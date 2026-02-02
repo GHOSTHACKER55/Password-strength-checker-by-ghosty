@@ -3,250 +3,302 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>GHOSTY | PRO CLOUD</title>
+    <title>GHOSTY PREMIUM | Shining Blue History</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Syncopate:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet"/>
-    
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Syncopate:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
     <style>
-        :root { --bg: #000; --ghost: #00f2ff; --blue: #0044ff; --glow: #00d2ff; }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
+        :root {
+            --bg: #000000;
+            --ghost-blue: #00f2ff;
+            --shining-shadow: 0 0 15px rgba(0, 242, 255, 0.8), 0 0 30px rgba(0, 242, 255, 0.4);
+            --glass: rgba(255, 255, 255, 0.01);
+        }
 
-        /* PROGRESS & NOTIFY */
-        #notify { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, var(--blue), var(--glow)); color: #fff; padding: 15px 30px; border-radius: 50px; font-weight: 900; font-size: 0.75rem; z-index: 10000; transition: 0.5s; box-shadow: 0 0 20px rgba(0,210,255,0.4); }
-        #notify.active { top: 30px; }
-        #bar { position: fixed; top: 0; left: 0; width: 0%; height: 4px; background: var(--glow); z-index: 10001; transition: 0.3s; box-shadow: 0 0 10px var(--glow); }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
 
-        /* AUTH MODAL */
-        #authModal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
-        .auth-card { background: #000; border: 1px solid var(--blue); padding: 40px 25px; border-radius: 40px; width: 92%; max-width: 380px; text-align: center; }
-        .auth-input { width: 100%; padding: 18px; margin-bottom: 15px; border-radius: 15px; border: 1px solid #222; background: #111; color: var(--glow); outline: none; }
-        .auth-btn { width: 100%; padding: 18px; border-radius: 15px; background: linear-gradient(135deg, var(--blue), var(--glow)); color: #fff; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        body {
+            background-color: var(--bg);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
 
-        /* SIDEBAR */
-        .menu-icon { position: fixed; top: 25px; left: 25px; z-index: 1000; font-size: 1.6rem; color: var(--glow); cursor: pointer; }
-        .sidebar { position: fixed; top: 0; left: -310px; width: 280px; height: 100%; background: #000; border-right: 1px solid var(--blue); z-index: 999; transition: 0.4s; padding: 100px 30px; }
-        .sidebar.active { left: 0; }
-        .nav-item { display: flex; align-items: center; padding: 22px 0; color: #fff; font-size: 0.75rem; font-weight: 900; font-family: 'Syncopate'; letter-spacing: 2px; border-bottom: 1px solid #111; cursor: pointer; }
-        .nav-item i { margin-right: 15px; color: var(--glow); width: 20px; }
+        #rainCanvas {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            opacity: 0.3;
+        }
 
-        /* HOME / CONTENT */
-        .container { max-width: 500px; margin: 0 auto; padding: 100px 20px; text-align: center; }
-        .logo-text { font-family: 'Orbitron'; font-size: 2.5rem; letter-spacing: 12px; text-shadow: 0 0 20px var(--glow); }
-        
-        .upload-area { background: rgba(0, 68, 255, 0.05); border: 2px dashed var(--blue); border-radius: 40px; padding: 60px 20px; cursor: pointer; margin-top: 40px; position: relative; }
-        .upload-icon { font-size: 3rem; color: var(--glow); margin-bottom: 15px; filter: drop-shadow(0 0 8px var(--glow)); }
+        .container {
+            width: 100%;
+            max-width: 480px;
+            padding: 50px 20px;
+            z-index: 1;
+        }
 
-        /* GALLERY */
-        .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
-        .img-card { background: #0a0a0a; border-radius: 20px; overflow: hidden; border: 1px solid #222; position: relative; height: 180px; }
-        .img-card img { width: 100%; height: 130px; object-fit: cover; }
-        .img-actions { height: 50px; display: flex; align-items: center; justify-content: space-around; background: #000; }
-        .action-icon { color: var(--glow); font-size: 0.9rem; cursor: pointer; padding: 10px; }
+        header { text-align: center; margin-bottom: 40px; }
 
-        #matrix { position: fixed; inset: 0; z-index: -1; opacity: 0.15; pointer-events: none; }
-        .hidden { display: none !important; }
+        .ghost-icon {
+            font-size: 3rem;
+            color: var(--ghost-blue);
+            filter: drop-shadow(0 0 20px var(--ghost-blue));
+            animation: float 3s ease-in-out infinite;
+            margin-bottom: 10px;
+        }
+
+        .logo {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 900;
+            letter-spacing: 15px;
+            color: white;
+            text-transform: uppercase;
+            text-shadow: var(--shining-shadow);
+            animation: pulse 2s infinite alternate;
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); opacity: 0.7; } 50% { transform: translateY(-15px); opacity: 1; } }
+        @keyframes pulse { from { opacity: 0.8; } to { opacity: 1; transform: scale(1.02); } }
+
+        .premium-card {
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 40px;
+            padding: 35px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 1);
+            margin-bottom: 30px;
+        }
+
+        .upload-zone {
+            border: 2px solid var(--ghost-blue);
+            border-radius: 25px;
+            padding: 50px 20px;
+            text-align: center;
+            cursor: pointer;
+            background: rgba(0, 0, 0, 0.6);
+            box-shadow: inset 0 0 25px rgba(0, 242, 255, 0.2);
+            transition: 0.4s;
+        }
+
+        .upload-zone:hover { box-shadow: 0 0 20px var(--ghost-blue); transform: scale(1.02); }
+
+        .shining-blue-text {
+            color: var(--ghost-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 0 0 10px var(--ghost-blue);
+        }
+
+        .btn-main {
+            width: 100%;
+            margin-top: 30px;
+            padding: 22px;
+            border: none;
+            border-radius: 20px;
+            font-family: 'Syncopate', sans-serif;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            background: linear-gradient(90deg, #002222, var(--ghost-blue), #002222);
+            background-size: 200% auto;
+            box-shadow: 0 0 30px rgba(0, 242, 255, 0.5);
+            animation: moveShine 3s linear infinite;
+        }
+
+        @keyframes moveShine { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+
+        /* HISTORY SECTION */
+        .history-box {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 25px;
+            padding: 20px;
+            border: 1px solid rgba(0, 242, 255, 0.1);
+        }
+
+        .history-title {
+            font-size: 0.7rem;
+            letter-spacing: 4px;
+            color: var(--ghost-blue);
+            text-align: center;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            text-shadow: 0 0 5px var(--ghost-blue);
+        }
+
+        .history-item {
+            background: #000;
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 12px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .history-link {
+            color: var(--ghost-blue);
+            font-size: 0.75rem;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 70%;
+            text-decoration: none;
+        }
+
+        .mini-copy {
+            background: var(--ghost-blue);
+            color: #000;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.6rem;
+            font-weight: 900;
+            cursor: pointer;
+        }
+
+        /* UPLOADER ELEMENTS */
+        .result-box { display: none; margin-top: 30px; }
+        .link-bar {
+            background: #000;
+            padding: 18px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid var(--ghost-blue);
+        }
+        #urlText { color: var(--ghost-blue); font-family: monospace; font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        .copy-btn { background: white; color: black; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 900; cursor: pointer; }
+        .loader { display: none; margin: 20px auto; width: 40px; height: 40px; border: 4px solid rgba(0, 242, 255, 0.1); border-top: 4px solid var(--ghost-blue); border-radius: 50%; animation: spin 1s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+
+        footer { margin-top: 40px; padding: 25px; text-align: center; font-size: 0.7rem; color: var(--ghost-blue); letter-spacing: 8px; opacity: 0.5; }
     </style>
 </head>
 <body>
 
-    <div id="bar"></div>
-    <canvas id="matrix"></canvas>
-    <div id="notify">GHOSTY V14</div>
-    <div class="menu-icon" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
+    <canvas id="rainCanvas"></canvas>
 
-    <div id="authModal">
-        <div class="auth-card">
-            <h2 id="atitle" style="font-family:'Syncopate'; color:var(--glow); margin-bottom:30px; font-size:1.2rem; letter-spacing:4px;">LOGIN</h2>
-            <input type="email" id="email" class="auth-input" placeholder="EMAIL">
-            <input type="password" id="pass" class="auth-input" placeholder="PASSWORD">
-            <button class="auth-btn" onclick="handleAuth()">CONTINUE</button>
-            <p onclick="switchAuth()" id="aswitch" style="margin-top:25px; font-size:0.6rem; color:var(--glow); cursor:pointer; font-weight:700;">OR SIGN UP</p>
+    <div class="container">
+        <header>
+            <i class="fas fa-ghost ghost-icon"></i>
+            <div class="logo">GHOSTY</div>
+            <p style="font-size: 0.6rem; letter-spacing: 5px; margin-top: 10px; color: white;">PREMIUM SHINING LOG</p>
+        </header>
+
+        <div class="premium-card">
+            <div class="upload-zone" id="dropArea">
+                <i class="fas fa-file-export" style="color: white; font-size: 2.5rem; margin-bottom: 15px; filter: drop-shadow(0 0 10px var(--ghost-blue));"></i>
+                <h2 class="shining-blue-text" id="fileLabel">Upload Image</h2>
+                <input type="file" id="fileInput" hidden accept="image/*">
+            </div>
+
+            <div class="loader" id="spinner"></div>
+            <button class="btn-main" id="goBtn">GET LINK</button>
+
+            <div class="result-box" id="resultBox">
+                <div class="link-bar">
+                    <span id="urlText"></span>
+                    <button class="copy-btn" id="copyBtn">COPY</button>
+                </div>
+                <button onclick="location.reload()" style="background:none; border:none; color:#444; width:100%; margin-top:20px; cursor:pointer; font-size:0.75rem;">NEW SUMMON</button>
+            </div>
         </div>
-    </div>
 
-    <nav class="sidebar" id="sidebar">
-        <div class="nav-item" onclick="showView('home')"><i class="fas fa-home"></i> HOME</div>
-        <div class="nav-item" onclick="showView('gallery'); loadGallery();"><i class="fas fa-images"></i> MY UPLOADS</div>
-        <div class="nav-item" style="color: #ff3333; margin-top: 50px;" onclick="logout()"><i class="fas fa-power-off"></i> LOGOUT</div>
-    </nav>
-
-    <div id="homeView" class="container">
-        <h1 class="logo-text">GHOSTY</h1>
-        <p style="font-size:0.6rem; letter-spacing:4px; opacity:0.5; margin-top:10px;">PRO IMAGE CLOUD</p>
-        
-        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
-            <i class="fas fa-cloud-upload-alt upload-icon"></i>
-            <h3 style="letter-spacing:1px; font-size: 1rem;">UPLOAD TO ACCOUNT</h3>
-            <p style="font-size:0.6rem; opacity:0.4; margin-top:8px;">Images are optimized for speed</p>
-            <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="processAndUpload(this)">
+        <div class="history-box">
+            <div class="history-title">Recent History</div>
+            <div id="historyList"></div>
+            <button onclick="clearHistory()" style="background:none; border:none; color:#ff4d4d; font-size:0.6rem; margin-top:10px; cursor:pointer; width:100%; letter-spacing: 2px;">WIPE ALL DATA</button>
         </div>
-    </div>
 
-    <div id="galleryView" class="container hidden">
-        <h2 style="font-family:'Syncopate'; color:var(--glow); font-size:1rem; letter-spacing:3px; margin-bottom:30px;">MY CLOUD</h2>
-        <div id="galleryGrid" class="gallery-grid"></div>
+        <footer>GHOSTY PREMIUM</footer>
     </div>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDulf_AZJ7_e8zhEPqARYeboQ435zllAN0",
-            authDomain: "image-to-link-e0c9a.firebaseapp.com",
-            projectId: "image-to-link-e0c9a",
-            storageBucket: "image-to-link-e0c9a.firebasestorage.app",
-            messagingSenderId: "510967733413",
-            appId: "1:510967733413:web:6e13746901855c8e3a414c"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const auth = firebase.auth();
-        const db = firebase.firestore();
+        const KEY = 'Ed019955ccdfc5952b136e449d727e0b';
+        const fileInput = document.getElementById('fileInput');
+        const historyList = document.getElementById('historyList');
 
-        let isLogin = true;
-
-        function notify(msg) {
-            const n = document.getElementById('notify');
-            n.innerText = msg; n.classList.add('active');
-            setTimeout(() => n.classList.remove('active'), 3000);
-        }
-
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
-        
-        function showView(v) {
-            ['home', 'gallery'].forEach(id => document.getElementById(id + 'View').classList.add('hidden'));
-            document.getElementById(v + 'View').classList.remove('hidden');
-            document.getElementById('sidebar').classList.remove('active');
-        }
-
-        function switchAuth() {
-            isLogin = !isLogin;
-            document.getElementById('atitle').innerText = isLogin ? "LOGIN" : "SIGN UP";
-            document.getElementById('aswitch').innerText = isLogin ? "OR SIGN UP" : "ALREADY HAVE ACCOUNT?";
-        }
-
-        async function handleAuth() {
-            const e = document.getElementById('email').value;
-            const p = document.getElementById('pass').value;
-            if(!e || !p) return notify("FILL ALL FIELDS");
-            try {
-                if(isLogin) await auth.signInWithEmailAndPassword(e, p);
-                else await auth.createUserWithEmailAndPassword(e, p);
-                notify("SUCCESS");
-            } catch (err) { notify("AUTH FAILED"); }
-        }
-
-        auth.onAuthStateChanged(user => {
-            if(user) document.getElementById('authModal').classList.add('hidden');
-            else document.getElementById('authModal').classList.remove('hidden');
-        });
-
-        function logout() { auth.signOut(); window.location.reload(); }
-
-        // IMAGE PROCESSING (FIXES UPLOAD BUG)
-        async function processAndUpload(input) {
-            if(!input.files[0]) return;
-            const file = input.files[0];
-            const bar = document.getElementById('bar');
-            bar.style.width = "20%";
-            notify("OPTIMIZING...");
-
-            const reader = new FileReader();
-            reader.readAsDataURL(file);
-            reader.onload = function(event) {
-                const img = new Image();
-                img.src = event.target.result;
-                img.onload = async function() {
-                    // Create Canvas for compression
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 800; // Resize to fit database limits
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > MAX_WIDTH) {
-                        height *= MAX_WIDTH / width;
-                        width = MAX_WIDTH;
-                    }
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    // Compress to 70% quality
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
-                    
-                    bar.style.width = "60%";
-                    try {
-                        await db.collection("user_uploads").add({
-                            uid: auth.currentUser.uid,
-                            url: compressedBase64,
-                            timestamp: Date.now()
-                        });
-                        bar.style.width = "100%";
-                        notify("UPLOADED TO CLOUD!");
-                        setTimeout(() => bar.style.width="0%", 1000);
-                    } catch (e) {
-                        notify("UPLOAD FAILED");
-                    }
-                }
-            };
-        }
-
-        async function loadGallery() {
-            const grid = document.getElementById('galleryGrid');
-            grid.innerHTML = "<p>Loading Sync...</p>";
-            const snap = await db.collection("user_uploads").where("uid", "==", auth.currentUser.uid).orderBy("timestamp", "desc").get();
-            let h = "";
-            snap.forEach(doc => {
-                const data = doc.data();
-                h += `
-                <div class="img-card">
-                    <img src="${data.url}">
-                    <div class="img-actions">
-                        <i class="fas fa-link action-icon" onclick="copyLink('${data.url}')" title="Copy Link"></i>
-                        <i class="fas fa-trash action-icon" onclick="delImg('${doc.id}')" style="color:red"></i>
-                    </div>
-                </div>`;
-            });
-            grid.innerHTML = h || "No Images Found";
-        }
-
-        function copyLink(url) {
-            // Since this is Base64, the link is the data itself.
-            // In a real app with Firebase Storage, this would be a URL.
-            const dummy = document.createElement("textarea");
-            document.body.appendChild(dummy);
-            dummy.value = url;
-            dummy.select();
-            document.execCommand("copy");
-            document.body.removeChild(dummy);
-            notify("IMAGE DATA COPIED!");
-        }
-
-        async function delImg(id) {
-            if(confirm("Delete Image?")) {
-                await db.collection("user_uploads").doc(id).delete();
-                notify("DELETED");
-                loadGallery();
-            }
-        }
-
-        // MATRIX
-        const c = document.getElementById('matrix'); const ctx = c.getContext('2d');
-        c.width = window.innerWidth; c.height = window.innerHeight;
-        const drops = Array(Math.floor(c.width/20)).fill(1);
+        // RAIN BACKGROUND
+        const canvas = document.getElementById('rainCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        const drops = Array(Math.floor(canvas.width / 16)).fill(1);
         function draw() {
-            ctx.fillStyle = "rgba(0,0,0,0.1)"; ctx.fillRect(0,0,c.width,c.height);
-            ctx.fillStyle = "#0044ff"; ctx.font = "15px monospace";
-            drops.forEach((y, i) => {
-                ctx.fillText(Math.floor(Math.random()*2), i*20, y*20);
-                if(y*20 > c.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
+            ctx.fillStyle = "rgba(0,0,0,0.15)"; ctx.fillRect(0,0,canvas.width,canvas.height);
+            ctx.fillStyle = "#00f2ff"; ctx.font = "16px monospace";
+            drops.forEach((y, x) => {
+                ctx.fillText(Math.floor(Math.random()*2), x*16, y*16);
+                if(y*16 > canvas.height && Math.random() > 0.975) drops[x] = 0;
+                drops[x]++;
             });
         }
-        setInterval(draw, 50);
+        setInterval(draw, 35);
+
+        // HISTORY LOGIC
+        function saveToHistory(url) {
+            let history = JSON.parse(localStorage.getItem('ghosty_history') || '[]');
+            history.unshift(url);
+            if(history.length > 5) history.pop();
+            localStorage.setItem('ghosty_history', JSON.stringify(history));
+            renderHistory();
+        }
+
+        function renderHistory() {
+            let history = JSON.parse(localStorage.getItem('ghosty_history') || '[]');
+            historyList.innerHTML = history.map(url => `
+                <div class="history-item">
+                    <a href="${url}" target="_blank" class="history-link">${url}</a>
+                    <button class="mini-copy" onclick="copyText('${url}')">COPY</button>
+                </div>
+            `).join('');
+        }
+
+        function copyText(text) {
+            navigator.clipboard.writeText(text);
+            alert("Copied to clipboard!");
+        }
+
+        function clearHistory() {
+            localStorage.removeItem('ghosty_history');
+            renderHistory();
+        }
+
+        // UPLOADER
+        document.getElementById('dropArea').onclick = () => fileInput.click();
+        document.getElementById('goBtn').onclick = async () => {
+            if(!fileInput.files[0]) return;
+            document.getElementById('goBtn').style.display='none';
+            document.getElementById('spinner').style.display='block';
+            const fd = new FormData(); fd.append('image', fileInput.files[0]);
+            try {
+                const res = await fetch(`https://api.imgbb.com/1/upload?key=${KEY}`, {method:'POST', body:fd});
+                const data = await res.json();
+                if(data.success) {
+                    const url = data.data.url;
+                    document.getElementById('urlText').innerText = url;
+                    document.getElementById('spinner').style.display='none';
+                    document.getElementById('resultBox').style.display='block';
+                    saveToHistory(url);
+                }
+            } catch(e) { location.reload(); }
+        };
+
+        document.getElementById('copyBtn').onclick = () => {
+            copyText(document.getElementById('urlText').innerText);
+        };
+
+        window.onload = renderHistory;
     </script>
 </body>
 </html>
