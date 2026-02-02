@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>GHOSTY PREMIUM | Shining Menu Edition</title>
+    <title>GHOSTY PREMIUM | Shining Blue Edition</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Syncopate:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
     <style>
@@ -17,30 +17,30 @@
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
         body { background-color: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; }
 
-        /* MENU STYLES */
+        /* --- 3-LINE MENU STYLES --- */
         .menu-btn {
             position: fixed;
-            top: 20px;
+            top: 25px;
             left: 20px;
             z-index: 1000;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             color: var(--ghost-blue);
             cursor: pointer;
-            text-shadow: var(--shining-shadow);
+            filter: drop-shadow(0 0 10px var(--ghost-blue));
         }
 
         .sidebar {
             position: fixed;
             top: 0;
-            left: -300px;
+            left: -320px;
             width: 300px;
             height: 100%;
-            background: rgba(0, 0, 0, 0.95);
-            backdrop-filter: blur(20px);
-            border-right: 1px solid var(--ghost-blue);
+            background: rgba(0, 0, 0, 0.98);
+            backdrop-filter: blur(25px);
+            border-right: 2px solid var(--ghost-blue);
             z-index: 999;
-            transition: 0.4s ease;
-            padding: 80px 20px;
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 100px 30px;
         }
 
         .sidebar.active { left: 0; }
@@ -50,9 +50,9 @@
             color: white;
             text-decoration: none;
             font-family: 'Syncopate', sans-serif;
-            font-size: 0.8rem;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
+            font-size: 0.85rem;
+            margin-bottom: 40px;
+            letter-spacing: 3px;
             transition: 0.3s;
             cursor: pointer;
         }
@@ -60,64 +60,74 @@
         .sidebar-item:hover { color: var(--ghost-blue); text-shadow: var(--shining-shadow); }
         .sidebar-item i { margin-right: 15px; color: var(--ghost-blue); }
 
-        /* RAIN BACKGROUND */
-        #rainCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.3; }
+        /* --- SHINING RAIN BACKGROUND --- */
+        #rainCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
 
-        .container { width: 100%; max-width: 480px; margin: 0 auto; padding: 50px 20px; text-align: center; }
+        .container { width: 100%; max-width: 480px; margin: 0 auto; padding: 60px 20px; text-align: center; }
 
         header .logo {
-            font-family: 'Orbitron', sans-serif; font-size: 3rem; letter-spacing: 12px;
-            text-shadow: var(--shining-shadow); margin-top: 20px;
+            font-family: 'Orbitron', sans-serif; font-size: 3.2rem; letter-spacing: 15px;
+            text-shadow: var(--shining-shadow); margin-top: 10px; color: white;
         }
 
-        /* MAIN CARD */
+        /* --- MAIN CARDS --- */
         .premium-card {
             background: var(--glass); backdrop-filter: blur(20px);
             border: 1px solid rgba(0, 242, 255, 0.3); border-radius: 40px;
-            padding: 35px; box-shadow: 0 0 50px #000; margin-top: 30px;
+            padding: 40px 30px; box-shadow: 0 0 60px #000; margin-top: 40px;
         }
 
         .upload-zone {
-            border: 2px solid var(--ghost-blue); border-radius: 25px; padding: 40px 10px;
-            background: rgba(0, 0, 0, 0.6); box-shadow: inset 0 0 20px rgba(0, 242, 255, 0.2);
-            cursor: pointer;
+            border: 2px solid var(--ghost-blue); border-radius: 25px; padding: 50px 15px;
+            background: rgba(0, 0, 0, 0.7); box-shadow: inset 0 0 25px rgba(0, 242, 255, 0.2);
+            cursor: pointer; transition: 0.3s;
         }
 
+        .upload-zone:hover { transform: scale(1.02); box-shadow: 0 0 20px var(--ghost-blue); }
+
         .btn-main {
-            width: 100%; margin-top: 25px; padding: 20px; border: none; border-radius: 20px;
-            font-family: 'Syncopate', sans-serif; color: white; cursor: pointer;
+            width: 100%; margin-top: 30px; padding: 22px; border: none; border-radius: 20px;
+            font-family: 'Syncopate', sans-serif; font-weight: 700; color: white; cursor: pointer;
             background: linear-gradient(90deg, #002222, var(--ghost-blue), #002222);
             background-size: 200% auto; animation: moveShine 3s linear infinite;
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
         }
 
         @keyframes moveShine { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 
-        /* GALLERY (3 IN A ROW) */
+        /* --- GALLERY GRID (3 IN A ROW) --- */
         #galleryView { display: none; }
         .gallery-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-            margin-top: 20px;
+            gap: 12px;
+            margin-top: 30px;
         }
 
         .gallery-item {
             aspect-ratio: 1;
             border: 1px solid var(--ghost-blue);
-            border-radius: 8px;
+            border-radius: 12px;
             overflow: hidden;
             position: relative;
             cursor: pointer;
+            background: #111;
         }
 
-        .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 0.3s; }
+        .gallery-item:hover img { opacity: 1; transform: scale(1.1); }
 
-        /* FOOTER & UI */
-        .loader { display: none; margin: 20px auto; width: 40px; height: 40px; border: 4px solid rgba(0,242,255,0.1); border-top: 4px solid var(--ghost-blue); border-radius: 50%; animation: spin 1s linear infinite; }
+        /* --- RESULTS & LOADER --- */
+        .loader { display: none; margin: 20px auto; width: 45px; height: 45px; border: 4px solid rgba(0,242,255,0.1); border-top: 4px solid var(--ghost-blue); border-radius: 50%; animation: spin 1s linear infinite; }
         @keyframes spin { to { transform: rotate(360deg); } }
-        #resultBox { display: none; margin-top: 20px; }
-        .link-bar { background: #000; padding: 15px; border-radius: 12px; border: 1px solid var(--ghost-blue); display: flex; justify-content: space-between; align-items: center; }
-        #urlText { font-size: 0.7rem; color: var(--ghost-blue); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+        #resultBox { display: none; margin-top: 25px; animation: fadeIn 0.5s; }
+        .link-bar { background: #000; padding: 18px; border-radius: 15px; border: 1px solid var(--ghost-blue); display: flex; justify-content: space-between; align-items: center; }
+        #urlText { font-size: 0.75rem; color: var(--ghost-blue); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: monospace; }
+        .copy-btn { background: white; color: black; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 900; cursor: pointer; }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        footer { margin-top: 50px; text-align: center; font-size: 0.65rem; color: var(--ghost-blue); letter-spacing: 5px; opacity: 0.5; }
     </style>
 </head>
 <body>
@@ -125,11 +135,13 @@
     <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
 
     <nav class="sidebar" id="sidebar">
-        <div class="sidebar-item" onclick="showHome()"><i class="fas fa-home"></i> HOME</div>
+        <div class="sidebar-item" onclick="showHome()"><i class="fas fa-bolt"></i> HOME</div>
         <div class="sidebar-item" onclick="showGallery()"><i class="fas fa-images"></i> MY UPLOADS</div>
-        <div class="sidebar-item" onclick="alert('Premium logic goes here!')"><i class="fas fa-crown"></i> BUY PREMIUM</div>
-        <div class="sidebar-item" style="margin-top: 50px; opacity: 0.6; pointer-events: none;">
-            <i class="fas fa-headset"></i> ADMIN: 03106723295
+        <div class="sidebar-item" onclick="window.open('https://wa.me/923106723295', '_blank')"><i class="fas fa-crown"></i> BUY PREMIUM</div>
+        
+        <div style="position: absolute; bottom: 40px; left: 30px;">
+            <p style="font-size: 0.6rem; color: #555; letter-spacing: 1px; margin-bottom: 5px;">CONTACT ADMIN</p>
+            <p style="color: var(--ghost-blue); font-size: 0.9rem; font-weight: bold;">03106723295</p>
         </div>
     </nav>
 
@@ -137,73 +149,86 @@
 
     <div class="container">
         <header>
-            <i class="fas fa-ghost" style="color: var(--ghost-blue); font-size: 2rem; filter: drop-shadow(0 0 10px var(--ghost-blue));"></i>
+            <i class="fas fa-ghost" style="color: var(--ghost-blue); font-size: 2.5rem; filter: drop-shadow(0 0 15px var(--ghost-blue));"></i>
             <div class="logo">GHOSTY</div>
         </header>
 
         <div id="homeView">
             <div class="premium-card">
                 <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
-                    <i class="fas fa-cloud-upload-alt" style="font-size: 2.5rem; color: var(--ghost-blue); margin-bottom: 15px;"></i>
-                    <h2 id="fileLabel" style="font-size: 1rem; color: var(--ghost-blue);">UPLOAD IMAGE</h2>
+                    <i class="fas fa-plus-circle" style="font-size: 3rem; color: white; text-shadow: 0 0 10px var(--ghost-blue); margin-bottom: 20px;"></i>
+                    <h2 id="fileLabel" style="font-size: 1.1rem; color: var(--ghost-blue); letter-spacing: 2px;">UPLOAD IMAGE</h2>
+                    <p style="font-size: 0.7rem; color: #555; margin-top: 10px;">TAP TO INJECT MEDIA</p>
                     <input type="file" id="fileInput" hidden accept="image/*">
                 </div>
+                
                 <div class="loader" id="spinner"></div>
                 <button class="btn-main" id="goBtn">GET LINK</button>
 
                 <div id="resultBox">
                     <div class="link-bar">
                         <span id="urlText"></span>
-                        <button onclick="copyCurrent()" style="padding: 5px 10px; border-radius: 5px; border: none; font-weight: bold;">COPY</button>
+                        <button class="copy-btn" id="copyBtn">COPY</button>
                     </div>
+                    <button onclick="location.reload()" style="background: none; border: none; color: #444; margin-top: 20px; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; letter-spacing: 2px;">New Upload</button>
                 </div>
             </div>
         </div>
 
         <div id="galleryView">
-            <h3 style="color: var(--ghost-blue); letter-spacing: 3px; font-size: 0.8rem; margin-bottom: 20px;">MY RECENT UPLOADS</h3>
+            <h2 style="color: var(--ghost-blue); text-shadow: var(--shining-shadow); font-size: 1rem; letter-spacing: 4px; margin-bottom: 10px;">MY RECENT UPLOADS</h2>
+            <p style="font-size: 0.6rem; color: #444; margin-bottom: 30px;">TAP IMAGE TO COPY LINK</p>
             <div class="gallery-grid" id="galleryGrid"></div>
-            <button onclick="clearAll()" style="background: none; border: none; color: red; margin-top: 30px; font-size: 0.7rem; cursor: pointer;">WIPE GALLERY DATA</button>
+            <button onclick="clearHistory()" style="background: none; border: 1px solid #ff4d4d; color: #ff4d4d; border-radius: 10px; padding: 10px 20px; margin-top: 40px; font-size: 0.7rem; cursor: pointer;">WIPE DATA</button>
         </div>
+
+        <footer>&copy; 2026 GHOSTY PREMIUM</footer>
     </div>
 
     <script>
         const API_KEY = 'Ed019955ccdfc5952b136e449d727e0b';
         
-        // SIDEBAR TOGGLE
+        // --- NAVIGATION LOGIC ---
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
+        
         function showHome() { 
             document.getElementById('homeView').style.display = 'block'; 
             document.getElementById('galleryView').style.display = 'none'; 
-            toggleMenu(); 
+            if(document.getElementById('sidebar').classList.contains('active')) toggleMenu(); 
         }
+
         function showGallery() { 
             document.getElementById('homeView').style.display = 'none'; 
             document.getElementById('galleryView').style.display = 'block'; 
             renderGallery();
-            toggleMenu(); 
+            if(document.getElementById('sidebar').classList.contains('active')) toggleMenu(); 
         }
 
-        // RAIN SCRIPT
+        // --- SHINING BLUE RAIN ---
         const canvas = document.getElementById('rainCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        const drops = Array(Math.floor(canvas.width / 16)).fill(1);
+        const drops = Array(Math.floor(canvas.width / 18)).fill(1);
         function drawRain() {
             ctx.fillStyle = "rgba(0,0,0,0.15)"; ctx.fillRect(0,0,canvas.width,canvas.height);
             ctx.fillStyle = "#00f2ff"; ctx.font = "16px monospace";
             drops.forEach((y, x) => {
-                ctx.fillText(Math.floor(Math.random()*2), x*16, y*16);
-                if(y*16 > canvas.height && Math.random() > 0.975) drops[x] = 0;
+                ctx.fillText(Math.floor(Math.random()*2), x*18, y*18);
+                if(y*18 > canvas.height && Math.random() > 0.975) drops[x] = 0;
                 drops[x]++;
             });
         }
         setInterval(drawRain, 35);
 
-        // UPLOADER LOGIC
+        // --- UPLOADER LOGIC ---
         const fileInput = document.getElementById('fileInput');
+        const fileLabel = document.getElementById('fileLabel');
+
+        fileInput.onchange = () => { if(fileInput.files[0]) fileLabel.innerText = "DATA DETECTED"; };
+
         document.getElementById('goBtn').onclick = async () => {
-            if(!fileInput.files[0]) return alert("Select image!");
+            if(!fileInput.files[0]) return alert("Please select a file.");
+            
             document.getElementById('goBtn').style.display = 'none';
             document.getElementById('spinner').style.display = 'block';
             
@@ -216,21 +241,25 @@
                     document.getElementById('urlText').innerText = url;
                     document.getElementById('resultBox').style.display = 'block';
                     document.getElementById('spinner').style.display = 'none';
-                    saveToLocal(url);
+                    saveToGallery(url);
                 }
-            } catch(e) { location.reload(); }
+            } catch(e) { alert("Error uploading."); location.reload(); }
         };
 
-        // LOCAL STORAGE & GALLERY
-        function saveToLocal(url) {
-            let images = JSON.parse(localStorage.getItem('ghosty_images') || '[]');
+        // --- GALLERY & STORAGE ---
+        function saveToGallery(url) {
+            let images = JSON.parse(localStorage.getItem('ghosty_gallery') || '[]');
             images.unshift(url);
-            localStorage.setItem('ghosty_images', JSON.stringify(images));
+            localStorage.setItem('ghosty_gallery', JSON.stringify(images));
         }
 
         function renderGallery() {
             const grid = document.getElementById('galleryGrid');
-            let images = JSON.parse(localStorage.getItem('ghosty_images') || '[]');
+            let images = JSON.parse(localStorage.getItem('ghosty_gallery') || '[]');
+            if(images.length === 0) {
+                grid.innerHTML = '<p style="grid-column: span 3; color: #333; font-size: 0.8rem; margin-top: 20px;">No images found.</p>';
+                return;
+            }
             grid.innerHTML = images.map(url => `
                 <div class="gallery-item" onclick="copySpecific('${url}')">
                     <img src="${url}">
@@ -238,17 +267,22 @@
             `).join('');
         }
 
-        function copyCurrent() {
-            navigator.clipboard.writeText(document.getElementById('urlText').innerText);
-            alert("Link Copied!");
-        }
-
         function copySpecific(url) {
             navigator.clipboard.writeText(url);
-            alert("Image Link Copied!");
+            alert("Link copied from gallery!");
         }
 
-        function clearAll() { localStorage.removeItem('ghosty_images'); renderGallery(); }
+        document.getElementById('copyBtn').onclick = () => {
+            navigator.clipboard.writeText(document.getElementById('urlText').innerText);
+            alert("Copied!");
+        };
+
+        function clearHistory() {
+            if(confirm("Wipe all recent uploads?")) {
+                localStorage.removeItem('ghosty_gallery');
+                renderGallery();
+            }
+        }
     </script>
 </body>
 </html>
