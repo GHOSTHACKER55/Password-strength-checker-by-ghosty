@@ -3,68 +3,81 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>GHOSTY PREMIUM | V3</title>
+    <title>GHOSTY PREMIUM | STAFF EDITION</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Syncopate:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Syncopate:wght@700&family=Inter:wght@400;900&display=swap" rel="stylesheet"/>
     
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <style>
-        :root { --bg: #000; --ghost: #00f2ff; --glass: rgba(0, 242, 255, 0.05); --blue-glow: #007bff; }
+        :root { --bg: #000; --ghost: #00f2ff; --blue-accent: #007bff; --error: #ff4d4d; }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
         body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
 
-        /* STAFF ACCESS POPUP (Matches your screenshot style) */
-        #unlockPortal {
+        /* STAFF ACCESS MODAL (Matches Screenshot) */
+        #staffModal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 30000;
+            background: rgba(0,0,0,0.9); z-index: 50000;
             display: none; align-items: center; justify-content: center;
         }
         .staff-card {
-            background: #fff; color: #000; padding: 40px 30px; border-radius: 40px;
-            width: 90%; max-width: 360px; text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            background: #fff; color: #000; padding: 45px 35px; border-radius: 45px;
+            width: 92%; max-width: 380px; text-align: center;
+            box-shadow: 0 15px 50px rgba(0,0,0,0.8);
+            animation: slideUp 0.4s ease;
         }
-        .staff-title { font-family: 'Inter'; font-weight: 900; font-style: italic; font-size: 1.4rem; letter-spacing: -1px; margin-bottom: 5px; }
-        .staff-sub { font-size: 0.6rem; opacity: 0.6; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; }
-        .staff-input { 
-            width: 100%; padding: 18px; border-radius: 15px; border: 2px solid var(--blue-glow);
-            text-align: center; font-size: 1.2rem; margin-bottom: 20px; outline: none;
-        }
-        .unlock-btn { 
-            width: 100%; padding: 18px; background: #000; color: #fff; border: none;
-            border-radius: 15px; font-weight: 900; text-transform: uppercase; cursor: pointer;
-        }
-
-        /* SIDEBAR */
-        .menu-btn { position:fixed; top:20px; left:20px; z-index:1000; font-size:1.5rem; color:var(--ghost); cursor:pointer; }
-        .sidebar { position:fixed; top:0; left:-300px; width:280px; height:100%; background:rgba(0,0,0,0.98); border-right:2px solid var(--ghost); z-index:999; transition:0.4s; padding:80px 25px; }
-        .sidebar.active { left:0; }
-        .sidebar-item { display:flex; align-items:center; color:#fff; text-decoration:none; padding:18px 0; font-family:'Syncopate'; font-size:0.65rem; cursor:pointer; border-bottom: 1px solid #111; }
-        .sidebar-item i { margin-right: 15px; color: var(--ghost); }
-
-        /* HOME UI */
-        .home-section { max-width:480px; margin:0 auto; padding:80px 20px; text-align: center; }
-        .logo-box { margin-bottom: 40px; }
-        .logo-text { font-family: 'Orbitron'; font-size: 2.5rem; letter-spacing: 10px; text-shadow: 0 0 20px var(--ghost); }
-        .upload-main { background: rgba(0,0,0,0.6); border: 2px solid var(--ghost); border-radius: 40px; padding: 40px 20px; }
-        .upload-area { border: 1px solid rgba(0,242,255,0.2); border-radius: 20px; padding: 40px 10px; margin-bottom: 20px; cursor: pointer; }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
         
-        #rainCanvas { position:fixed; top:0; left:0; z-index:-1; opacity:0.25; }
+        .staff-header { font-weight: 900; font-style: italic; font-size: 1.6rem; letter-spacing: -1px; margin-bottom: 5px; }
+        .staff-sub { font-size: 0.65rem; opacity: 0.5; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 30px; }
+        
+        .staff-input-group { position: relative; margin-bottom: 25px; }
+        .staff-input { 
+            width: 100%; padding: 20px; border-radius: 18px; border: 2.5px solid var(--blue-accent);
+            text-align: center; font-size: 1.3rem; outline: none; transition: 0.3s;
+        }
+        .staff-error { color: var(--error); font-size: 0.75rem; font-weight: 700; margin-top: 10px; display: none; }
+        
+        .unlock-btn { 
+            width: 100%; padding: 20px; background: #000; color: #fff; border: none;
+            border-radius: 18px; font-weight: 900; text-transform: uppercase; cursor: pointer;
+            letter-spacing: 1px;
+        }
+
+        /* SIDEBAR & MENU */
+        .menu-btn { position:fixed; top:20px; left:20px; z-index:1000; font-size:1.5rem; color:var(--ghost); cursor:pointer; }
+        .sidebar { position:fixed; top:0; left:-310px; width:290px; height:100%; background:rgba(0,0,0,0.98); border-right:2px solid var(--ghost); z-index:999; transition:0.4s; padding:90px 30px; }
+        .sidebar.active { left:0; }
+        .sidebar-item { display:flex; align-items:center; color:#fff; text-decoration:none; padding:20px 0; font-family:'Syncopate'; font-size:0.7rem; cursor:pointer; border-bottom: 1px solid #111; letter-spacing: 1px; }
+        .sidebar-item i { margin-right: 18px; color: var(--ghost); font-size: 1rem; }
+
+        /* ADMIN CONSOLE VIEW */
+        .admin-header { font-family: 'Orbitron'; font-size: 2rem; color: var(--ghost); text-shadow: 0 0 15px var(--ghost); margin-bottom: 30px; }
+        .stats-box { background: rgba(0,0,0,0.7); border: 1px solid #333; border-radius: 20px; padding: 25px; text-align: left; }
+        .stat-line { border-bottom: 1px solid #222; padding: 15px 0; display: flex; justify-content: space-between; font-size: 0.85rem; }
+
+        /* BACKGROUND & UI */
+        #rainCanvas { position:fixed; top:0; left:0; z-index:-1; opacity:0.2; }
+        .container { max-width:480px; margin:0 auto; padding:100px 20px; text-align: center; }
         .hidden { display:none !important; }
     </style>
 </head>
 <body>
 
-    <div id="unlockPortal">
+    <div id="staffModal">
         <div class="staff-card">
-            <div class="staff-title">STAFF ACCESS</div>
+            <div class="staff-header">STAFF ACCESS</div>
             <div class="staff-sub">SECURE PORTAL</div>
-            <input type="password" id="adminPass" class="staff-input" placeholder="••••••••">
-            <button class="unlock-btn" onclick="checkUnlock()">UNLOCK</button>
-            <p onclick="closeUnlock()" style="margin-top:20px; cursor:pointer; font-size:0.7rem; opacity:0.5;">CANCEL</p>
+            
+            <div class="staff-input-group">
+                <input type="password" id="adminPass" class="staff-input" placeholder="••••••••">
+                <div id="errorMsg" class="staff-error">INCORRECT STAFF PASSWORD</div>
+            </div>
+            
+            <button class="unlock-btn" onclick="verifyStaff()">UNLOCK</button>
+            <p onclick="closeStaff()" style="margin-top:25px; cursor:pointer; font-size:0.75rem; font-weight: 700; opacity:0.4;">CANCEL</p>
         </div>
     </div>
 
@@ -72,44 +85,39 @@
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-item" onclick="showPage('home')"><i class="fas fa-home"></i> HOME</div>
         <div class="sidebar-item" onclick="showPage('uploads')"><i class="fas fa-images"></i> MY UPLOADS</div>
-        <div class="sidebar-item" onclick="window.open('https://wa.me/923106723295')"><i class="fas fa-crown"></i> BUY PREMIUM</div>
+        <div class="sidebar-item" onclick="openStaff()"><i class="fas fa-user-shield"></i> ADMIN PANEL</div>
         <div class="sidebar-item" onclick="showPage('suggest')"><i class="fas fa-comment-dots"></i> SUGGESTION</div>
-        
-        <div class="sidebar-item" style="color: var(--ghost);" onclick="openUnlock()">
-            <i class="fas fa-user-shield"></i> ADMIN PANEL
-        </div>
-        
-        <div class="sidebar-item" onclick="firebase.auth().signOut()" style="color:#ff4d4d; margin-top:40px;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
+        <div class="sidebar-item" onclick="firebase.auth().signOut()" style="color:#ff4d4d; margin-top:50px;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
     </nav>
 
     <canvas id="rainCanvas"></canvas>
 
-    <div class="home-section" id="homeView">
-        <div class="logo-box">
-            <i class="fas fa-ghost" style="font-size: 3rem; color: var(--ghost); margin-bottom: 10px;"></i>
-            <h1 class="logo-text">GHOSTY</h1>
-            <p style="font-size: 0.6rem; letter-spacing: 3px; opacity: 0.5;">PREMIUM SHINING LOG</p>
-        </div>
+    <div class="container" id="homeView">
+        <i class="fas fa-ghost" style="font-size: 3.5rem; color: var(--ghost); margin-bottom: 15px;"></i>
+        <h1 style="font-family:'Orbitron'; font-size: 2.8rem; letter-spacing: 12px; text-shadow: 0 0 15px var(--ghost);">GHOSTY</h1>
+        <p style="font-size: 0.6rem; letter-spacing: 4px; opacity: 0.5; margin-bottom: 50px;">PREMIUM SHINING LOG</p>
 
-        <div class="upload-main">
-            <div class="upload-area">
-                <i class="fas fa-file-export" style="font-size: 3rem; color: var(--ghost); margin-bottom: 15px;"></i>
-                <h3 style="letter-spacing: 2px; font-size: 0.9rem;">UPLOAD IMAGE</h3>
+        <div style="background: rgba(0,0,0,0.6); border: 2px solid var(--ghost); border-radius: 40px; padding: 50px 25px;">
+            <div style="border: 1px dashed rgba(0,242,255,0.4); padding: 40px; border-radius: 25px; margin-bottom: 25px;">
+                <i class="fas fa-cloud-upload-alt" style="font-size: 3.5rem; color: var(--ghost);"></i>
+                <p style="margin-top: 15px; font-weight: 900; font-size: 0.9rem; letter-spacing: 2px;">UPLOAD IMAGE</p>
             </div>
-            <button class="unlock-btn" style="background:none; border: 1px solid var(--ghost); width: 80%; font-size: 0.7rem;">GET LINK</button>
+            <button class="unlock-btn" style="background: none; border: 1px solid var(--ghost); color: #fff; width: 85%;">GET LINK</button>
         </div>
-        <p style="margin-top: 50px; font-size: 0.6rem; letter-spacing: 4px; opacity: 0.4;">RECENT HISTORY</p>
     </div>
 
-    <div class="home-section hidden" id="adminView">
-        <h2 style="font-family: 'Orbitron'; color: var(--ghost);">ADMIN CONSOLE</h2>
-        <div id="adminData" style="margin-top: 30px; text-align: left; background: #0a0a0a; padding: 20px; border-radius: 20px; border: 1px solid #222;">
-            <p id="visitorCount">Loading Stats...</p>
+    <div class="container hidden" id="adminView">
+        <h2 class="admin-header">ADMIN CONSOLE</h2>
+        <div class="stats-box">
+            <div class="stat-line"><span>Total Visitors</span> <b id="vStat" style="color:var(--ghost)">0</b></div>
+            <div class="stat-line"><span>Total Uploads</span> <b id="uStat" style="color:var(--ghost)">0</b></div>
+            <div class="stat-line"><span>Server Status</span> <b style="color: #00ff00;">ONLINE</b></div>
         </div>
+        <button class="unlock-btn" style="margin-top: 30px; background: #111; border: 1px solid #333;" onclick="showPage('home')">EXIT CONSOLE</button>
     </div>
 
     <script>
-        // Use your Firebase Config here
+        // Use your Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDulf_AZJ7_e8zhEPqARYeboQ435zllAN0",
             authDomain: "image-to-link-e0c9a.firebaseapp.com",
@@ -122,45 +130,45 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // UNLOCK PORTAL LOGIC
-        const STAFF_PASS = "ghosty786"; // Set your desired admin password here
+        // PASSWORD PROTECTION
+        const STAFF_PASSWORD = "musa"; 
 
-        function openUnlock() { 
-            document.getElementById('unlockPortal').style.display = 'flex';
+        function openStaff() { 
+            document.getElementById('staffModal').style.display = 'flex';
             toggleMenu(); 
         }
-        function closeUnlock() { document.getElementById('unlockPortal').style.display = 'none'; }
+        function closeStaff() { 
+            document.getElementById('staffModal').style.display = 'none';
+            document.getElementById('errorMsg').style.display = 'none';
+        }
 
-        function checkUnlock() {
-            const input = document.getElementById('adminPass').value;
-            if(input === STAFF_PASS) {
-                closeUnlock();
+        function verifyStaff() {
+            const pass = document.getElementById('adminPass').value;
+            if(pass === STAFF_PASSWORD) {
+                closeStaff();
                 showPage('admin');
+                loadStats();
                 document.getElementById('adminPass').value = "";
             } else {
-                alert("ACCESS DENIED: Incorrect Staff Password");
+                document.getElementById('errorMsg').style.display = 'block';
+                document.getElementById('adminPass').value = "";
             }
         }
 
         // NAVIGATION
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         function showPage(p) {
-            const views = ['homeView', 'adminView']; // Add other view IDs here
-            views.forEach(v => {
-                const el = document.getElementById(v);
-                if(el) el.classList.add('hidden');
-            });
+            document.getElementById('homeView').classList.add('hidden');
+            document.getElementById('adminView').classList.add('hidden');
             document.getElementById(p + 'View').classList.remove('hidden');
         }
 
-        // LOGIN PERSISTENCE (7 DAYS)
-        auth.onAuthStateChanged(user => {
-            if(user) {
-                auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-            }
-        });
+        async function loadStats() {
+            const doc = await db.collection("stats").doc("counters").get();
+            if(doc.exists) document.getElementById('vStat').innerText = doc.data().v || 0;
+        }
 
-        // RAIN EFFECT
+        // MATRIX RAIN
         const canvas = document.getElementById('rainCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
