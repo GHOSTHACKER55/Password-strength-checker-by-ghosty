@@ -3,15 +3,15 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>GHOSTY PREMIUM | Easy Image Upload</title>
+    <title>GHOSTY PREMIUM | Elegant Image Hosting</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@700&family=Inter:wght@400;700&family=Orbitron:wght@800&display=swap" rel="stylesheet"/>
     <style>
         :root {
-            --bg: #050505;
+            --bg: #030303;
             --shining-blue: #00f2ff;
-            --deep-purple: #7000ff;
-            --glass: rgba(255, 255, 255, 0.03);
+            --btn-blue: #00d4ff;
+            --glass: rgba(255, 255, 255, 0.02);
         }
 
         * {
@@ -31,175 +31,179 @@
             overflow-x: hidden;
         }
 
-        /* Background Glows */
         .bg-glow {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: 
-                radial-gradient(circle at 50% 50%, rgba(0, 242, 255, 0.05) 0%, transparent 50%);
+            background: radial-gradient(circle at 50% 10%, rgba(0, 242, 255, 0.08) 0%, transparent 60%);
             z-index: -1;
         }
 
         .container {
             width: 100%;
-            max-width: 600px;
-            padding: 40px 20px;
+            max-width: 500px;
+            padding: 60px 20px;
         }
 
+        /* BEAUTIFUL TITLE */
         header {
             text-align: center;
             margin-bottom: 50px;
         }
 
         .logo {
-            font-family: 'Syncopate', sans-serif;
-            font-size: 2.5rem;
-            background: linear-gradient(to bottom, #fff, var(--shining-blue));
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 8px;
+            background: linear-gradient(180deg, #ffffff 0%, var(--shining-blue) 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.5));
+            filter: drop-shadow(0 0 20px rgba(0, 242, 255, 0.6));
+            animation: titleGlow 3s ease-in-out infinite alternate;
         }
 
-        /* Premium Card */
+        @keyframes titleGlow {
+            from { filter: drop-shadow(0 0 10px rgba(0, 242, 255, 0.4)); }
+            to { filter: drop-shadow(0 0 30px rgba(0, 242, 255, 0.8)); transform: scale(1.02); }
+        }
+
+        /* PREMIUM CARD */
         .premium-card {
             background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 24px;
-            padding: 30px;
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            padding: 35px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.9);
         }
 
-        /* ALWAYS BLUE GLOWING BORDER */
         .upload-zone {
             border: 2px solid var(--shining-blue);
             border-radius: 20px;
-            padding: 60px 20px;
+            padding: 50px 20px;
             text-align: center;
             cursor: pointer;
-            background: rgba(0, 242, 255, 0.03);
-            /* This creates the constant shining glow */
-            box-shadow: inset 0 0 15px rgba(0, 242, 255, 0.2), 0 0 15px rgba(0, 242, 255, 0.2);
+            background: rgba(0, 242, 255, 0.02);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.15);
             transition: 0.3s;
             position: relative;
             overflow: hidden;
-        }
-
-        /* Moving Shine Effect */
-        .upload-zone::after {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.05), transparent);
-            transform: rotate(45deg);
-            animation: shineMove 4s infinite;
-        }
-
-        @keyframes shineMove {
-            0% { transform: translateX(-100%) rotate(45deg); }
-            100% { transform: translateX(100%) rotate(45deg); }
         }
 
         .upload-zone i {
             font-size: 3rem;
             color: var(--shining-blue);
             margin-bottom: 15px;
-            filter: drop-shadow(0 0 8px var(--shining-blue));
+            filter: drop-shadow(0 0 10px var(--shining-blue));
         }
 
-        .upload-zone h2 {
-            font-size: 1.5rem;
-            letter-spacing: 1px;
-        }
-
-        /* Simple Buttons */
+        /* SHINING BLUE BUTTON */
         .btn-main {
             width: 100%;
-            margin-top: 25px;
-            padding: 18px;
+            margin-top: 30px;
+            padding: 20px;
             border: none;
-            border-radius: 12px;
-            background: white;
-            color: black;
+            border-radius: 15px;
+            background: linear-gradient(45deg, #008299, var(--btn-blue), #008299);
+            background-size: 200% auto;
+            color: white;
+            font-family: 'Syncopate', sans-serif;
             font-weight: 700;
             font-size: 1rem;
             cursor: pointer;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
+            box-shadow: 0 0 25px rgba(0, 242, 255, 0.4);
+            animation: moveGradient 3s linear infinite, btnPulse 2s infinite;
             transition: 0.3s;
         }
 
-        .btn-main:hover {
-            background: var(--shining-blue);
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
-            transform: translateY(-2px);
+        @keyframes moveGradient {
+            0% { background-position: 0% 50%; }
+            100% { background-position: 200% 50%; }
         }
 
-        /* Result Area */
+        @keyframes btnPulse {
+            0% { box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); }
+            50% { box-shadow: 0 0 35px rgba(0, 242, 255, 0.6); }
+            100% { box-shadow: 0 0 15px rgba(0, 242, 255, 0.3); }
+        }
+
+        .btn-main:hover {
+            transform: translateY(-3px) scale(1.02);
+            filter: brightness(1.2);
+        }
+
+        /* RESULT BOX */
         .result-box {
             display: none;
-            margin-top: 25px;
-            padding: 20px;
-            background: rgba(0,0,0,0.4);
-            border-radius: 15px;
+            margin-top: 30px;
+            padding: 25px;
+            background: rgba(0,0,0,0.6);
+            border-radius: 20px;
             border: 1px solid var(--shining-blue);
-            animation: fadeIn 0.5s ease;
+            animation: fadeIn 0.6s ease;
         }
 
         .link-bar {
-            background: #111;
-            padding: 12px;
-            border-radius: 8px;
+            background: #0a0a0a;
+            padding: 15px;
+            border-radius: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-top: 10px;
+            margin-top: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
 
         #urlText {
             font-family: monospace;
             color: var(--shining-blue);
+            font-size: 0.85rem;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
         }
 
         .copy-btn {
-            background: var(--shining-blue);
+            background: white;
+            color: black;
             border: none;
-            padding: 8px 15px;
-            border-radius: 5px;
-            font-weight: bold;
+            padding: 10px 18px;
+            border-radius: 8px;
+            font-weight: 800;
             cursor: pointer;
-            margin-left: 10px;
+            transition: 0.3s;
         }
 
-        /* Loader */
+        .copy-btn:hover {
+            background: var(--shining-blue);
+        }
+
         .loader {
             display: none;
             margin: 20px auto;
-            width: 30px;
-            height: 30px;
-            border: 3px solid rgba(0, 242, 255, 0.1);
-            border-top: 3px solid var(--shining-blue);
+            width: 40px;
+            height: 40px;
+            border: 4px solid rgba(0, 242, 255, 0.1);
+            border-top: 4px solid var(--shining-blue);
             border-radius: 50%;
-            animation: spin 0.8s linear infinite;
+            animation: spin 1s linear infinite;
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         footer {
-            margin-top: 40px;
+            margin-top: 50px;
             text-align: center;
-            font-size: 0.7rem;
-            opacity: 0.4;
-            letter-spacing: 2px;
+            font-size: 0.65rem;
+            opacity: 0.3;
+            letter-spacing: 4px;
+            text-transform: uppercase;
         }
     </style>
 </head>
@@ -209,35 +213,35 @@
     <div class="container">
         <header>
             <div class="logo">GHOSTY</div>
-            <p style="font-size: 0.7rem; letter-spacing: 3px; margin-top: 5px; opacity: 0.6;">PREMIUM IMAGE CONVERTER</p>
+            <p style="font-size: 0.6rem; letter-spacing: 6px; margin-top: 15px; opacity: 0.5; color: #fff;">PREMIUM CLOUD UPLOADER</p>
         </header>
 
         <div class="premium-card">
             <div class="upload-zone" id="dropArea">
-                <i class="fas fa-cloud-upload-alt"></i>
-                <h2 id="fileLabel">Upload Image</h2>
-                <p style="opacity: 0.5; font-size: 0.8rem; margin-top: 5px;">Click or drag photo here</p>
+                <i class="fas fa-file-import"></i>
+                <h2 id="fileLabel" style="font-size: 1.4rem;">Upload Image</h2>
+                <p style="opacity: 0.4; font-size: 0.75rem; margin-top: 8px;">Tap to select from gallery</p>
                 <input type="file" id="fileInput" hidden accept="image/*">
             </div>
 
             <div class="loader" id="spinner"></div>
 
             <button class="btn-main" id="goBtn">
-                <i class="fas fa-bolt"></i> GET LINK
+                <i class="fas fa-magic"></i> GET LINK
             </button>
 
             <div class="result-box" id="resultBox">
-                <p style="font-size: 0.7rem; color: #888;">YOUR LINK IS READY:</p>
+                <p style="font-size: 0.7rem; color: #aaa; text-transform: uppercase; letter-spacing: 1px;">Success! Link Manifested:</p>
                 <div class="link-bar">
                     <span id="urlText"></span>
                     <button class="copy-btn" id="copyBtn">COPY</button>
                 </div>
-                <button onclick="location.reload()" style="background:none; border:none; color:#555; width:100; margin-top:15px; cursor:pointer; font-size:0.8rem;">Upload Another</button>
+                <button onclick="location.reload()" style="background:none; border:none; color:#444; width:100%; margin-top:20px; cursor:pointer; font-size:0.75rem; text-transform: uppercase;">New Upload</button>
             </div>
         </div>
 
         <footer>
-            &copy; 2026 GHOSTY PREMIUM
+            DESIGNED FOR PERFORMANCE // 2026
         </footer>
     </div>
 
@@ -255,13 +259,13 @@
 
         fileInput.addEventListener('change', () => {
             if (fileInput.files.length > 0) {
-                fileLabel.innerText = "Ready to Upload";
+                fileLabel.innerText = "Image Selected";
                 fileLabel.style.color = '#00f2ff';
             }
         });
 
         goBtn.addEventListener('click', async () => {
-            if (fileInput.files.length === 0) return alert("Please choose an image!");
+            if (fileInput.files.length === 0) return alert("Select an image first!");
 
             goBtn.style.display = 'none';
             spinner.style.display = 'block';
@@ -282,16 +286,22 @@
                     resultBox.style.display = 'block';
                 } else {
                     alert("Error: " + data.error.message);
+                    location.reload();
                 }
             } catch (err) {
-                alert("Upload failed. Try again.");
+                alert("Connection failed.");
+                location.reload();
             }
         });
 
         document.getElementById('copyBtn').addEventListener('click', function() {
             navigator.clipboard.writeText(urlText.innerText);
-            this.innerText = "DONE!";
-            setTimeout(() => { this.innerText = "COPY"; }, 2000);
+            this.innerText = "DONE";
+            this.style.background = "#00f2ff";
+            setTimeout(() => { 
+                this.innerText = "COPY"; 
+                this.style.background = "#fff";
+            }, 2000);
         });
     </script>
 </body>
