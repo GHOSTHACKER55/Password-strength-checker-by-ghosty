@@ -16,45 +16,54 @@
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
         body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
 
-        /* PREMIUM MODAL (Image 7 Style) */
+        /* MODAL POPUP (Your Requested Style) */
         #premiumModal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9); z-index: 20000;
+            background: rgba(0,0,0,0.85); z-index: 20000;
             display: none; align-items: center; justify-content: center;
         }
         .modal-card {
             background: #0a0a0a; border: 1px solid var(--ghost);
             padding: 35px; border-radius: 25px; width: 90%; max-width: 380px;
             text-align: center; box-shadow: 0 0 30px rgba(0,242,255,0.3);
-            position: relative; animation: popIn 0.3s ease-out;
+            animation: popIn 0.3s ease-out;
         }
         @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
         .modal-title { font-family: 'Orbitron'; color: var(--ghost); font-size: 1.1rem; margin-bottom: 10px; text-transform: uppercase; }
         .modal-msg { font-size: 0.8rem; opacity: 0.8; margin-bottom: 25px; line-height: 1.5; }
-        .modal-btn { background: var(--ghost); color: #000; border: none; padding: 12px 45px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; }
+        .modal-btn { background: var(--ghost); color: #000; border: none; padding: 12px 45px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
 
-        /* AUTH BOX */
+        /* AUTH UI */
         #authOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:5000; display:flex; align-items:center; justify-content:center; }
         .auth-card { background:#0a0a0a; border:1px solid var(--ghost); padding:30px; border-radius:25px; width:90%; max-width:400px; text-align:center; }
         .auth-input { width:100%; padding:15px; margin:10px 0; border-radius:12px; border:1px solid #222; background:#000; color:#fff; outline:none; }
-        .auth-btn { width:100%; padding:15px; border-radius:12px; border:none; background:var(--ghost); color:#000; font-weight:900; cursor:pointer; text-transform: uppercase; }
+        .auth-btn { width:100%; padding:15px; border-radius:12px; border:none; background:var(--ghost); color:#000; font-weight:900; cursor:pointer; }
 
-        /* SIDEBAR */
+        /* SIDEBAR (3 LINES) */
         .menu-btn { position:fixed; top:20px; left:20px; z-index:1000; font-size:1.5rem; color:var(--ghost); cursor:pointer; }
         .sidebar { position:fixed; top:0; left:-300px; width:280px; height:100%; background:rgba(0,0,0,0.98); border-right:2px solid var(--ghost); z-index:999; transition:0.4s; padding:80px 25px; }
         .sidebar.active { left:0; }
-        .sidebar-item { display:block; color:#fff; text-decoration:none; padding:18px 0; font-family:'Syncopate'; font-size:0.65rem; cursor:pointer; border-bottom: 1px solid #111; letter-spacing: 2px; }
-        .sidebar-item i { margin-right: 10px; color: var(--ghost); width: 20px; }
+        .sidebar-item { display:flex; align-items:center; color:#fff; text-decoration:none; padding:18px 0; font-family:'Syncopate'; font-size:0.65rem; cursor:pointer; border-bottom: 1px solid #111; letter-spacing: 2px; }
+        .sidebar-item i { margin-right: 15px; font-size: 0.9rem; color: var(--ghost); width: 20px; text-align: center; }
 
-        /* GALLERY (3 IN A ROW) */
+        /* HOME UI (Matches your Screenshot) */
+        .home-container { max-width:480px; margin:0 auto; padding:80px 20px; text-align: center; }
+        .logo-section { margin-bottom: 40px; }
+        .logo-icon { font-size: 3.5rem; color: var(--ghost); filter: drop-shadow(0 0 10px var(--ghost)); margin-bottom: 10px; }
+        .logo-text { font-family: 'Orbitron'; font-size: 2.8rem; letter-spacing: 12px; color: #fff; text-shadow: 0 0 15px var(--ghost); }
+        .logo-sub { font-size: 0.6rem; letter-spacing: 4px; opacity: 0.5; margin-top: 5px; }
+        
+        .upload-box { background: rgba(0,0,0,0.6); border: 2px solid var(--ghost); border-radius: 35px; padding: 40px 20px; margin-top: 30px; box-shadow: 0 0 20px rgba(0,242,255,0.1); }
+        .upload-inner { border: 1px solid rgba(0,242,255,0.3); border-radius: 20px; padding: 30px 10px; cursor: pointer; transition: 0.3s; margin-bottom: 20px; }
+        .upload-inner:hover { background: var(--glass); }
+        .upload-title { color: var(--ghost); font-weight: 900; letter-spacing: 2px; font-size: 1rem; margin-top: 10px; }
+        
+        /* GALLERY (3 IN ROW) */
         .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
-        .gallery-card { aspect-ratio: 1; background: #050505; border: 1px solid #222; border-radius: 10px; overflow: hidden; position: relative; }
-        .gallery-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; }
+        .gallery-card { aspect-ratio: 1; border: 1px solid #222; border-radius: 10px; overflow: hidden; background: #050505; }
 
         #rainCanvas { position:fixed; top:0; left:0; z-index:-1; opacity:0.3; }
-        .container { max-width:480px; margin:0 auto; padding:80px 20px; text-align: center;}
         .hidden { display:none !important; }
-        .shining-logo { font-family:'Orbitron'; color:var(--ghost); letter-spacing:10px; text-shadow: 0 0 15px var(--ghost); font-size: 2.2rem; }
     </style>
 </head>
 <body>
@@ -91,46 +100,56 @@
         <div class="sidebar-item" onclick="showPage('uploads')"><i class="fas fa-images"></i> MY UPLOADS</div>
         <div class="sidebar-item" onclick="window.open('https://wa.me/923106723295')"><i class="fas fa-crown"></i> BUY PREMIUM</div>
         <div class="sidebar-item" onclick="showPage('suggest')"><i class="fas fa-comment-dots"></i> SUGGESTION</div>
-        <div class="sidebar-item" id="adminLink" style="display:none; color: #ff0055;" onclick="showPage('admin')"><i class="fas fa-user-shield"></i> ADMIN PANEL</div>
+        
+        <div class="sidebar-item" id="adminLink" style="display:none; color: #ff0055;" onclick="showPage('admin')">
+            <i class="fas fa-user-shield"></i> ADMIN PANEL
+        </div>
+        
         <div class="sidebar-item" onclick="firebase.auth().signOut()" style="color:red; margin-top:40px; border:none;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
     </nav>
 
     <canvas id="rainCanvas"></canvas>
 
-    <div class="container" id="homeView">
-        <h1 class="shining-logo">GHOSTY</h1>
-        <p style="font-size:0.6rem; letter-spacing:3px; opacity: 0.5; margin-top: 10px;">PREMIUM SHINING LOG</p>
-        <div style="background:var(--glass); border: 1px solid var(--ghost); padding: 50px 20px; border-radius: 35px; margin-top: 50px;">
-            <i class="fas fa-cloud-upload-alt" style="font-size:3.5rem; color:var(--ghost); filter: drop-shadow(0 0 10px var(--ghost));"></i>
-            <h3 style="margin-top:20px; letter-spacing: 2px; font-size: 0.9rem;">UPLOAD IMAGE</h3>
-            <button class="auth-btn" style="margin-top:30px; background:none; border:1px solid var(--ghost); color:#fff; width: 80%;">GET LINK</button>
+    <div class="home-container" id="homeView">
+        <div class="logo-section">
+            <div class="logo-icon"><i class="fas fa-ghost"></i></div>
+            <div class="logo-text">GHOSTY</div>
+            <div class="logo-sub">PREMIUM SHINING LOG</div>
         </div>
+
+        <div class="upload-box">
+            <div class="upload-inner" onclick="document.getElementById('fileInput').click()">
+                <i class="fas fa-file-export" style="font-size: 2.5rem; color: var(--ghost);"></i>
+                <div class="upload-title">UPLOAD IMAGE</div>
+            </div>
+            <input type="file" id="fileInput" hidden>
+            <button class="auth-btn" style="background:none; border: 1px solid var(--ghost); color:#fff; width: 90%; font-size: 0.8rem;">GET LINK</button>
+        </div>
+        <p style="margin-top: 40px; font-size: 0.6rem; letter-spacing: 3px; opacity: 0.4;">RECENT HISTORY</p>
     </div>
 
-    <div class="container hidden" id="uploadsView">
-        <h2 style="color:var(--ghost); font-family:'Syncopate'; font-size: 0.8rem;">HISTORY (3x3)</h2>
+    <div class="home-container hidden" id="uploadsView">
+        <h2 style="color:var(--ghost); font-family:'Syncopate'; font-size: 0.8rem;">MY UPLOADS</h2>
         <div class="gallery-grid" id="galleryGrid">
             <div class="gallery-card"></div><div class="gallery-card"></div><div class="gallery-card"></div>
         </div>
     </div>
 
-    <div class="container hidden" id="suggestView">
-        <h2 style="color:var(--ghost); font-family:'Syncopate'; font-size: 0.8rem;">SUBMIT SUGGESTION</h2>
-        <textarea id="suggestTxt" style="width:100%; height:150px; background:#050505; border:1px solid var(--ghost); color:#fff; padding:15px; margin-top:20px; border-radius:15px; outline: none; border-style: dashed;" placeholder="Type your idea for Musa..."></textarea>
-        <button class="auth-btn" onclick="submitSuggest()" style="margin-top:15px;">SEND TO ADMIN</button>
+    <div class="home-container hidden" id="suggestView">
+        <h2 style="color:var(--ghost); font-family:'Syncopate'; font-size: 0.8rem;">SEND FEEDBACK</h2>
+        <textarea id="suggestTxt" style="width:100%; height:150px; background:#050505; border:1px solid var(--ghost); color:#fff; padding:15px; margin-top:20px; border-radius:15px; outline: none;" placeholder="What should we add?"></textarea>
+        <button class="auth-btn" onclick="submitSuggest()" style="margin-top:15px;">SEND TO MUSA</button>
     </div>
 
-    <div class="container hidden" id="adminView">
-        <h2 style="color:var(--ghost); font-family:'Syncopate';">ADMIN PANEL</h2>
-        <div id="adminPanelContent" style="margin-top:30px; text-align: left; background: #0a0a0a; padding: 20px; border-radius: 15px; border: 1px solid #222;">
-            <p id="vCounter" style="color:var(--ghost); font-weight: bold;">Visitors: Loading...</p>
-            <hr style="border: 0; border-top: 1px solid #222; margin: 15px 0;">
-            <p style="font-size: 0.7rem; opacity: 0.6;">Only musaandanas963@gmail.com can see this.</p>
+    <div class="home-container hidden" id="adminView">
+        <h2 style="color:var(--ghost); font-family:'Syncopate';">ADMIN CONSOLE</h2>
+        <div id="stats" style="margin-top: 30px; text-align: left; background: #0a0a0a; padding: 20px; border-radius: 15px; border: 1px solid #222;">
+            <p id="vCounter">Visitors: Loading...</p>
         </div>
     </div>
 
     <script>
-        // YOUR FIREBASE CONFIG
+        // FIREBASE CONFIG
         const firebaseConfig = {
             apiKey: "AIzaSyDulf_AZJ7_e8zhEPqARYeboQ435zllAN0",
             authDomain: "image-to-link-e0c9a.firebaseapp.com",
@@ -144,7 +163,7 @@
         const db = firebase.firestore();
         const ADMIN_MAIL = "musaandanas963@gmail.com"; 
 
-        // POPUP SYSTEM
+        // POPUP
         function showPopup(title, msg) {
             document.getElementById('mTitle').innerText = title;
             document.getElementById('mBody').innerText = msg;
@@ -152,15 +171,15 @@
         }
         function closePopup() { document.getElementById('premiumModal').style.display = 'none'; }
 
-        // AUTH LOGIC (7-Day Memory)
+        // AUTH & PERSISTENCE
         async function login() {
             const email = document.getElementById('logEmail').value;
             const pass = document.getElementById('logPass').value;
             try { 
                 await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
                 await auth.signInWithEmailAndPassword(email, pass);
-                showPopup("WELCOME", "Success! Redirecting to Ghosty Home.");
-            } catch(e) { showPopup("ACCESS DENIED", e.message); }
+                showPopup("SUCCESS", "Logged in successfully.");
+            } catch(e) { showPopup("ERROR", e.message); }
         }
 
         async function signup() {
@@ -170,26 +189,29 @@
             try {
                 const res = await auth.createUserWithEmailAndPassword(email, pass);
                 await db.collection("users").doc(res.user.uid).set({ name, email });
-                showPopup("BORN!", "Welcome to the Ghosty family.");
-            } catch(e) { showPopup("FAILED", e.message); }
+                showPopup("SUCCESS", "Account Created!");
+            } catch(e) { showPopup("ERROR", e.message); }
         }
 
         auth.onAuthStateChanged(user => {
             if(user) {
                 document.getElementById('authOverlay').classList.add('hidden');
-                if(user.email === ADMIN_MAIL) document.getElementById('adminLink').style.display='block';
+                if(user.email === ADMIN_MAIL) {
+                    document.getElementById('adminLink').style.display = 'flex';
+                }
                 db.collection("stats").doc("counters").set({ v: firebase.firestore.FieldValue.increment(1) }, {merge:true});
             } else {
                 document.getElementById('authOverlay').classList.remove('hidden');
+                document.getElementById('adminLink').style.display = 'none';
             }
         });
 
+        // NAVIGATION
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         function toggleAuth(isSignup) {
             document.getElementById('loginBox').classList.toggle('hidden', isSignup);
             document.getElementById('signupBox').classList.toggle('hidden', !isSignup);
         }
-
         function showPage(p) {
             const views = ['homeView', 'uploadsView', 'suggestView', 'adminView'];
             views.forEach(v => document.getElementById(v).classList.add('hidden'));
@@ -200,10 +222,10 @@
 
         async function submitSuggest() {
             const text = document.getElementById('suggestTxt').value;
-            if(!text) return showPopup("ALERT", "Type something first.");
+            if(!text) return showPopup("ALERT", "Field is empty.");
             await db.collection("suggestions").add({ text, user: auth.currentUser.email });
             document.getElementById('suggestTxt').value = "";
-            showPopup("SENT", "Musa has received your suggestion!");
+            showPopup("SENT", "Musa will check your suggestion soon!");
         }
 
         async function loadStats() {
@@ -211,7 +233,7 @@
             document.getElementById('vCounter').innerText = "Total Site Visitors: " + (doc.data().v || 0);
         }
 
-        // MATRIX RAIN
+        // MATRIX EFFECT
         const canvas = document.getElementById('rainCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
