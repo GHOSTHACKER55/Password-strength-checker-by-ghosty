@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>GHOSTY PREMIUM | V8 ADMIN PRO</title>
+    <title>GHOSTY PREMIUM | V9 FINAL</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Syncopate:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet"/>
     
@@ -16,15 +16,25 @@
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
 
+        /* GHOSTY NOTIFICATION POPUP */
+        #notification {
+            position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
+            background: var(--ghost); color: #000; padding: 15px 30px; border-radius: 50px;
+            font-weight: 900; font-size: 0.8rem; z-index: 10000; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 20px rgba(0, 242, 255, 0.5);
+        }
+        #notification.show { bottom: 40px; }
+
         /* HOME UI */
         .home-view { text-align: center; padding: 80px 20px; }
         .ghost-icon { font-size: 3.5rem; color: var(--ghost); margin-bottom: 15px; filter: drop-shadow(0 0 10px var(--ghost)); }
         .logo-text { font-family: 'Orbitron'; font-size: 2.8rem; letter-spacing: 12px; margin-bottom: 5px; }
         .sub-text { font-size: 0.65rem; letter-spacing: 4px; opacity: 0.5; font-weight: 700; margin-bottom: 40px; }
         
-        .upload-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(0,242,255,0.2); border-radius: 45px; padding: 40px 25px; max-width: 400px; margin: 0 auto; }
+        .upload-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(0, 242, 255, 0.2); border-radius: 45px; padding: 40px 25px; max-width: 400px; margin: 0 auto; }
         .upload-btn { border: 2px solid var(--ghost); border-radius: 30px; padding: 40px; margin-bottom: 20px; cursor: pointer; }
-        .action-btn { width: 100%; padding: 18px; border-radius: 18px; font-weight: 900; cursor: pointer; text-transform: uppercase; border: none; }
+        .action-btn { width: 100%; padding: 18px; border-radius: 18px; font-weight: 900; cursor: pointer; text-transform: uppercase; border: none; transition: 0.2s; }
+        .action-btn:active { transform: scale(0.95); }
 
         /* SIDEBAR MENU */
         .menu-icon { position: fixed; top: 25px; left: 25px; z-index: 1000; font-size: 1.8rem; color: var(--ghost); cursor: pointer; }
@@ -35,30 +45,31 @@
 
         /* MODALS & INPUTS */
         #staffModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 5000; display: none; align-items: center; justify-content: center; }
-        .white-card { background: #fff; color: #000; padding: 40px 30px; border-radius: 45px; width: 90%; max-width: 360px; text-align: center; }
-        .modal-input { width: 100%; padding: 18px; border-radius: 15px; border: 2.5px solid var(--blue); margin-bottom: 20px; text-align: center; font-size: 1.1rem; outline: none; }
+        .white-card { background: #fff; color: #000; padding: 40px 30px; border-radius: 45px; width: 92%; max-width: 360px; text-align: center; }
+        .modal-input { width: 100%; padding: 18px; border-radius: 15px; border: 2.5px solid var(--blue); margin-bottom: 20px; text-align: center; font-size: 1.1rem; outline: none; color: #000; background: #fff; }
+        textarea.modal-input { text-align: left; }
         
-        /* PLACEHOLDER COLOR FIX */
-        ::placeholder { color: #555; opacity: 1; }
-
-        /* ADMIN & SUGGESTION STYLES */
+        /* PAGE STYLES */
         .page-container { max-width: 500px; margin: 0 auto; padding: 100px 20px; }
-        .data-box { background: #0a0a0a; border: 1px solid #222; border-radius: 20px; padding: 15px; margin-bottom: 15px; }
-        .user-email-tag { font-size: 0.65rem; color: #007bff; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
-        .reply-box { margin-top: 10px; padding: 10px; background: rgba(0,242,255,0.1); border-radius: 10px; font-size: 0.8rem; color: var(--ghost); border-left: 3px solid var(--ghost); }
+        .data-box { background: #0a0a0a; border: 1px solid #222; border-radius: 20px; padding: 18px; margin-bottom: 15px; position: relative; }
+        .user-tag { font-size: 0.6rem; color: var(--blue); font-weight: 900; letter-spacing: 1px; display: block; margin-bottom: 8px; }
+        .reply-box { margin-top: 12px; padding: 12px; background: rgba(0, 242, 255, 0.05); border-radius: 12px; font-size: 0.8rem; color: var(--ghost); border-left: 3px solid var(--ghost); }
         
-        #matrix { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.15; }
+        #matrix { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.15; pointer-events: none; }
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
     <canvas id="matrix"></canvas>
+    
+    <div id="notification">MESSAGE SENT TO ADMIN!</div>
+
     <div class="menu-icon" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
 
     <nav class="sidebar" id="sidebar">
         <div class="nav-item" onclick="showView('home')"><i class="fas fa-home"></i> HOME</div>
-        <div class="nav-item" onclick="showView('premium')"><i class="fas fa-crown"></i> BUY PREMIUM</div>
+        <div class="nav-item" onclick="window.open('https://wa.me/923106723295')"><i class="fas fa-crown"></i> BUY PREMIUM</div>
         <div class="nav-item" onclick="window.location.href='tel:03106723295'"><i class="fas fa-headset"></i> CONTACT ADMIN</div>
         <div class="nav-item" onclick="openStaffModal()"><i class="fas fa-user-shield"></i> ADMIN</div>
         <div class="nav-item" onclick="showView('suggest')"><i class="fas fa-comment-dots"></i> SUGGESTIONS</div>
@@ -67,11 +78,11 @@
 
     <div id="staffModal">
         <div class="white-card">
-            <h2 style="font-weight:900; font-style:italic;">STAFF ACCESS</h2>
-            <p style="font-size:0.6rem; opacity:0.5; margin-bottom:25px;">SECURE PORTAL</p>
+            <h2 style="font-weight:900; font-style:italic; font-family: 'Inter';">STAFF ACCESS</h2>
+            <p style="font-size:0.6rem; opacity:0.5; margin-bottom:25px; letter-spacing: 2px;">SECURE PORTAL</p>
             <input type="password" id="staffPass" class="modal-input" placeholder="ENTER PASSWORD">
             <button class="action-btn" style="background:#000; color:#fff;" onclick="checkAdmin()">UNLOCK</button>
-            <p onclick="closeStaffModal()" style="margin-top:20px; cursor:pointer; font-size:0.7rem; opacity:0.5;">CANCEL</p>
+            <p onclick="closeStaffModal()" style="margin-top:20px; cursor:pointer; font-size:0.7rem; opacity:0.5; font-weight: 700;">CANCEL</p>
         </div>
     </div>
 
@@ -80,29 +91,30 @@
         <h1 class="logo-text">GHOSTY</h1>
         <p class="sub-text">PREMIUM SHINING LOG</p>
         <div class="upload-card">
-            <div class="upload-btn"><i class="fas fa-cloud-upload-alt" style="font-size:3rem; color:var(--ghost);"></i><br><br>UPLOAD IMAGE</div>
-            <button class="action-btn" style="background:none; border:1px solid var(--ghost); color:#fff; font-size:0.7rem;">GET LINK</button>
+            <div class="upload-btn"><i class="fas fa-cloud-upload-alt" style="font-size:3rem; color:var(--ghost);"></i><br><br><span style="font-size: 0.8rem; font-weight: 900; letter-spacing: 2px;">UPLOAD IMAGE</span></div>
+            <button class="action-btn" style="background:none; border: 1px solid var(--ghost); color:#fff; font-size:0.7rem;">GET LINK</button>
         </div>
     </div>
 
     <div id="suggestView" class="page-container hidden">
-        <h2 style="font-family:'Orbitron'; color:var(--ghost); margin-bottom:20px;">SEND SUGGESTION</h2>
-        <textarea id="userMsg" class="modal-input" style="height:150px; background:#111; color:#fff; border-color:#333; text-align:left; padding:15px;" placeholder="Write your suggestion or feedback here..."></textarea>
+        <h2 style="font-family:'Orbitron'; color:var(--ghost); margin-bottom:20px; letter-spacing: 3px;">SUGGESTION</h2>
+        <textarea id="userMsg" class="modal-input" style="height:150px; background:#111; color:#fff; border-color:#222; padding:15px; font-size: 0.9rem;" placeholder="Write your suggestion or feedback here..."></textarea>
         <button class="action-btn" style="background:var(--ghost); color:#000;" onclick="submitSuggestion()">SEND TO ADMIN</button>
     </div>
 
     <div id="mySuggestView" class="page-container hidden">
-        <h2 style="font-family:'Orbitron'; color:var(--ghost); margin-bottom:20px;">MY REPLIES</h2>
+        <h2 style="font-family:'Orbitron'; color:var(--ghost); margin-bottom:20px; letter-spacing: 3px;">MY REPLIES</h2>
         <div id="my-list"></div>
     </div>
 
     <div id="adminView" class="page-container hidden">
-        <h2 style="font-family:'Orbitron'; color:var(--ghost); text-align:center; margin-bottom:30px;">ADMIN CONSOLE</h2>
+        <h2 style="font-family:'Orbitron'; color:var(--ghost); text-align:center; margin-bottom:30px; letter-spacing: 3px;">ADMIN PANEL</h2>
         <div id="admin-list"></div>
         <button class="action-btn" style="background:#111; margin-top:20px; border:1px solid #333; color:#fff;" onclick="showView('home')">EXIT ADMIN</button>
     </div>
 
     <script>
+        // Replace with your Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDulf_AZJ7_e8zhEPqARYeboQ435zllAN0",
             authDomain: "image-to-link-e0c9a.firebaseapp.com",
@@ -117,214 +129,13 @@
 
         const MASTER_PASS = "musa"; 
 
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
-        function openStaffModal() { document.getElementById('staffModal').style.display = 'flex'; toggleSidebar(); }
-        function closeStaffModal() { document.getElementById('staffModal').style.display = 'none'; }
-
-        function showView(v) {
-            ['home','suggest','mySuggest','admin'].forEach(id => document.getElementById(id+'View').classList.add('hidden'));
-            document.getElementById(v+'View').classList.remove('hidden');
-            if(window.innerWidth < 768) document.getElementById('sidebar').classList.remove('active');
+        // UTILITY: SHOW NOTIFICATION
+        function notify(msg) {
+            const n = document.getElementById('notification');
+            n.innerText = msg;
+            n.classList.add('show');
+            setTimeout(() => n.classList.remove('show'), 3000);
         }
-
-        function checkAdmin() {
-            if(document.getElementById('staffPass').value === MASTER_PASS) {
-                closeStaffModal(); showView('admin'); loadAdminSuggestions();
-            } else { alert("WRONG PASSWORD"); }
-        }
-
-        function submitSuggestion() {
-            const user = auth.currentUser;
-            const text = document.getElementById('userMsg').value;
-            if(!text) return alert("Please enter a suggestion");
-            
-            db.collection("suggestions").add({
-                text: text,
-                user: user ? user.email : "Guest User",
-                reply: "",
-                timestamp: Date.now()
-            }).then(() => {
-                alert("Success! Admin will see your email and message.");
-                document.getElementById('userMsg').value = "";
-                showView('home');
-            });
-        }
-
-        async function loadMySuggestions() {
-            const user = auth.currentUser;
-            if(!user) return;
-            const snap = await db.collection("suggestions").where("user", "==", user.email).get();
-            let html = "";
-            snap.forEach(doc => {
-                const data = doc.data();
-                html += `<div class="data-box">
-                    <p style="font-size:0.9rem;">${data.text}</p>
-                    ${data.reply ? `<div class="reply-box"><b>REPLY:</b> ${data.reply}</div>` : `<p style="font-size:0.6rem; margin-top:10px; opacity:0.4;">Admin hasn't replied yet.</p>`}
-                </div>`;
-            });
-            document.getElementById('my-list').innerHTML = html || "No history found.";
-        }
-
-        async function loadAdminSuggestions() {
-            const snap = await db.collection("suggestions").orderBy("timestamp", "desc").get();
-            let html = "";
-            snap.forEach(doc => {
-                const data = doc.data();
-                html += `<div class="data-box">
-                    <span class="user-email-tag">SENDER: ${data.user}</span>
-                    <p style="margin:10px 0; font-size:0.9rem; line-height:1.4;">${data.text}</p>
-                    <input type="text" id="rep-${doc.id}" class="modal-input" style="background:#000; color:#fff; font-size:0.8rem; height:45px; margin-bottom:10px; border-color:#222;" placeholder="Type your reply to this email...">
-                    <button class="action-btn" style="font-size:0.65rem; padding:12px; background:var(--ghost); color:#000;" onclick="adminReply('${doc.id}')">SEND REPLY</button>
-                </div>`;
-            });
-            document.getElementById('admin-list').innerHTML = html || "No incoming suggestions.";
-        }
-
-        function adminReply(id) {
-            const repText = document.getElementById('rep-'+id).value;
-            if(!repText) return alert("Write something first!");
-            db.collection("suggestions").doc(id).update({ reply: repText }).then(() => {
-                alert("Reply sent successfully to user!");
-                loadAdminSuggestions();
-            });
-        }
-
-        // MATRIX BACKGROUND
-        const c = document.getElementById('matrix');
-        const ctx = c.getContext('2d');
-        c.width = window.innerWidth; c.height = window.innerHeight;
-        const drops = Array(Math.floor(c.width/20)).fill(1);
-        function draw() {
-            ctx.fillStyle = "rgba(0,0,0,0.1)"; ctx.fillRect(0,0,c.width,c.height);
-            ctx.fillStyle = "#00f2ff"; ctx.font = "15px monospace";
-            drops.forEach((y, i) => {
-                ctx.fillText(Math.floor(Math.random()*2), i*20, y*20);
-                if(y*20 > c.height && Math.random() > 0.975) drops[i] = 0;
-                drops[i]++;
-            });
-        }
-        setInterval(draw, 50);
-    </script>
-</body>
-</html>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>GHOSTY PREMIUM | V8 ADMIN PRO</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Syncopate:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet"/>
-    
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
-
-    <style>
-        :root { --bg: #000; --ghost: #00f2ff; --panel: #111; --blue: #007bff; }
-        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
-
-        /* HOME UI */
-        .home-view { text-align: center; padding: 80px 20px; }
-        .ghost-icon { font-size: 3.5rem; color: var(--ghost); margin-bottom: 15px; filter: drop-shadow(0 0 10px var(--ghost)); }
-        .logo-text { font-family: 'Orbitron'; font-size: 2.8rem; letter-spacing: 12px; margin-bottom: 5px; }
-        .sub-text { font-size: 0.65rem; letter-spacing: 4px; opacity: 0.5; font-weight: 700; margin-bottom: 40px; }
-        
-        .upload-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(0,242,255,0.2); border-radius: 45px; padding: 40px 25px; max-width: 400px; margin: 0 auto; }
-        .upload-btn { border: 2px solid var(--ghost); border-radius: 30px; padding: 40px; margin-bottom: 20px; cursor: pointer; }
-        .action-btn { width: 100%; padding: 18px; border-radius: 18px; font-weight: 900; cursor: pointer; text-transform: uppercase; border: none; }
-
-        /* SIDEBAR MENU */
-        .menu-icon { position: fixed; top: 25px; left: 25px; z-index: 1000; font-size: 1.8rem; color: var(--ghost); cursor: pointer; }
-        .sidebar { position: fixed; top: 0; left: -310px; width: 300px; height: 100%; background: #000; border-right: 1px solid var(--ghost); z-index: 999; transition: 0.4s; padding: 100px 30px; }
-        .sidebar.active { left: 0; }
-        .nav-item { display: flex; align-items: center; padding: 20px 0; color: #fff; font-family: 'Syncopate'; font-size: 0.7rem; border-bottom: 1px solid #111; cursor: pointer; letter-spacing: 1px; }
-        .nav-item i { margin-right: 15px; color: var(--ghost); width: 25px; }
-
-        /* MODALS & INPUTS */
-        #staffModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 5000; display: none; align-items: center; justify-content: center; }
-        .white-card { background: #fff; color: #000; padding: 40px 30px; border-radius: 45px; width: 90%; max-width: 360px; text-align: center; }
-        .modal-input { width: 100%; padding: 18px; border-radius: 15px; border: 2.5px solid var(--blue); margin-bottom: 20px; text-align: center; font-size: 1.1rem; outline: none; }
-        
-        /* PLACEHOLDER COLOR FIX */
-        ::placeholder { color: #555; opacity: 1; }
-
-        /* ADMIN & SUGGESTION STYLES */
-        .page-container { max-width: 500px; margin: 0 auto; padding: 100px 20px; }
-        .data-box { background: #0a0a0a; border: 1px solid #222; border-radius: 20px; padding: 15px; margin-bottom: 15px; }
-        .user-email-tag { font-size: 0.65rem; color: #007bff; font-weight: 900; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; display: block; }
-        .reply-box { margin-top: 10px; padding: 10px; background: rgba(0,242,255,0.1); border-radius: 10px; font-size: 0.8rem; color: var(--ghost); border-left: 3px solid var(--ghost); }
-        
-        #matrix { position: fixed; top: 0; left: 0; z-index: -1; opacity: 0.15; }
-        .hidden { display: none !important; }
-    </style>
-</head>
-<body>
-
-    <canvas id="matrix"></canvas>
-    <div class="menu-icon" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
-
-    <nav class="sidebar" id="sidebar">
-        <div class="nav-item" onclick="showView('home')"><i class="fas fa-home"></i> HOME</div>
-        <div class="nav-item" onclick="showView('premium')"><i class="fas fa-crown"></i> BUY PREMIUM</div>
-        <div class="nav-item" onclick="window.location.href='tel:03106723295'"><i class="fas fa-headset"></i> CONTACT ADMIN</div>
-        <div class="nav-item" onclick="openStaffModal()"><i class="fas fa-user-shield"></i> ADMIN</div>
-        <div class="nav-item" onclick="showView('suggest')"><i class="fas fa-comment-dots"></i> SUGGESTIONS</div>
-        <div class="nav-item" onclick="showView('mySuggest'); loadMySuggestions();"><i class="fas fa-reply-all"></i> MY SUGGESTIONS</div>
-    </nav>
-
-    <div id="staffModal">
-        <div class="white-card">
-            <h2 style="font-weight:900; font-style:italic;">STAFF ACCESS</h2>
-            <p style="font-size:0.6rem; opacity:0.5; margin-bottom:25px;">SECURE PORTAL</p>
-            <input type="password" id="staffPass" class="modal-input" placeholder="ENTER PASSWORD">
-            <button class="action-btn" style="background:#000; color:#fff;" onclick="checkAdmin()">UNLOCK</button>
-            <p onclick="closeStaffModal()" style="margin-top:20px; cursor:pointer; font-size:0.7rem; opacity:0.5;">CANCEL</p>
-        </div>
-    </div>
-
-    <div id="homeView" class="home-view">
-        <i class="fas fa-ghost ghost-icon"></i>
-        <h1 class="logo-text">GHOSTY</h1>
-        <p class="sub-text">PREMIUM SHINING LOG</p>
-        <div class="upload-card">
-            <div class="upload-btn"><i class="fas fa-cloud-upload-alt" style="font-size:3rem; color:var(--ghost);"></i><br><br>UPLOAD IMAGE</div>
-            <button class="action-btn" style="background:none; border:1px solid var(--ghost); color:#fff; font-size:0.7rem;">GET LINK</button>
-        </div>
-    </div>
-
-    <div id="suggestView" class="page-container hidden">
-        <h2 style="font-family:'Orbitron'; color:var(--ghost); margin-bottom:20px;">SEND SUGGESTION</h2>
-        <textarea id="userMsg" class="modal-input" style="height:150px; background:#111; color:#fff; border-color:#333; text-align:left; padding:15px;" placeholder="Write your suggestion or feedback here..."></textarea>
-        <button class="action-btn" style="background:var(--ghost); color:#000;" onclick="submitSuggestion()">SEND TO ADMIN</button>
-    </div>
-
-    <div id="mySuggestView" class="page-container hidden">
-        <h2 style="font-family:'Orbitron'; color:var(--ghost); margin-bottom:20px;">MY REPLIES</h2>
-        <div id="my-list"></div>
-    </div>
-
-    <div id="adminView" class="page-container hidden">
-        <h2 style="font-family:'Orbitron'; color:var(--ghost); text-align:center; margin-bottom:30px;">ADMIN CONSOLE</h2>
-        <div id="admin-list"></div>
-        <button class="action-btn" style="background:#111; margin-top:20px; border:1px solid #333; color:#fff;" onclick="showView('home')">EXIT ADMIN</button>
-    </div>
-
-    <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyDulf_AZJ7_e8zhEPqARYeboQ435zllAN0",
-            authDomain: "image-to-link-e0c9a.firebaseapp.com",
-            projectId: "image-to-link-e0c9a",
-            storageBucket: "image-to-link-e0c9a.firebasestorage.app",
-            messagingSenderId: "510967733413",
-            appId: "1:510967733413:web:6e13746901855c8e3a414c"
-        };
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
-
-        const MASTER_PASS = "musa"; 
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
         function openStaffModal() { document.getElementById('staffModal').style.display = 'flex'; toggleSidebar(); }
@@ -339,39 +150,40 @@
         function checkAdmin() {
             if(document.getElementById('staffPass').value === MASTER_PASS) {
                 closeStaffModal(); showView('admin'); loadAdminSuggestions();
-            } else { alert("WRONG PASSWORD"); }
+                document.getElementById('staffPass').value = "";
+            } else { notify("WRONG PASSWORD!"); }
         }
 
         function submitSuggestion() {
             const user = auth.currentUser;
             const text = document.getElementById('userMsg').value;
-            if(!text) return alert("Please enter a suggestion");
+            if(!text) { notify("PLEASE TYPE SOMETHING!"); return; }
             
             db.collection("suggestions").add({
                 text: text,
-                user: user ? user.email : "Guest User",
+                user: user ? user.email : "Guest",
                 reply: "",
                 timestamp: Date.now()
             }).then(() => {
-                alert("Success! Admin will see your email and message.");
+                notify("MESSAGE SENT TO ADMIN!");
                 document.getElementById('userMsg').value = "";
-                showView('home');
+                setTimeout(() => showView('home'), 1000);
             });
         }
 
         async function loadMySuggestions() {
             const user = auth.currentUser;
             if(!user) return;
-            const snap = await db.collection("suggestions").where("user", "==", user.email).get();
+            const snap = await db.collection("suggestions").where("user", "==", user.email).orderBy("timestamp", "desc").get();
             let html = "";
             snap.forEach(doc => {
                 const data = doc.data();
                 html += `<div class="data-box">
-                    <p style="font-size:0.9rem;">${data.text}</p>
-                    ${data.reply ? `<div class="reply-box"><b>REPLY:</b> ${data.reply}</div>` : `<p style="font-size:0.6rem; margin-top:10px; opacity:0.4;">Admin hasn't replied yet.</p>`}
+                    <p style="font-size:0.9rem; line-height:1.5;">${data.text}</p>
+                    ${data.reply ? `<div class="reply-box"><b>REPLY:</b> ${data.reply}</div>` : `<p style="font-size:0.6rem; margin-top:10px; opacity:0.3; font-style:italic;">Waiting for Admin reply...</p>`}
                 </div>`;
             });
-            document.getElementById('my-list').innerHTML = html || "No history found.";
+            document.getElementById('my-list').innerHTML = html || "<p style='text-align:center; opacity:0.3;'>No history found.</p>";
         }
 
         async function loadAdminSuggestions() {
@@ -380,25 +192,25 @@
             snap.forEach(doc => {
                 const data = doc.data();
                 html += `<div class="data-box">
-                    <span class="user-email-tag">SENDER: ${data.user}</span>
-                    <p style="margin:10px 0; font-size:0.9rem; line-height:1.4;">${data.text}</p>
-                    <input type="text" id="rep-${doc.id}" class="modal-input" style="background:#000; color:#fff; font-size:0.8rem; height:45px; margin-bottom:10px; border-color:#222;" placeholder="Type your reply to this email...">
-                    <button class="action-btn" style="font-size:0.65rem; padding:12px; background:var(--ghost); color:#000;" onclick="adminReply('${doc.id}')">SEND REPLY</button>
+                    <span class="user-tag">FROM: ${data.user}</span>
+                    <p style="margin:8px 0; font-size:0.9rem;">${data.text}</p>
+                    <input type="text" id="rep-${doc.id}" class="modal-input" style="background:#000; color:#fff; font-size:0.8rem; height:45px; margin-bottom:10px; border-color:#333; text-align:left; padding:0 15px;" placeholder="Type your reply...">
+                    <button class="action-btn" style="font-size:0.6rem; padding:10px; background:var(--ghost); color:#000;" onclick="adminReply('${doc.id}')">SEND REPLY</button>
                 </div>`;
             });
-            document.getElementById('admin-list').innerHTML = html || "No incoming suggestions.";
+            document.getElementById('admin-list').innerHTML = html || "<p style='text-align:center; opacity:0.3;'>Inbox empty.</p>";
         }
 
         function adminReply(id) {
             const repText = document.getElementById('rep-'+id).value;
-            if(!repText) return alert("Write something first!");
+            if(!repText) return;
             db.collection("suggestions").doc(id).update({ reply: repText }).then(() => {
-                alert("Reply sent successfully to user!");
+                notify("REPLY SENT TO USER!");
                 loadAdminSuggestions();
             });
         }
 
-        // MATRIX BACKGROUND
+        // MATRIX EFFECT
         const c = document.getElementById('matrix');
         const ctx = c.getContext('2d');
         c.width = window.innerWidth; c.height = window.innerHeight;
