@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>GHOSTY ADMIN PRO</title>
+    <title>GHOSTY PREMIUM | V2</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Syncopate:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
     
@@ -16,50 +16,49 @@
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
         body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
 
-        /* --- AUTH OVERLAY --- */
+        /* GHOSTY POPUP */
+        #ghostAlert {
+            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
+            background: #000; border: 2px solid var(--ghost); padding: 15px 25px;
+            border-radius: 15px; z-index: 10000; display: flex; align-items: center;
+            gap: 12px; transition: 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 0 20px rgba(0,242,255,0.5);
+        }
+        #ghostAlert.active { top: 30px; }
+
+        /* AUTH BOX */
         #authOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:5000; display:flex; align-items:center; justify-content:center; }
         .auth-card { background:#0a0a0a; border:1px solid var(--ghost); padding:30px; border-radius:25px; width:90%; max-width:400px; text-align:center; }
         .auth-input { width:100%; padding:12px; margin:8px 0; border-radius:10px; border:1px solid #222; background:#000; color:#fff; outline:none; }
         .auth-btn { width:100%; padding:15px; border-radius:10px; border:none; background:var(--ghost); color:#000; font-weight:900; cursor:pointer; margin-top:10px; }
-        
-        /* --- SIDEBAR --- */
+
+        /* SIDEBAR */
         .menu-btn { position:fixed; top:20px; left:20px; z-index:1000; font-size:1.5rem; color:var(--ghost); cursor:pointer; }
         .sidebar { position:fixed; top:0; left:-300px; width:280px; height:100%; background:rgba(0,0,0,0.95); border-right:1px solid var(--ghost); z-index:999; transition:0.4s; padding:80px 20px; }
         .sidebar.active { left:0; }
-        .sidebar-item { display:block; color:#fff; text-decoration:none; padding:15px 0; font-family:'Syncopate'; font-size:0.7rem; cursor:pointer; }
-        .sidebar-item i { margin-right:10px; color:var(--ghost); }
-
-        /* --- ADMIN PANEL VIEW --- */
-        #adminView { display:none; padding:80px 20px; max-width:800px; margin:0 auto; }
-        .stat-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:15px; margin-bottom:30px; }
-        .stat-card { background:var(--glass); border:1px solid var(--ghost); padding:20px; border-radius:15px; text-align:center; }
-        .stat-val { font-size:1.5rem; color:var(--ghost); font-weight:900; }
-        .data-table { width:100%; border-collapse:collapse; font-size:0.7rem; margin-top:20px; }
-        .data-table th, td { border:1px solid #222; padding:10px; text-align:left; }
+        .sidebar-item { display:block; color:#fff; text-decoration:none; padding:15px 0; font-family:'Syncopate'; font-size:0.7rem; cursor:pointer; border-bottom: 1px solid #111; }
         
-        /* --- SUGGESTION FORM --- */
-        #suggestionView { display:none; padding:100px 20px; text-align:center; }
-        textarea { width:100%; height:150px; background:#111; border:1px solid var(--ghost); border-radius:15px; color:#fff; padding:15px; outline:none; }
-
+        #adminView, #suggestionView { display:none; padding:80px 20px; max-width:800px; margin:0 auto; }
         #rainCanvas { position:fixed; top:0; left:0; z-index:-1; opacity:0.3; }
-        .container { max-width:480px; margin:0 auto; padding:80px 20px; text-align:center; }
         .hidden { display:none !important; }
     </style>
 </head>
 <body>
 
+    <div id="ghostAlert"><i class="fas fa-ghost"></i><span id="alertMsg"></span></div>
+
     <div id="authOverlay">
         <div class="auth-card" id="loginBox">
-            <h2 style="color:var(--ghost); margin-bottom:20px;">GHOSTY LOGIN</h2>
-            <input type="email" id="logEmail" class="auth-input" placeholder="Email">
+            <h2 style="color:var(--ghost); margin-bottom:20px; font-family:'Orbitron'">GHOSTY LOGIN</h2>
+            <input type="email" id="logEmail" class="auth-input" placeholder="Gmail">
             <input type="password" id="logPass" class="auth-input" placeholder="Password">
             <button class="auth-btn" onclick="login()">SIGN IN</button>
             <p onclick="toggleAuth(true)" style="font-size:0.7rem; margin-top:15px; cursor:pointer;">Need Account? <span style="color:var(--ghost)">SIGNUP</span></p>
         </div>
         <div class="auth-card hidden" id="signupBox">
-            <h2 style="color:var(--ghost); margin-bottom:20px;">GHOSTY SIGNUP</h2>
+            <h2 style="color:var(--ghost); margin-bottom:20px; font-family:'Orbitron'">GHOSTY SIGNUP</h2>
             <input type="text" id="regName" class="auth-input" placeholder="Full Name">
-            <input type="email" id="regEmail" class="auth-input" placeholder="Email">
+            <input type="email" id="regEmail" class="auth-input" placeholder="Gmail">
             <input type="password" id="regPass" class="auth-input" placeholder="Password">
             <input type="password" id="regConfirm" class="auth-input" placeholder="Confirm Password">
             <button class="auth-btn" onclick="signup()">CREATE ACCOUNT</button>
@@ -70,60 +69,59 @@
     <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-item" onclick="showPage('home')"><i class="fas fa-home"></i> HOME</div>
-        <div class="sidebar-item" onclick="showPage('suggest')"><i class="fas fa-comment-alt"></i> SUGGESTION</div>
+        <div class="sidebar-item" onclick="showPage('suggest')"><i class="fas fa-comment-dots"></i> SUGGESTION</div>
         <div class="sidebar-item" id="adminLink" style="display:none;" onclick="showPage('admin')"><i class="fas fa-user-shield"></i> ADMIN PANEL</div>
         <div class="sidebar-item" onclick="window.open('https://wa.me/923106723295')"><i class="fas fa-crown"></i> BUY PREMIUM</div>
-        <div class="sidebar-item" onclick="firebase.auth().signOut()" style="color:red; margin-top:50px;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
+        <div class="sidebar-item" onclick="firebase.auth().signOut()" style="color:red; margin-top:40px;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
     </nav>
 
     <canvas id="rainCanvas"></canvas>
 
-    <div class="container" id="homeView">
-        <h1 class="logo" style="font-family:'Orbitron'; letter-spacing:10px; color:var(--ghost)">GHOSTY</h1>
-        <div style="background:var(--glass); border:1px solid var(--ghost); padding:40px; border-radius:30px; margin-top:30px;">
-            <input type="file" id="fileInp" hidden>
-            <div onclick="document.getElementById('fileInp').click()" style="border:2px dashed var(--ghost); padding:40px; border-radius:20px; cursor:pointer;">
-                <i class="fas fa-upload" style="font-size:2rem; color:var(--ghost)"></i>
-                <p style="margin-top:10px;">CLICK TO UPLOAD</p>
-            </div>
+    <div class="container" id="homeView" style="text-align:center; padding-top:100px;">
+        <h1 style="font-family:'Orbitron'; color:var(--ghost); letter-spacing:15px;">GHOSTY</h1>
+        <p style="font-size:0.6rem; letter-spacing:3px; margin-bottom:40px;">IMAGE TO LINK PORTAL</p>
+        <div style="background:var(--glass); border:1px solid var(--ghost); padding:50px; border-radius:30px; max-width:400px; margin:0 auto;">
+            <p style="color:var(--ghost); margin-bottom:20px;">READY TO INJECT</p>
+            <button class="auth-btn" onclick="alert('Upload logic active!')">UPLOAD IMAGE</button>
         </div>
     </div>
 
     <div id="suggestionView">
-        <h2 style="color:var(--ghost)">TOOL SUGGESTIONS</h2>
-        <p style="font-size:0.7rem; margin-bottom:20px;">What should we change?</p>
-        <textarea id="suggestTxt" placeholder="Write your ideas here..."></textarea>
-        <button class="auth-btn" onclick="submitSuggest()">SUBMIT SUGGESTION</button>
+        <h2 style="color:var(--ghost)">SUGGESTIONS</h2>
+        <textarea id="suggestTxt" style="width:100%; height:150px; background:#111; border:1px solid var(--ghost); color:#fff; padding:15px; margin-top:20px; border-radius:15px;" placeholder="What should we add or change?"></textarea>
+        <button class="auth-btn" onclick="submitSuggest()">SEND TO ADMIN</button>
     </div>
 
     <div id="adminView">
-        <h2 style="color:var(--ghost); margin-bottom:20px;">ADMIN DASHBOARD</h2>
-        <div class="stat-grid">
-            <div class="stat-card"><p>Total Visitors</p><div class="stat-val" id="statVisitors">0</div></div>
-            <div class="stat-card"><p>Total Images</p><div class="stat-val" id="statImages">0</div></div>
-        </div>
-        <h3 style="font-size:0.8rem; color:var(--ghost)">REGISTERED USERS</h3>
-        <table class="data-table"><thead id="userTableHead"><tr><th>Name</th><th>Email</th></tr></thead><tbody id="userTable"></tbody></table>
-        <h3 style="font-size:0.8rem; color:var(--ghost); margin-top:30px;">USER SUGGESTIONS</h3>
-        <div id="suggestList" style="margin-top:10px;"></div>
+        <h2 style="color:var(--ghost)">ADMIN PANEL</h2>
+        <p id="vCount" style="margin:20px 0;">Total Visitors: Loading...</p>
+        <div id="userList"></div>
     </div>
 
     <script>
-        // --- FIREBASE CONFIG ---
+        // YOUR REAL FIREBASE KEYS
         const firebaseConfig = {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_PROJECT.firebaseapp.com",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_PROJECT.appspot.com",
-            messagingSenderId: "YOUR_SENDER_ID",
-            appId: "YOUR_APP_ID"
+            apiKey: "AIzaSyDulf_AZJ7_e8zhEPqARYeboQ435zllAN0",
+            authDomain: "image-to-link-e0c9a.firebaseapp.com",
+            projectId: "image-to-link-e0c9a",
+            storageBucket: "image-to-link-e0c9a.firebasestorage.app",
+            messagingSenderId: "510967733413",
+            appId: "1:510967733413:web:6e13746901855c8e3a414c"
         };
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
-        const ADMIN_MAIL = "your-email@gmail.com"; // CHANGE THIS
+        const ADMIN_MAIL = "ghostyhere532@gmail.com"; // Your email from the screenshot
 
-        // --- AUTH FUNCTIONS ---
+        // GHOSTY NOTIFY SYSTEM
+        function ghostNotify(msg) {
+            const alertBox = document.getElementById('ghostAlert');
+            const alertText = document.getElementById('alertMsg');
+            alertText.innerText = msg.toUpperCase();
+            alertBox.classList.add('active');
+            setTimeout(() => alertBox.classList.remove('active'), 4000);
+        }
+
         function toggleAuth(isSignup) {
             document.getElementById('loginBox').classList.toggle('hidden', isSignup);
             document.getElementById('signupBox').classList.toggle('hidden', !isSignup);
@@ -134,67 +132,50 @@
             const email = document.getElementById('regEmail').value;
             const pass = document.getElementById('regPass').value;
             const conf = document.getElementById('regConfirm').value;
-            if(pass !== conf) return alert("Passwords don't match");
+            if(pass !== conf) return ghostNotify("Passwords don't match");
             try {
                 const res = await auth.createUserWithEmailAndPassword(email, pass);
                 await db.collection("users").doc(res.user.uid).set({ name, email });
-            } catch(e) { alert(e.message); }
+                ghostNotify("Ghosty Account Created!");
+            } catch(e) { ghostNotify(e.message); }
         }
 
         async function login() {
             const email = document.getElementById('logEmail').value;
             const pass = document.getElementById('logPass').value;
-            try { await auth.signInWithEmailAndPassword(email, pass); } catch(e) { alert(e.message); }
+            try { 
+                await auth.signInWithEmailAndPassword(email, pass);
+                ghostNotify("Welcome Back!");
+            } catch(e) { ghostNotify(e.message); }
         }
 
         auth.onAuthStateChanged(user => {
             if(user) {
                 document.getElementById('authOverlay').classList.add('hidden');
                 if(user.email === ADMIN_MAIL) document.getElementById('adminLink').style.display='block';
-                // Count visitor
                 db.collection("stats").doc("counters").set({ visitors: firebase.firestore.FieldValue.increment(1) }, {merge:true});
             } else {
                 document.getElementById('authOverlay').classList.remove('hidden');
             }
         });
 
-        // --- NAVIGATION ---
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
         function showPage(p) {
             document.getElementById('homeView').style.display = p==='home'?'block':'none';
             document.getElementById('suggestionView').style.display = p==='suggest'?'block':'none';
             document.getElementById('adminView').style.display = p==='admin'?'block':'none';
-            if(p==='admin') loadAdminData();
             toggleMenu();
         }
 
-        // --- DATABASE LOGIC ---
         async function submitSuggest() {
             const text = document.getElementById('suggestTxt').value;
+            if(!text) return ghostNotify("Write something first!");
             await db.collection("suggestions").add({ text, user: auth.currentUser.email });
-            alert("Suggestion Sent!");
+            ghostNotify("Suggestion Received!");
             document.getElementById('suggestTxt').value = "";
         }
 
-        async function loadAdminData() {
-            // Visitors & Total Images
-            const stats = await db.collection("stats").doc("counters").get();
-            document.getElementById('statVisitors').innerText = stats.data().visitors || 0;
-            
-            // Users List
-            const users = await db.collection("users").get();
-            let utable = "";
-            users.forEach(doc => { utable += `<tr><td>${doc.data().name}</td><td>${doc.data().email}</td></tr>`; });
-            document.getElementById('userTable').innerHTML = utable;
-
-            // Suggestions
-            const suggs = await db.collection("suggestions").get();
-            let slist = "";
-            suggs.forEach(doc => { slist += `<div style="background:#111; padding:10px; margin:5px; border-left:2px solid var(--ghost)">${doc.data().text} <br><small>- ${doc.data().user}</small></div>`; });
-            document.getElementById('suggestList').innerHTML = slist;
-        }
-
-        // --- RAIN ---
+        // RAIN SCRIPT
         const canvas = document.getElementById('rainCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
