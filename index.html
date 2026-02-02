@@ -12,11 +12,11 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <style>
-        :root { --bg: #000; --ghost: #00f2ff; --glass: rgba(255,255,255,0.03); }
+        :root { --bg: #000; --ghost: #00f2ff; --glass: rgba(0, 242, 255, 0.03); }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
         body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
 
-        /* GHOSTY POPUP */
+        /* GHOSTY NOTIFY POPUP */
         #ghostAlert {
             position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
             background: #000; border: 2px solid var(--ghost); padding: 15px 25px;
@@ -29,18 +29,28 @@
         /* AUTH BOX */
         #authOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:5000; display:flex; align-items:center; justify-content:center; }
         .auth-card { background:#0a0a0a; border:1px solid var(--ghost); padding:30px; border-radius:25px; width:90%; max-width:400px; text-align:center; }
-        .auth-input { width:100%; padding:12px; margin:8px 0; border-radius:10px; border:1px solid #222; background:#000; color:#fff; outline:none; }
-        .auth-btn { width:100%; padding:15px; border-radius:10px; border:none; background:var(--ghost); color:#000; font-weight:900; cursor:pointer; margin-top:10px; }
+        .auth-input { width:100%; padding:15px; margin:10px 0; border-radius:12px; border:1px solid #222; background:#000; color:#fff; outline:none; font-size: 0.9rem; }
+        .auth-btn { width:100%; padding:15px; border-radius:12px; border:none; background:var(--ghost); color:#000; font-weight:900; cursor:pointer; margin-top:10px; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* SIDEBAR */
-        .menu-btn { position:fixed; top:20px; left:20px; z-index:1000; font-size:1.5rem; color:var(--ghost); cursor:pointer; }
-        .sidebar { position:fixed; top:0; left:-300px; width:280px; height:100%; background:rgba(0,0,0,0.95); border-right:1px solid var(--ghost); z-index:999; transition:0.4s; padding:80px 20px; }
+        /* SIDEBAR (3 LINES) */
+        .menu-btn { position:fixed; top:20px; left:20px; z-index:1000; font-size:1.5rem; color:var(--ghost); cursor:pointer; filter: drop-shadow(0 0 5px var(--ghost)); }
+        .sidebar { position:fixed; top:0; left:-300px; width:280px; height:100%; background:rgba(0,0,0,0.98); border-right:2px solid var(--ghost); z-index:999; transition:0.4s; padding:80px 25px; }
         .sidebar.active { left:0; }
-        .sidebar-item { display:block; color:#fff; text-decoration:none; padding:15px 0; font-family:'Syncopate'; font-size:0.7rem; cursor:pointer; border-bottom: 1px solid #111; }
-        
-        #adminView, #suggestionView { display:none; padding:80px 20px; max-width:800px; margin:0 auto; }
+        .sidebar-item { display:block; color:#fff; text-decoration:none; padding:18px 0; font-family:'Syncopate'; font-size:0.65rem; cursor:pointer; border-bottom: 1px solid #111; letter-spacing: 2px; }
+        .sidebar-item i { margin-right: 12px; color: var(--ghost); }
+
+        /* GALLERY (3 IN A ROW) */
+        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
+        .gallery-card { aspect-ratio: 1; border-radius: 10px; border: 1px solid #222; overflow: hidden; position: relative; cursor: pointer; background: #050505; }
+        .gallery-card img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7; transition: 0.3s; }
+        .gallery-card:hover img { opacity: 1; transform: scale(1.1); }
+
+        /* UI ELEMENTS */
         #rainCanvas { position:fixed; top:0; left:0; z-index:-1; opacity:0.3; }
+        .container { max-width:480px; margin:0 auto; padding:80px 20px; }
         .hidden { display:none !important; }
+        header .logo { font-family:'Orbitron'; color:var(--ghost); letter-spacing:10px; font-size: 2.5rem; text-shadow: 0 0 15px var(--ghost); }
+        .premium-box { background: rgba(255,255,255,0.02); border: 1px solid rgba(0,242,255,0.2); border-radius: 35px; padding: 40px 25px; backdrop-filter: blur(10px); }
     </style>
 </head>
 <body>
@@ -53,53 +63,67 @@
             <input type="email" id="logEmail" class="auth-input" placeholder="Gmail">
             <input type="password" id="logPass" class="auth-input" placeholder="Password">
             <button class="auth-btn" onclick="login()">SIGN IN</button>
-            <p onclick="toggleAuth(true)" style="font-size:0.7rem; margin-top:15px; cursor:pointer;">Need Account? <span style="color:var(--ghost)">SIGNUP</span></p>
+            <p onclick="toggleAuth(true)" style="font-size:0.7rem; margin-top:15px; cursor:pointer; opacity: 0.6;">Need Account? <span style="color:var(--ghost)">SIGNUP</span></p>
         </div>
         <div class="auth-card hidden" id="signupBox">
             <h2 style="color:var(--ghost); margin-bottom:20px; font-family:'Orbitron'">GHOSTY SIGNUP</h2>
-            <input type="text" id="regName" class="auth-input" placeholder="Full Name">
+            <input type="text" id="regName" class="auth-input" placeholder="Name">
             <input type="email" id="regEmail" class="auth-input" placeholder="Gmail">
             <input type="password" id="regPass" class="auth-input" placeholder="Password">
             <input type="password" id="regConfirm" class="auth-input" placeholder="Confirm Password">
             <button class="auth-btn" onclick="signup()">CREATE ACCOUNT</button>
-            <p onclick="toggleAuth(false)" style="font-size:0.7rem; margin-top:15px; cursor:pointer;">Have Account? <span style="color:var(--ghost)">LOGIN</span></p>
+            <p onclick="toggleAuth(false)" style="font-size:0.7rem; margin-top:15px; cursor:pointer; opacity: 0.6;">Have Account? <span style="color:var(--ghost)">LOGIN</span></p>
         </div>
     </div>
 
     <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
     <nav class="sidebar" id="sidebar">
         <div class="sidebar-item" onclick="showPage('home')"><i class="fas fa-home"></i> HOME</div>
-        <div class="sidebar-item" onclick="showPage('suggest')"><i class="fas fa-comment-dots"></i> SUGGESTION</div>
-        <div class="sidebar-item" id="adminLink" style="display:none;" onclick="showPage('admin')"><i class="fas fa-user-shield"></i> ADMIN PANEL</div>
+        <div class="sidebar-item" onclick="showPage('uploads')"><i class="fas fa-images"></i> MY UPLOADS</div>
         <div class="sidebar-item" onclick="window.open('https://wa.me/923106723295')"><i class="fas fa-crown"></i> BUY PREMIUM</div>
-        <div class="sidebar-item" onclick="firebase.auth().signOut()" style="color:red; margin-top:40px;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
+        <div class="sidebar-item" onclick="showPage('suggest')"><i class="fas fa-comment-dots"></i> SUGGESTION</div>
+        <div class="sidebar-item" id="adminLink" style="display:none; color: #ff0055;" onclick="showPage('admin')"><i class="fas fa-user-shield"></i> ADMIN PANEL</div>
+        <div class="sidebar-item" onclick="firebase.auth().signOut()" style="color:red; margin-top:40px; border:none;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
     </nav>
 
     <canvas id="rainCanvas"></canvas>
 
-    <div class="container" id="homeView" style="text-align:center; padding-top:100px;">
-        <h1 style="font-family:'Orbitron'; color:var(--ghost); letter-spacing:15px;">GHOSTY</h1>
-        <p style="font-size:0.6rem; letter-spacing:3px; margin-bottom:40px;">IMAGE TO LINK PORTAL</p>
-        <div style="background:var(--glass); border:1px solid var(--ghost); padding:50px; border-radius:30px; max-width:400px; margin:0 auto;">
-            <p style="color:var(--ghost); margin-bottom:20px;">READY TO INJECT</p>
-            <button class="auth-btn" onclick="alert('Upload logic active!')">UPLOAD IMAGE</button>
+    <div class="container" id="homeView" style="text-align:center;">
+        <header><div class="logo">GHOSTY</div></header>
+        <p style="font-size:0.6rem; letter-spacing:3px; margin: 15px 0 40px 0; opacity: 0.5;">PREMIUM SHINING LOG</p>
+        
+        <div class="premium-box">
+            <div onclick="document.getElementById('fileInp').click()" style="border:2px dashed var(--ghost); padding:50px 20px; border-radius:25px; cursor:pointer; transition: 0.3s;" id="uploadBtn">
+                <i class="fas fa-cloud-upload-alt" style="font-size:3rem; color:var(--ghost); filter: drop-shadow(0 0 10px var(--ghost));"></i>
+                <h3 style="margin-top:20px; font-size: 1rem; letter-spacing: 2px;">UPLOAD IMAGE</h3>
+            </div>
+            <input type="file" id="fileInp" hidden accept="image/*">
+            <button class="auth-btn" style="background: transparent; color: #fff; border: 1px solid var(--ghost); margin-top: 25px;">GET LINK</button>
         </div>
     </div>
 
-    <div id="suggestionView">
-        <h2 style="color:var(--ghost)">SUGGESTIONS</h2>
-        <textarea id="suggestTxt" style="width:100%; height:150px; background:#111; border:1px solid var(--ghost); color:#fff; padding:15px; margin-top:20px; border-radius:15px;" placeholder="What should we add or change?"></textarea>
-        <button class="auth-btn" onclick="submitSuggest()">SEND TO ADMIN</button>
+    <div class="container hidden" id="uploadsView">
+        <h2 style="color:var(--ghost); font-family:'Syncopate'; font-size: 0.8rem; letter-spacing: 3px;">MY RECENT UPLOADS</h2>
+        <div class="gallery-grid" id="galleryGrid"></div>
     </div>
 
-    <div id="adminView">
-        <h2 style="color:var(--ghost)">ADMIN PANEL</h2>
-        <p id="vCount" style="margin:20px 0;">Total Visitors: Loading...</p>
-        <div id="userList"></div>
+    <div class="container hidden" id="suggestView">
+        <h2 style="color:var(--ghost); font-family:'Syncopate'; font-size: 0.8rem;">TOOL SUGGESTIONS</h2>
+        <textarea id="suggestTxt" style="width:100%; height:150px; background:#050505; border:1px solid var(--ghost); color:#fff; padding:15px; margin-top:20px; border-radius:15px; outline: none;" placeholder="What should we add?"></textarea>
+        <button class="auth-btn" onclick="submitSuggest()">SEND SUGGESTION</button>
+    </div>
+
+    <div class="container hidden" id="adminView">
+        <h2 style="color:var(--ghost); font-family:'Syncopate';">ADMIN DASHBOARD</h2>
+        <div id="adminStats" style="margin-top:20px; background: #050505; padding: 20px; border-radius: 15px; border: 1px solid #222;">
+            <p id="statVisitors">Visitors: 0</p>
+            <p id="statUsers">Total Users: 0</p>
+        </div>
+        <div id="userTable" style="margin-top: 20px; font-size: 0.7rem;"></div>
     </div>
 
     <script>
-        // YOUR REAL FIREBASE KEYS
+        // CONFIG WITH YOUR REAL KEYS
         const firebaseConfig = {
             apiKey: "AIzaSyDulf_AZJ7_e8zhEPqARYeboQ435zllAN0",
             authDomain: "image-to-link-e0c9a.firebaseapp.com",
@@ -111,15 +135,15 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
-        const ADMIN_MAIL = "ghostyhere532@gmail.com"; // Your email from the screenshot
+        const ADMIN_MAIL = "musaandanas963@gmail.com"; 
 
-        // GHOSTY NOTIFY SYSTEM
+        // GHOSTY NOTIFY
         function ghostNotify(msg) {
-            const alertBox = document.getElementById('ghostAlert');
-            const alertText = document.getElementById('alertMsg');
-            alertText.innerText = msg.toUpperCase();
-            alertBox.classList.add('active');
-            setTimeout(() => alertBox.classList.remove('active'), 4000);
+            const box = document.getElementById('ghostAlert');
+            const text = document.getElementById('alertMsg');
+            text.innerText = msg.toUpperCase();
+            box.classList.add('active');
+            setTimeout(() => box.classList.remove('active'), 4000);
         }
 
         function toggleAuth(isSignup) {
@@ -131,12 +155,11 @@
             const name = document.getElementById('regName').value;
             const email = document.getElementById('regEmail').value;
             const pass = document.getElementById('regPass').value;
-            const conf = document.getElementById('regConfirm').value;
-            if(pass !== conf) return ghostNotify("Passwords don't match");
+            if(pass.length < 6) return ghostNotify("Password too short");
             try {
                 const res = await auth.createUserWithEmailAndPassword(email, pass);
                 await db.collection("users").doc(res.user.uid).set({ name, email });
-                ghostNotify("Ghosty Account Created!");
+                ghostNotify("Ghosty Born!");
             } catch(e) { ghostNotify(e.message); }
         }
 
@@ -145,7 +168,7 @@
             const pass = document.getElementById('logPass').value;
             try { 
                 await auth.signInWithEmailAndPassword(email, pass);
-                ghostNotify("Welcome Back!");
+                ghostNotify("Welcome Back");
             } catch(e) { ghostNotify(e.message); }
         }
 
@@ -153,39 +176,52 @@
             if(user) {
                 document.getElementById('authOverlay').classList.add('hidden');
                 if(user.email === ADMIN_MAIL) document.getElementById('adminLink').style.display='block';
-                db.collection("stats").doc("counters").set({ visitors: firebase.firestore.FieldValue.increment(1) }, {merge:true});
+                db.collection("stats").doc("counters").set({ v: firebase.firestore.FieldValue.increment(1) }, {merge:true});
             } else {
                 document.getElementById('authOverlay').classList.remove('hidden');
             }
         });
 
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
+        
         function showPage(p) {
-            document.getElementById('homeView').style.display = p==='home'?'block':'none';
-            document.getElementById('suggestionView').style.display = p==='suggest'?'block':'none';
-            document.getElementById('adminView').style.display = p==='admin'?'block':'none';
+            const views = ['homeView', 'uploadsView', 'suggestView', 'adminView'];
+            views.forEach(v => document.getElementById(v).classList.add('hidden'));
+            document.getElementById(p + 'View').classList.remove('hidden');
+            if(p === 'uploads') renderGallery();
+            if(p === 'admin') loadAdminData();
             toggleMenu();
         }
 
         async function submitSuggest() {
             const text = document.getElementById('suggestTxt').value;
-            if(!text) return ghostNotify("Write something first!");
+            if(!text) return ghostNotify("Field is empty");
             await db.collection("suggestions").add({ text, user: auth.currentUser.email });
-            ghostNotify("Suggestion Received!");
+            ghostNotify("Feedback Sent!");
             document.getElementById('suggestTxt').value = "";
         }
 
-        // RAIN SCRIPT
+        function renderGallery() {
+            // Placeholder: In real app, fetch from Firestore 'uploads' collection
+            document.getElementById('galleryGrid').innerHTML = '<p style="grid-column: span 3; opacity: 0.3; font-size: 0.7rem;">Empty database...</p>';
+        }
+
+        async function loadAdminData() {
+            const stats = await db.collection("stats").doc("counters").get();
+            document.getElementById('statVisitors').innerText = "Visitors: " + (stats.data().v || 0);
+        }
+
+        // RAIN EFFECT
         const canvas = document.getElementById('rainCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        const drops = Array(Math.floor(canvas.width / 16)).fill(1);
+        const drops = Array(Math.floor(canvas.width / 18)).fill(1);
         function draw() {
             ctx.fillStyle = "rgba(0,0,0,0.15)"; ctx.fillRect(0,0,canvas.width,canvas.height);
             ctx.fillStyle = "#00f2ff"; ctx.font = "16px monospace";
             drops.forEach((y, x) => {
-                ctx.fillText(Math.floor(Math.random()*2), x*16, y*16);
-                if(y*16 > canvas.height && Math.random() > 0.975) drops[x] = 0;
+                ctx.fillText(Math.floor(Math.random()*2), x*18, y*18);
+                if(y*18 > canvas.height && Math.random() > 0.975) drops[x] = 0;
                 drops[x]++;
             });
         }
