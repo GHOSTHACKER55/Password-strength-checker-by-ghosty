@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>GHOSTY PREMIUM | ADMIN V5</title>
+    <title>GHOSTY | MASTER ADMIN</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Syncopate:wght@700&family=Inter:wght@400;900&display=swap" rel="stylesheet"/>
     
@@ -12,29 +12,36 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <style>
-        :root { --bg: #000; --ghost: #00f2ff; --blue: #007bff; }
+        :root { --bg: #000; --ghost: #00f2ff; --blue: #007bff; --glass: rgba(0, 242, 255, 0.05); }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
         body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
 
-        /* STAFF MODAL */
+        /* FIXED STAFF MODAL (MATCHES SCREENSHOT) */
         #staffModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 50000; display: none; align-items: center; justify-content: center; }
-        .staff-card { background: #fff; color: #000; padding: 45px 30px; border-radius: 40px; width: 92%; max-width: 380px; text-align: center; }
-        .staff-input { width: 100%; padding: 18px; border-radius: 15px; border: 2.5px solid var(--blue); text-align: center; font-size: 1.2rem; margin-bottom: 20px; outline: none; }
-        .unlock-btn { width: 100%; padding: 18px; background: #000; color: #fff; border: none; border-radius: 15px; font-weight: 900; cursor: pointer; }
+        .staff-card { background: #fff; color: #000; padding: 45px 30px; border-radius: 45px; width: 92%; max-width: 380px; text-align: center; }
+        .staff-input { width: 100%; padding: 18px; border-radius: 15px; border: 2.5px solid var(--blue); text-align: center; font-size: 1.2rem; margin-bottom: 20px; outline: none; color: #000; }
+        .unlock-btn { width: 100%; padding: 18px; background: #000; color: #fff; border: none; border-radius: 15px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
 
-        /* SIDEBAR */
+        /* SIDEBAR NAVIGATION */
         .menu-btn { position:fixed; top:20px; left:20px; z-index:1000; font-size:1.5rem; color:var(--ghost); cursor:pointer; }
         .sidebar { position:fixed; top:0; left:-310px; width:290px; height:100%; background:rgba(0,0,0,0.98); border-right:2px solid var(--ghost); z-index:999; transition:0.4s; padding:80px 25px; }
         .sidebar.active { left:0; }
-        .sidebar-item { display:flex; align-items:center; color:#fff; padding:18px 0; font-family:'Syncopate'; font-size:0.65rem; cursor:pointer; border-bottom: 1px solid #111; }
-        .sidebar-item i { margin-right: 15px; color: var(--ghost); }
+        .sidebar-item { display:flex; align-items:center; color:#fff; padding:18px 0; font-family:'Syncopate'; font-size:0.65rem; cursor:pointer; border-bottom: 1px solid #111; letter-spacing: 1px; }
+        .sidebar-item i { margin-right: 15px; color: var(--ghost); width: 20px; }
 
-        /* ADMIN CONSOLE */
-        .admin-view { max-width: 600px; margin: 0 auto; padding: 100px 20px; }
-        .admin-tab { background: rgba(0,242,255,0.05); border: 1px solid #222; border-radius: 20px; padding: 20px; margin-bottom: 20px; }
-        .tab-title { color: var(--ghost); font-family: 'Orbitron'; font-size: 0.8rem; margin-bottom: 15px; border-bottom: 1px solid #333; padding-bottom: 10px; }
-        .data-item { font-size: 0.75rem; padding: 10px; border-bottom: 1px solid #111; display: flex; justify-content: space-between; }
+        /* ADMIN DASHBOARD */
+        .admin-container { max-width: 800px; margin: 0 auto; padding: 100px 20px; }
+        .admin-header { font-family: 'Orbitron'; color: var(--ghost); font-size: 1.8rem; text-align: center; margin-bottom: 40px; text-shadow: 0 0 10px var(--ghost); }
         
+        .admin-grid { display: grid; grid-template-columns: 1fr; gap: 20px; }
+        .admin-panel { background: var(--glass); border: 1px solid #222; border-radius: 25px; padding: 25px; }
+        .panel-title { font-family: 'Orbitron'; font-size: 0.75rem; color: var(--ghost); margin-bottom: 20px; display: flex; align-items: center; gap: 10px; text-transform: uppercase; border-bottom: 1px solid #222; padding-bottom: 10px; }
+        
+        .data-list { max-height: 250px; overflow-y: auto; }
+        .data-row { display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #111; font-size: 0.8rem; }
+        .data-row:last-child { border: none; }
+        .badge { background: var(--blue); padding: 4px 10px; border-radius: 20px; font-size: 0.6rem; font-weight: 900; }
+
         #rainCanvas { position:fixed; top:0; left:0; z-index:-1; opacity:0.15; }
         .hidden { display:none !important; }
     </style>
@@ -43,11 +50,11 @@
 
     <div id="staffModal">
         <div class="staff-card">
-            <h2 style="font-weight:900; font-style:italic; margin-bottom:5px;">STAFF ACCESS</h2>
-            <p style="font-size:0.6rem; opacity:0.5; margin-bottom:30px; letter-spacing:2px;">SECURE PORTAL</p>
+            <h2 style="font-weight:900; font-style:italic; margin-bottom:5px; font-family: 'Inter';">STAFF ACCESS</h2>
+            <p style="font-size:0.6rem; opacity:0.5; margin-bottom:30px; letter-spacing:2px; font-weight: 700;">SECURE PORTAL</p>
             <input type="password" id="adminPass" class="staff-input" placeholder="••••••••">
-            <button class="unlock-btn" onclick="verifyStaff()">UNLOCK</button>
-            <p onclick="closeStaff()" style="margin-top:20px; cursor:pointer; font-size:0.7rem; font-weight:700;">CANCEL</p>
+            <button class="unlock-btn" onclick="verifyAdmin()">UNLOCK</button>
+            <p onclick="closeStaff()" style="margin-top:20px; cursor:pointer; font-size:0.75rem; font-weight:900; opacity: 0.4;">CANCEL</p>
         </div>
     </div>
 
@@ -56,40 +63,42 @@
         <div class="sidebar-item" onclick="showPage('home')"><i class="fas fa-home"></i> HOME</div>
         <div class="sidebar-item" onclick="openStaff()"><i class="fas fa-user-shield"></i> ADMIN PANEL</div>
         <div class="sidebar-item" onclick="showPage('suggest')"><i class="fas fa-comment-dots"></i> SUGGESTION</div>
-        <div class="sidebar-item" onclick="firebase.auth().signOut()" style="color:red; margin-top:50px;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
+        <div class="sidebar-item" onclick="firebase.auth().signOut()" style="color:#ff4d4d; margin-top:50px;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
     </nav>
 
     <canvas id="rainCanvas"></canvas>
 
-    <div class="admin-view hidden" id="adminView">
-        <h1 style="font-family:'Orbitron'; color:var(--ghost); text-align:center; margin-bottom:40px;">ADMIN CONSOLE</h1>
+    <div class="admin-container hidden" id="adminView">
+        <h1 class="admin-header">ADMIN CONSOLE</h1>
         
-        <div class="admin-tab">
-            <div class="tab-title"><i class="fas fa-users"></i> SIGNED UP ACCOUNTS</div>
-            <div id="userList">Loading users...</div>
+        <div class="admin-grid">
+            <div class="admin-panel">
+                <div class="panel-title"><i class="fas fa-users"></i> Registered Users</div>
+                <div class="data-list" id="adminUsers">Loading...</div>
+            </div>
+
+            <div class="admin-panel">
+                <div class="panel-title"><i class="fas fa-envelope"></i> Feedback / Suggestions</div>
+                <div class="data-list" id="adminSuggests">Loading...</div>
+            </div>
+
+            <div class="admin-panel">
+                <div class="panel-title"><i class="fas fa-images"></i> Image Upload History</div>
+                <div class="data-list" id="adminUploads">Loading...</div>
+            </div>
         </div>
 
-        <div class="admin-tab">
-            <div class="tab-title"><i class="fas fa-envelope-open-text"></i> RECENT SUGGESTIONS</div>
-            <div id="suggestList">Loading suggestions...</div>
-        </div>
-
-        <div class="admin-tab">
-            <div class="tab-title"><i class="fas fa-image"></i> UPLOADED IMAGES</div>
-            <div id="uploadList">Loading activity...</div>
-        </div>
-
-        <button class="unlock-btn" style="background:#111; border:1px solid #333;" onclick="showPage('home')">EXIT ADMIN</button>
+        <button class="unlock-btn" style="background:#111; margin-top:30px; border:1px solid #333;" onclick="showPage('home')">EXIT ADMIN</button>
     </div>
 
     <div id="homeView" style="text-align:center; padding-top:120px;">
         <i class="fas fa-ghost" style="font-size:3.5rem; color:var(--ghost); text-shadow:0 0 15px var(--ghost);"></i>
-        <h1 style="font-family:'Orbitron'; font-size:2.5rem; letter-spacing:10px; margin-top:10px;">GHOSTY</h1>
-        <p style="font-size:0.6rem; opacity:0.5; letter-spacing:3px;">PREMIUM SHINING LOG</p>
+        <h1 style="font-family:'Orbitron'; font-size:2.8rem; letter-spacing:12px; margin-top:10px;">GHOSTY</h1>
+        <p style="font-size:0.6rem; opacity:0.5; letter-spacing:4px;">PREMIUM SHINING LOG</p>
     </div>
 
     <script>
-        // Replace with your Firebase Config
+        // Use your verified Firebase Config
         const firebaseConfig = {
             apiKey: "AIzaSyDulf_AZJ7_e8zhEPqARYeboQ435zllAN0",
             authDomain: "image-to-link-e0c9a.firebaseapp.com",
@@ -101,19 +110,22 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
-        const STAFF_PASS = "musa"; 
+        // Admin Security
+        const ADMIN_PASS = "musa"; 
 
         function openStaff() { document.getElementById('staffModal').style.display = 'flex'; toggleMenu(); }
         function closeStaff() { document.getElementById('staffModal').style.display = 'none'; }
-        
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
 
-        function verifyStaff() {
-            if(document.getElementById('adminPass').value === STAFF_PASS) {
+        function verifyAdmin() {
+            const val = document.getElementById('adminPass').value;
+            if(val === ADMIN_PASS) {
                 closeStaff();
                 showPage('admin');
-                fetchAdminData();
-            } else { alert("WRONG PASSWORD"); }
+                refreshAdminData();
+            } else {
+                alert("ACCESS DENIED: INCORRECT STAFF PASSWORD");
+            }
         }
 
         function showPage(p) {
@@ -121,25 +133,30 @@
             document.getElementById('adminView').classList.toggle('hidden', p !== 'admin');
         }
 
-        async function fetchAdminData() {
+        async function refreshAdminData() {
             // Fetch Users
-            const users = await db.collection("users").limit(10).get();
+            const userSnap = await db.collection("users").get();
             let userHTML = "";
-            users.forEach(doc => {
-                userHTML += `<div class="data-item"><span>${doc.data().name}</span> <span style="opacity:0.5">${doc.data().email}</span></div>`;
+            userSnap.forEach(doc => {
+                userHTML += `<div class="data-row"><span>${doc.data().name}</span> <span class="badge">${doc.data().email}</span></div>`;
             });
-            document.getElementById('userList').innerHTML = userHTML || "No users found.";
+            document.getElementById('adminUsers').innerHTML = userHTML || "No users registered.";
 
             // Fetch Suggestions
-            const suggests = await db.collection("suggestions").orderBy("text").limit(10).get();
+            const suggestSnap = await db.collection("suggestions").get();
             let suggestHTML = "";
-            suggests.forEach(doc => {
-                suggestHTML += `<div class="data-item"><span style="color:var(--ghost)">"${doc.data().text}"</span> <small>- ${doc.data().user}</small></div>`;
+            suggestSnap.forEach(doc => {
+                suggestHTML += `<div class="data-row"><span style="color:var(--ghost)">"${doc.data().text}"</span> <small>${doc.data().user}</small></div>`;
             });
-            document.getElementById('suggestList').innerHTML = suggestHTML || "No suggestions.";
+            document.getElementById('adminSuggests').innerHTML = suggestHTML || "No suggestions found.";
 
             // Fetch Upload Activity
-            document.getElementById('uploadList').innerHTML = "<p style='font-size:0.7rem; opacity:0.5'>Tracking active uploads...</p>";
+            const uploadSnap = await db.collection("uploads").limit(10).get();
+            let uploadHTML = "";
+            uploadSnap.forEach(doc => {
+                uploadHTML += `<div class="data-row"><span>Image #${doc.id.substring(0,5)}</span> <span style="opacity:0.5">${doc.data().user}</span></div>`;
+            });
+            document.getElementById('adminUploads').innerHTML = uploadHTML || "No recent uploads.";
         }
 
         // MATRIX EFFECT
@@ -149,7 +166,7 @@
         const drops = Array(Math.floor(canvas.width / 18)).fill(1);
         function draw() {
             ctx.fillStyle = "rgba(0,0,0,0.1)"; ctx.fillRect(0,0,canvas.width,canvas.height);
-            ctx.fillStyle = "#00f2ff"; ctx.font = "15px monospace";
+            ctx.fillStyle = "#00f2ff"; ctx.font = "16px monospace";
             drops.forEach((y, x) => {
                 ctx.fillText(Math.floor(Math.random()*2), x*18, y*18);
                 if(y*18 > canvas.height && Math.random() > 0.975) drops[x] = 0;
