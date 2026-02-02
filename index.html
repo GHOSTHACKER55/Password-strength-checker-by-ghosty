@@ -3,15 +3,15 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>GHOSTY PREMIUM | Matrix Rain Edition</title>
+    <title>GHOSTY PREMIUM | Neon Edition</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@800&family=Inter:wght@400;700&family=Syncopate:wght@700&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Syncopate:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
     <style>
         :root {
-            --bg: #020205;
-            --shining-blue: #00f2ff;
-            --btn-blue: #00d4ff;
-            --glass: rgba(0, 0, 0, 0.7);
+            --bg: #010103;
+            --neon-blue: #00f2ff;
+            --deep-glow: rgba(0, 242, 255, 0.6);
+            --glass: rgba(255, 255, 255, 0.02);
         }
 
         * {
@@ -28,27 +28,25 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow: hidden; /* Keeps rain contained */
+            overflow: hidden;
         }
 
-        /* SHINING BLUE RAIN CANVAS */
+        /* DIGITAL RAIN BACKGROUND */
         #rainCanvas {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             z-index: -1;
+            opacity: 0.4;
         }
 
         .container {
             width: 100%;
-            max-width: 500px;
-            padding: 60px 20px;
+            max-width: 480px;
+            padding: 50px 20px;
             z-index: 1;
         }
 
-        /* BEAUTIFUL TITLE */
+        /* SHINING NEON TITLE */
         header {
             text-align: center;
             margin-bottom: 40px;
@@ -56,101 +54,123 @@
 
         .logo {
             font-family: 'Orbitron', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 800;
-            letter-spacing: 10px;
-            background: linear-gradient(180deg, #fff, var(--shining-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0 0 25px rgba(0, 242, 255, 0.7));
+            font-size: 3.8rem;
+            font-weight: 900;
+            letter-spacing: 12px;
+            color: #fff;
+            text-transform: uppercase;
+            /* Blue Shining Glow */
+            text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-blue), 0 0 40px var(--neon-blue), 0 0 60px var(--neon-blue);
+            animation: pulseGlow 2s ease-in-out infinite alternate;
         }
 
-        /* PREMIUM CARD */
+        @keyframes pulseGlow {
+            from { text-shadow: 0 0 10px #fff, 0 0 20px var(--neon-blue), 0 0 30px var(--neon-blue); }
+            to { text-shadow: 0 0 15px #fff, 0 0 30px var(--neon-blue), 0 0 50px var(--neon-blue), 0 0 70px var(--neon-blue); transform: scale(1.03); }
+        }
+
+        /* PREMIUM GLASS CARD */
         .premium-card {
             background: var(--glass);
-            backdrop-filter: blur(15px);
-            border: 1px solid rgba(0, 242, 255, 0.2);
-            border-radius: 30px;
+            backdrop-filter: blur(25px);
+            border: 1px solid rgba(0, 242, 255, 0.3);
+            border-radius: 35px;
             padding: 35px;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 1), 0 0 20px rgba(0, 242, 255, 0.1);
+            box-shadow: 0 0 40px rgba(0, 0, 0, 1), 0 0 20px rgba(0, 242, 255, 0.1);
         }
 
+        /* GLOWING UPLOAD BOX */
         .upload-zone {
-            border: 2px solid var(--shining-blue);
+            border: 2px solid var(--neon-blue);
             border-radius: 20px;
             padding: 50px 20px;
             text-align: center;
             cursor: pointer;
-            background: rgba(0, 0, 0, 0.5);
-            box-shadow: inset 0 0 20px rgba(0, 242, 255, 0.2);
-            transition: 0.3s;
+            background: rgba(0, 242, 255, 0.05);
+            box-shadow: inset 0 0 20px rgba(0, 242, 255, 0.3), 0 0 15px rgba(0, 242, 255, 0.2);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         .upload-zone:hover {
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.4);
             transform: scale(1.02);
+            box-shadow: inset 0 0 30px rgba(0, 242, 255, 0.5), 0 0 25px rgba(0, 242, 255, 0.4);
         }
 
         .upload-zone i {
             font-size: 3.5rem;
-            color: var(--shining-blue);
+            color: white;
+            text-shadow: 0 0 15px var(--neon-blue);
             margin-bottom: 15px;
-            filter: drop-shadow(0 0 10px var(--shining-blue));
         }
 
-        /* SHINING BLUE BUTTON */
+        .shining-text {
+            color: var(--neon-blue);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 0 0 10px var(--neon-blue);
+        }
+
+        /* SHINING BLUE GET LINK BUTTON */
         .btn-main {
             width: 100%;
             margin-top: 30px;
-            padding: 20px;
+            padding: 22px;
             border: none;
-            border-radius: 15px;
-            background: linear-gradient(45deg, #004e5a, var(--btn-blue), #004e5a);
-            background-size: 200% auto;
-            color: white;
+            border-radius: 18px;
             font-family: 'Syncopate', sans-serif;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 1.1rem;
+            color: white;
+            text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 0 25px rgba(0, 242, 255, 0.5);
-            animation: moveGradient 3s linear infinite;
+            /* Animated Gradient */
+            background: linear-gradient(90deg, #004d4d, var(--neon-blue), #004d4d);
+            background-size: 200% auto;
+            box-shadow: 0 0 25px rgba(0, 242, 255, 0.6);
+            transition: 0.3s;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
+            animation: shineGradient 3s linear infinite;
         }
 
-        @keyframes moveGradient {
+        @keyframes shineGradient {
             0% { background-position: 0% 50%; }
             100% { background-position: 200% 50%; }
         }
 
         .btn-main:hover {
             filter: brightness(1.3);
-            transform: translateY(-2px);
+            box-shadow: 0 0 40px rgba(0, 242, 255, 0.8);
+            transform: translateY(-3px);
         }
 
-        /* RESULT AREA */
+        /* RESULT BOX */
         .result-box {
             display: none;
             margin-top: 30px;
-            animation: fadeIn 0.5s ease;
+            animation: slideUp 0.6s ease;
         }
+
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
         .link-bar {
             background: #000;
-            padding: 15px;
-            border-radius: 12px;
+            padding: 18px;
+            border-radius: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            border: 1px solid var(--shining-blue);
+            border: 1px solid var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2);
         }
 
         #urlText {
-            font-family: monospace;
-            color: var(--shining-blue);
-            font-size: 0.8rem;
+            font-family: 'Courier New', monospace;
+            color: var(--neon-blue);
+            font-weight: bold;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -160,33 +180,38 @@
             background: white;
             color: black;
             border: none;
-            padding: 8px 15px;
-            border-radius: 6px;
+            padding: 10px 18px;
+            border-radius: 8px;
             font-weight: 800;
             cursor: pointer;
+            transition: 0.3s;
         }
+
+        .copy-btn:hover { background: var(--neon-blue); }
 
         .loader {
             display: none;
             margin: 20px auto;
-            width: 40px;
-            height: 40px;
+            width: 45px;
+            height: 45px;
             border: 4px solid rgba(0, 242, 255, 0.1);
-            border-top: 4px solid var(--shining-blue);
+            border-top: 4px solid var(--neon-blue);
             border-radius: 50%;
             animation: spin 1s linear infinite;
+            filter: drop-shadow(0 0 10px var(--neon-blue));
         }
 
         @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         footer {
             margin-top: auto;
             padding: 30px;
             text-align: center;
             font-size: 0.6rem;
-            opacity: 0.5;
             letter-spacing: 5px;
+            color: var(--neon-blue);
+            text-shadow: 0 0 5px var(--neon-blue);
+            opacity: 0.6;
         }
     </style>
 </head>
@@ -197,21 +222,21 @@
     <div class="container">
         <header>
             <div class="logo">GHOSTY</div>
-            <p style="font-size: 0.6rem; letter-spacing: 4px; margin-top: 10px; color: var(--shining-blue);">PREMIUM MATRIX UPLOADER</p>
+            <p style="font-size: 0.6rem; letter-spacing: 6px; margin-top: 15px; color: #fff; opacity: 0.7;">ULTRA PREMIUM HOSTING</p>
         </header>
 
         <div class="premium-card">
             <div class="upload-zone" id="dropArea">
-                <i class="fas fa-microchip"></i>
-                <h2 id="fileLabel">Upload Image</h2>
-                <p style="opacity: 0.5; font-size: 0.7rem; margin-top: 5px;">Secure Port Ready</p>
+                <i class="fas fa-bolt"></i>
+                <h2 class="shining-text" id="fileLabel">Upload Image</h2>
+                <p style="opacity: 0.4; font-size: 0.7rem; margin-top: 8px; color: white;">CLICK TO SELECT DATA</p>
                 <input type="file" id="fileInput" hidden accept="image/*">
             </div>
 
             <div class="loader" id="spinner"></div>
 
             <button class="btn-main" id="goBtn">
-                <i class="fas fa-bolt"></i> GET LINK
+                <i class="fas fa-link"></i> GET LINK
             </button>
 
             <div class="result-box" id="resultBox">
@@ -219,52 +244,42 @@
                     <span id="urlText"></span>
                     <button class="copy-btn" id="copyBtn">COPY</button>
                 </div>
-                <button onclick="location.reload()" style="background:none; border:none; color:#555; width:100%; margin-top:15px; cursor:pointer; font-size:0.7rem;">NEW SESSION</button>
+                <button onclick="location.reload()" style="background:none; border:none; color:#555; width:100%; margin-top:20px; cursor:pointer; font-size:0.7rem; letter-spacing: 2px;">RESET PORT</button>
             </div>
         </div>
 
         <footer>
-            SYSTEM STATUS: ONLINE // 2026
+            &copy; 2026 GHOSTY PREMIUM // ONLINE
         </footer>
     </div>
 
     <script>
-        // SHINING BLUE RAIN SCRIPT
+        // MATRIX BLUE RAIN
         const canvas = document.getElementById('rainCanvas');
         const ctx = canvas.getContext('2d');
-
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        const characters = "01";
+        const chars = "01";
         const fontSize = 16;
         const columns = canvas.width / fontSize;
-        const drops = [];
+        const drops = Array(Math.floor(columns)).fill(1);
 
-        for (let x = 0; x < columns; x++) {
-            drops[x] = 1;
-        }
-
-        function drawRain() {
-            ctx.fillStyle = "rgba(2, 2, 5, 0.1)"; // Trails
+        function draw() {
+            ctx.fillStyle = "rgba(1, 1, 3, 0.15)";
             ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            ctx.fillStyle = "#00f2ff"; // Rain color
+            ctx.fillStyle = "#00f2ff";
             ctx.font = fontSize + "px monospace";
-
             for (let i = 0; i < drops.length; i++) {
-                const text = characters.charAt(Math.floor(Math.random() * characters.length));
+                const text = chars.charAt(Math.floor(Math.random() * chars.length));
                 ctx.fillText(text, i * fontSize, drops[i] * fontSize);
-
-                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-                    drops[i] = 0;
-                }
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
                 drops[i]++;
             }
         }
-        setInterval(drawRain, 33);
+        setInterval(draw, 35);
 
-        // UPLOADER SCRIPT
+        // UPLOADER LOGIC
         const KEY = 'Ed019955ccdfc5952b136e449d727e0b';
         const fileInput = document.getElementById('fileInput');
         const fileLabel = document.getElementById('fileLabel');
@@ -273,25 +288,22 @@
 
         fileInput.onchange = () => {
             if (fileInput.files.length > 0) {
-                fileLabel.innerText = "Data Loaded";
-                fileLabel.style.color = "#00f2ff";
+                fileLabel.innerText = "DATA READY";
+                fileLabel.style.textShadow = "0 0 20px #fff";
             }
         };
 
         document.getElementById('goBtn').onclick = async () => {
-            if (fileInput.files.length === 0) return alert("No file selected.");
+            if (fileInput.files.length === 0) return alert("Select image first.");
             
             document.getElementById('goBtn').style.display = 'none';
             document.getElementById('spinner').style.display = 'block';
 
-            const formData = new FormData();
-            formData.append('image', fileInput.files[0]);
+            const fd = new FormData();
+            fd.append('image', fileInput.files[0]);
 
             try {
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=${KEY}`, {
-                    method: 'POST',
-                    body: formData
-                });
+                const res = await fetch(`https://api.imgbb.com/1/upload?key=${KEY}`, { method: 'POST', body: fd });
                 const data = await res.json();
                 if (data.success) {
                     document.getElementById('urlText').innerText = data.data.url;
@@ -307,7 +319,8 @@
         document.getElementById('copyBtn').onclick = function() {
             navigator.clipboard.writeText(document.getElementById('urlText').innerText);
             this.innerText = "DONE";
-            setTimeout(() => this.innerText = "COPY", 2000);
+            this.style.background = "#00f2ff";
+            setTimeout(() => { this.innerText = "COPY"; this.style.background = "#fff"; }, 2000);
         };
     </script>
 </body>
