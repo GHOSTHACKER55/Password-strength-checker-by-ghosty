@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>GHOSTY | PRIVATE CLOUD</title>
+    <title>GHOSTY | PRO CLOUD</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Syncopate:wght@700&family=Inter:wght@400;700;900&display=swap" rel="stylesheet"/>
     
@@ -12,51 +12,41 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <style>
-        :root { --bg: #000; --ghost: #00f2ff; --deep-blue: #0044ff; --soft-blue: #00d2ff; }
+        :root { --bg: #000; --ghost: #00f2ff; --blue: #0044ff; --glow: #00d2ff; }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
 
-        /* NOTIFICATION */
-        #notify {
-            position: fixed; top: -100px; left: 50%; transform: translateX(-50%);
-            background: linear-gradient(90deg, var(--deep-blue), var(--soft-blue));
-            color: #fff; padding: 15px 35px; border-radius: 50px;
-            font-weight: 900; font-size: 0.8rem; z-index: 10000; transition: 0.5s;
-            box-shadow: 0 0 30px rgba(0, 68, 255, 0.4);
-        }
+        /* PROGRESS & NOTIFY */
+        #notify { position: fixed; top: -100px; left: 50%; transform: translateX(-50%); background: linear-gradient(90deg, var(--blue), var(--glow)); color: #fff; padding: 15px 30px; border-radius: 50px; font-weight: 900; font-size: 0.75rem; z-index: 10000; transition: 0.5s; box-shadow: 0 0 20px rgba(0,210,255,0.4); }
         #notify.active { top: 30px; }
-
-        /* UPLOAD PROGRESS BAR */
-        #uploadProgress {
-            position: fixed; top: 0; left: 0; width: 0%; height: 4px;
-            background: var(--soft-blue); box-shadow: 0 0 10px var(--soft-blue);
-            z-index: 10001; transition: width 0.3s;
-        }
+        #bar { position: fixed; top: 0; left: 0; width: 0%; height: 4px; background: var(--glow); z-index: 10001; transition: 0.3s; box-shadow: 0 0 10px var(--glow); }
 
         /* AUTH MODAL */
-        #authModal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(15px); }
-        .auth-card { background: #000; border: 1px solid var(--deep-blue); padding: 45px 30px; border-radius: 40px; width: 92%; max-width: 380px; text-align: center; }
-        .auth-input { width: 100%; padding: 18px; margin-bottom: 15px; border-radius: 15px; border: 1px solid #222; background: #111; color: var(--soft-blue); font-size: 1rem; outline: none; }
-        .auth-btn { width: 100%; padding: 18px; border-radius: 15px; background: linear-gradient(135deg, var(--deep-blue), var(--soft-blue)); color: #fff; border: none; font-weight: 900; cursor: pointer; letter-spacing: 1px; }
+        #authModal { position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 9000; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(10px); }
+        .auth-card { background: #000; border: 1px solid var(--blue); padding: 40px 25px; border-radius: 40px; width: 92%; max-width: 380px; text-align: center; }
+        .auth-input { width: 100%; padding: 18px; margin-bottom: 15px; border-radius: 15px; border: 1px solid #222; background: #111; color: var(--glow); outline: none; }
+        .auth-btn { width: 100%; padding: 18px; border-radius: 15px; background: linear-gradient(135deg, var(--blue), var(--glow)); color: #fff; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; }
 
         /* SIDEBAR */
-        .menu-icon { position: fixed; top: 25px; left: 25px; z-index: 1000; font-size: 1.6rem; color: var(--soft-blue); cursor: pointer; }
-        .sidebar { position: fixed; top: 0; left: -310px; width: 280px; height: 100%; background: #000; border-right: 1px solid var(--deep-blue); z-index: 999; transition: 0.4s; padding: 100px 30px; }
+        .menu-icon { position: fixed; top: 25px; left: 25px; z-index: 1000; font-size: 1.6rem; color: var(--glow); cursor: pointer; }
+        .sidebar { position: fixed; top: 0; left: -310px; width: 280px; height: 100%; background: #000; border-right: 1px solid var(--blue); z-index: 999; transition: 0.4s; padding: 100px 30px; }
         .sidebar.active { left: 0; }
         .nav-item { display: flex; align-items: center; padding: 22px 0; color: #fff; font-size: 0.75rem; font-weight: 900; font-family: 'Syncopate'; letter-spacing: 2px; border-bottom: 1px solid #111; cursor: pointer; }
-        .nav-item i { margin-right: 15px; color: var(--soft-blue); width: 20px; }
+        .nav-item i { margin-right: 15px; color: var(--glow); width: 20px; }
 
-        /* CONTAINER */
+        /* HOME / CONTENT */
         .container { max-width: 500px; margin: 0 auto; padding: 100px 20px; text-align: center; }
-        .logo-text { font-family: 'Orbitron'; font-size: 2.8rem; letter-spacing: 12px; text-shadow: 0 0 20px var(--soft-blue); }
+        .logo-text { font-family: 'Orbitron'; font-size: 2.5rem; letter-spacing: 12px; text-shadow: 0 0 20px var(--glow); }
         
-        .upload-box { background: rgba(0, 68, 255, 0.05); border: 2px dashed var(--deep-blue); border-radius: 40px; padding: 60px 25px; cursor: pointer; margin-top: 40px; }
-        .upload-icon { font-size: 3.5rem; color: var(--soft-blue); filter: drop-shadow(0 0 10px var(--soft-blue)); margin-bottom: 15px; }
+        .upload-area { background: rgba(0, 68, 255, 0.05); border: 2px dashed var(--blue); border-radius: 40px; padding: 60px 20px; cursor: pointer; margin-top: 40px; position: relative; }
+        .upload-icon { font-size: 3rem; color: var(--glow); margin-bottom: 15px; filter: drop-shadow(0 0 8px var(--glow)); }
 
+        /* GALLERY */
         .gallery-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
-        .img-card { background: #0a0a0a; border-radius: 20px; overflow: hidden; border: 1px solid #222; position: relative; height: 160px; }
-        .img-card img { width: 100%; height: 100%; object-fit: cover; }
-        .del-btn { position: absolute; top: 8px; right: 8px; background: rgba(0,0,0,0.7); color: #fff; width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; }
+        .img-card { background: #0a0a0a; border-radius: 20px; overflow: hidden; border: 1px solid #222; position: relative; height: 180px; }
+        .img-card img { width: 100%; height: 130px; object-fit: cover; }
+        .img-actions { height: 50px; display: flex; align-items: center; justify-content: space-around; background: #000; }
+        .action-icon { color: var(--glow); font-size: 0.9rem; cursor: pointer; padding: 10px; }
 
         #matrix { position: fixed; inset: 0; z-index: -1; opacity: 0.15; pointer-events: none; }
         .hidden { display: none !important; }
@@ -64,42 +54,42 @@
 </head>
 <body>
 
-    <div id="uploadProgress"></div>
+    <div id="bar"></div>
     <canvas id="matrix"></canvas>
-    <div id="notify">GHOSTY SYSTEM</div>
+    <div id="notify">GHOSTY V14</div>
     <div class="menu-icon" onclick="toggleSidebar()"><i class="fas fa-bars"></i></div>
 
     <div id="authModal">
         <div class="auth-card">
-            <h2 id="authTitle" style="font-family:'Syncopate'; color:var(--soft-blue); margin-bottom:30px; font-size:1.1rem; letter-spacing:4px;">LOGIN</h2>
-            <input type="email" id="email" class="auth-input" placeholder="EMAIL ADDRESS">
+            <h2 id="atitle" style="font-family:'Syncopate'; color:var(--glow); margin-bottom:30px; font-size:1.2rem; letter-spacing:4px;">LOGIN</h2>
+            <input type="email" id="email" class="auth-input" placeholder="EMAIL">
             <input type="password" id="pass" class="auth-input" placeholder="PASSWORD">
             <button class="auth-btn" onclick="handleAuth()">CONTINUE</button>
-            <p onclick="switchAuth()" id="authSwitch" style="margin-top:25px; font-size:0.65rem; color:var(--soft-blue); cursor:pointer; font-weight:700;">CREATE ACCOUNT</p>
+            <p onclick="switchAuth()" id="aswitch" style="margin-top:25px; font-size:0.6rem; color:var(--glow); cursor:pointer; font-weight:700;">OR SIGN UP</p>
         </div>
     </div>
 
     <nav class="sidebar" id="sidebar">
         <div class="nav-item" onclick="showView('home')"><i class="fas fa-home"></i> HOME</div>
-        <div class="nav-item" onclick="showView('uploads'); loadMyImages();"><i class="fas fa-images"></i> MY UPLOADS</div>
-        <div class="nav-item" style="color: #ff4444; margin-top: 50px;" onclick="logout()"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
+        <div class="nav-item" onclick="showView('gallery'); loadGallery();"><i class="fas fa-images"></i> MY UPLOADS</div>
+        <div class="nav-item" style="color: #ff3333; margin-top: 50px;" onclick="logout()"><i class="fas fa-power-off"></i> LOGOUT</div>
     </nav>
 
     <div id="homeView" class="container">
         <h1 class="logo-text">GHOSTY</h1>
-        <p style="font-size:0.6rem; letter-spacing:5px; opacity:0.5; margin-top:10px;">PRIVATE CLOUD LOG</p>
+        <p style="font-size:0.6rem; letter-spacing:4px; opacity:0.5; margin-top:10px;">PRO IMAGE CLOUD</p>
         
-        <div class="upload-box" onclick="document.getElementById('fileInput').click()">
+        <div class="upload-area" onclick="document.getElementById('fileInput').click()">
             <i class="fas fa-cloud-upload-alt upload-icon"></i>
-            <h3 style="letter-spacing:2px;">UPLOAD FROM GALLERY</h3>
-            <p style="font-size:0.6rem; opacity:0.4; margin-top:10px;">Images are saved to your account</p>
-            <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="uploadImage(this)">
+            <h3 style="letter-spacing:1px; font-size: 1rem;">UPLOAD TO ACCOUNT</h3>
+            <p style="font-size:0.6rem; opacity:0.4; margin-top:8px;">Images are optimized for speed</p>
+            <input type="file" id="fileInput" class="hidden" accept="image/*" onchange="processAndUpload(this)">
         </div>
     </div>
 
-    <div id="uploadsView" class="container hidden">
-        <h2 style="font-family:'Syncopate'; color:var(--soft-blue); font-size:1rem; letter-spacing:4px; margin-bottom:30px;">CLOUD GALLERY</h2>
-        <div id="gallery" class="gallery-grid"></div>
+    <div id="galleryView" class="container hidden">
+        <h2 style="font-family:'Syncopate'; color:var(--glow); font-size:1rem; letter-spacing:3px; margin-bottom:30px;">MY CLOUD</h2>
+        <div id="galleryGrid" class="gallery-grid"></div>
     </div>
 
     <script>
@@ -115,7 +105,7 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        let isLoginMode = true;
+        let isLogin = true;
 
         function notify(msg) {
             const n = document.getElementById('notify');
@@ -124,28 +114,28 @@
         }
 
         function toggleSidebar() { document.getElementById('sidebar').classList.toggle('active'); }
-
+        
         function showView(v) {
-            ['home', 'uploads'].forEach(id => document.getElementById(id + 'View').classList.add('hidden'));
+            ['home', 'gallery'].forEach(id => document.getElementById(id + 'View').classList.add('hidden'));
             document.getElementById(v + 'View').classList.remove('hidden');
             document.getElementById('sidebar').classList.remove('active');
         }
 
         function switchAuth() {
-            isLoginMode = !isLoginMode;
-            document.getElementById('authTitle').innerText = isLoginMode ? "LOGIN" : "SIGN UP";
-            document.getElementById('authSwitch').innerText = isLoginMode ? "CREATE ACCOUNT" : "ALREADY HAVE AN ACCOUNT?";
+            isLogin = !isLogin;
+            document.getElementById('atitle').innerText = isLogin ? "LOGIN" : "SIGN UP";
+            document.getElementById('aswitch').innerText = isLogin ? "OR SIGN UP" : "ALREADY HAVE ACCOUNT?";
         }
 
         async function handleAuth() {
-            const email = document.getElementById('email').value;
-            const pass = document.getElementById('pass').value;
-            if(!email || !pass) return notify("MISSING DATA");
+            const e = document.getElementById('email').value;
+            const p = document.getElementById('pass').value;
+            if(!e || !p) return notify("FILL ALL FIELDS");
             try {
-                if(isLoginMode) await auth.signInWithEmailAndPassword(email, pass);
-                else await auth.createUserWithEmailAndPassword(email, pass);
-                notify("SUCCESSFUL");
-            } catch (e) { notify("ERROR: " + e.message.split(')')[0].split('/')[1]); }
+                if(isLogin) await auth.signInWithEmailAndPassword(e, p);
+                else await auth.createUserWithEmailAndPassword(e, p);
+                notify("SUCCESS");
+            } catch (err) { notify("AUTH FAILED"); }
         }
 
         auth.onAuthStateChanged(user => {
@@ -155,48 +145,91 @@
 
         function logout() { auth.signOut(); window.location.reload(); }
 
-        // UPLOAD WITH PROGRESS
-        async function uploadImage(input) {
+        // IMAGE PROCESSING (FIXES UPLOAD BUG)
+        async function processAndUpload(input) {
             if(!input.files[0]) return;
-            const bar = document.getElementById('uploadProgress');
-            
-            // Start Progress
-            bar.style.width = "30%";
-            notify("UPLOADING...");
-
             const file = input.files[0];
+            const bar = document.getElementById('bar');
+            bar.style.width = "20%";
+            notify("OPTIMIZING...");
+
             const reader = new FileReader();
-            
-            reader.onload = async function(e) {
-                bar.style.width = "70%";
-                await db.collection("user_uploads").add({
-                    uid: auth.currentUser.uid,
-                    url: e.target.result,
-                    timestamp: Date.now()
-                });
-                bar.style.width = "100%";
-                notify("UPLOADED SUCCESSFULLY!");
-                setTimeout(() => { bar.style.width = "0%"; }, 1000);
-            };
             reader.readAsDataURL(file);
+            reader.onload = function(event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = async function() {
+                    // Create Canvas for compression
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 800; // Resize to fit database limits
+                    let width = img.width;
+                    let height = img.height;
+
+                    if (width > MAX_WIDTH) {
+                        height *= MAX_WIDTH / width;
+                        width = MAX_WIDTH;
+                    }
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    // Compress to 70% quality
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.7);
+                    
+                    bar.style.width = "60%";
+                    try {
+                        await db.collection("user_uploads").add({
+                            uid: auth.currentUser.uid,
+                            url: compressedBase64,
+                            timestamp: Date.now()
+                        });
+                        bar.style.width = "100%";
+                        notify("UPLOADED TO CLOUD!");
+                        setTimeout(() => bar.style.width="0%", 1000);
+                    } catch (e) {
+                        notify("UPLOAD FAILED");
+                    }
+                }
+            };
         }
 
-        async function loadMyImages() {
-            const g = document.getElementById('gallery');
-            g.innerHTML = "<p>Fetching...</p>";
+        async function loadGallery() {
+            const grid = document.getElementById('galleryGrid');
+            grid.innerHTML = "<p>Loading Sync...</p>";
             const snap = await db.collection("user_uploads").where("uid", "==", auth.currentUser.uid).orderBy("timestamp", "desc").get();
-            let html = "";
+            let h = "";
             snap.forEach(doc => {
-                html += `<div class="img-card"><img src="${doc.data().url}"><div class="del-btn" onclick="deleteImg('${doc.id}')">×</div></div>`;
+                const data = doc.data();
+                h += `
+                <div class="img-card">
+                    <img src="${data.url}">
+                    <div class="img-actions">
+                        <i class="fas fa-link action-icon" onclick="copyLink('${data.url}')" title="Copy Link"></i>
+                        <i class="fas fa-trash action-icon" onclick="delImg('${doc.id}')" style="color:red"></i>
+                    </div>
+                </div>`;
             });
-            g.innerHTML = html || "No images found.";
+            grid.innerHTML = h || "No Images Found";
         }
 
-        async function deleteImg(id) {
-            if(confirm("Delete?")) {
+        function copyLink(url) {
+            // Since this is Base64, the link is the data itself.
+            // In a real app with Firebase Storage, this would be a URL.
+            const dummy = document.createElement("textarea");
+            document.body.appendChild(dummy);
+            dummy.value = url;
+            dummy.select();
+            document.execCommand("copy");
+            document.body.removeChild(dummy);
+            notify("IMAGE DATA COPIED!");
+        }
+
+        async function delImg(id) {
+            if(confirm("Delete Image?")) {
                 await db.collection("user_uploads").doc(id).delete();
-                notify("REMOVED");
-                loadMyImages();
+                notify("DELETED");
+                loadGallery();
             }
         }
 
