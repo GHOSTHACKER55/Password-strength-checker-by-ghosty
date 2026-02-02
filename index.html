@@ -3,286 +3,212 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>GHOSTY PREMIUM | Shining Blue Edition</title>
+    <title>GHOSTY ADMIN PRO</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Syncopate:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+
     <style>
-        :root {
-            --bg: #000000;
-            --ghost-blue: #00f2ff;
-            --shining-shadow: 0 0 15px rgba(0, 242, 255, 0.8);
-            --glass: rgba(255, 255, 255, 0.02);
-        }
+        :root { --bg: #000; --ghost: #00f2ff; --glass: rgba(255,255,255,0.03); }
+        * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
+        body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-        body { background-color: var(--bg); color: white; min-height: 100vh; overflow-x: hidden; }
-
-        /* --- 3-LINE MENU STYLES --- */
-        .menu-btn {
-            position: fixed;
-            top: 25px;
-            left: 20px;
-            z-index: 1000;
-            font-size: 1.8rem;
-            color: var(--ghost-blue);
-            cursor: pointer;
-            filter: drop-shadow(0 0 10px var(--ghost-blue));
-        }
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: -320px;
-            width: 300px;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.98);
-            backdrop-filter: blur(25px);
-            border-right: 2px solid var(--ghost-blue);
-            z-index: 999;
-            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            padding: 100px 30px;
-        }
-
-        .sidebar.active { left: 0; }
-
-        .sidebar-item {
-            display: block;
-            color: white;
-            text-decoration: none;
-            font-family: 'Syncopate', sans-serif;
-            font-size: 0.85rem;
-            margin-bottom: 40px;
-            letter-spacing: 3px;
-            transition: 0.3s;
-            cursor: pointer;
-        }
-
-        .sidebar-item:hover { color: var(--ghost-blue); text-shadow: var(--shining-shadow); }
-        .sidebar-item i { margin-right: 15px; color: var(--ghost-blue); }
-
-        /* --- SHINING RAIN BACKGROUND --- */
-        #rainCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.4; }
-
-        .container { width: 100%; max-width: 480px; margin: 0 auto; padding: 60px 20px; text-align: center; }
-
-        header .logo {
-            font-family: 'Orbitron', sans-serif; font-size: 3.2rem; letter-spacing: 15px;
-            text-shadow: var(--shining-shadow); margin-top: 10px; color: white;
-        }
-
-        /* --- MAIN CARDS --- */
-        .premium-card {
-            background: var(--glass); backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 242, 255, 0.3); border-radius: 40px;
-            padding: 40px 30px; box-shadow: 0 0 60px #000; margin-top: 40px;
-        }
-
-        .upload-zone {
-            border: 2px solid var(--ghost-blue); border-radius: 25px; padding: 50px 15px;
-            background: rgba(0, 0, 0, 0.7); box-shadow: inset 0 0 25px rgba(0, 242, 255, 0.2);
-            cursor: pointer; transition: 0.3s;
-        }
-
-        .upload-zone:hover { transform: scale(1.02); box-shadow: 0 0 20px var(--ghost-blue); }
-
-        .btn-main {
-            width: 100%; margin-top: 30px; padding: 22px; border: none; border-radius: 20px;
-            font-family: 'Syncopate', sans-serif; font-weight: 700; color: white; cursor: pointer;
-            background: linear-gradient(90deg, #002222, var(--ghost-blue), #002222);
-            background-size: 200% auto; animation: moveShine 3s linear infinite;
-            box-shadow: 0 0 20px rgba(0, 242, 255, 0.4);
-        }
-
-        @keyframes moveShine { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
-
-        /* --- GALLERY GRID (3 IN A ROW) --- */
-        #galleryView { display: none; }
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-top: 30px;
-        }
-
-        .gallery-item {
-            aspect-ratio: 1;
-            border: 1px solid var(--ghost-blue);
-            border-radius: 12px;
-            overflow: hidden;
-            position: relative;
-            cursor: pointer;
-            background: #111;
-        }
-
-        .gallery-item img { width: 100%; height: 100%; object-fit: cover; opacity: 0.8; transition: 0.3s; }
-        .gallery-item:hover img { opacity: 1; transform: scale(1.1); }
-
-        /* --- RESULTS & LOADER --- */
-        .loader { display: none; margin: 20px auto; width: 45px; height: 45px; border: 4px solid rgba(0,242,255,0.1); border-top: 4px solid var(--ghost-blue); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        #resultBox { display: none; margin-top: 25px; animation: fadeIn 0.5s; }
-        .link-bar { background: #000; padding: 18px; border-radius: 15px; border: 1px solid var(--ghost-blue); display: flex; justify-content: space-between; align-items: center; }
-        #urlText { font-size: 0.75rem; color: var(--ghost-blue); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: monospace; }
-        .copy-btn { background: white; color: black; border: none; padding: 8px 15px; border-radius: 8px; font-weight: 900; cursor: pointer; }
+        /* --- AUTH OVERLAY --- */
+        #authOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:5000; display:flex; align-items:center; justify-content:center; }
+        .auth-card { background:#0a0a0a; border:1px solid var(--ghost); padding:30px; border-radius:25px; width:90%; max-width:400px; text-align:center; }
+        .auth-input { width:100%; padding:12px; margin:8px 0; border-radius:10px; border:1px solid #222; background:#000; color:#fff; outline:none; }
+        .auth-btn { width:100%; padding:15px; border-radius:10px; border:none; background:var(--ghost); color:#000; font-weight:900; cursor:pointer; margin-top:10px; }
         
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* --- SIDEBAR --- */
+        .menu-btn { position:fixed; top:20px; left:20px; z-index:1000; font-size:1.5rem; color:var(--ghost); cursor:pointer; }
+        .sidebar { position:fixed; top:0; left:-300px; width:280px; height:100%; background:rgba(0,0,0,0.95); border-right:1px solid var(--ghost); z-index:999; transition:0.4s; padding:80px 20px; }
+        .sidebar.active { left:0; }
+        .sidebar-item { display:block; color:#fff; text-decoration:none; padding:15px 0; font-family:'Syncopate'; font-size:0.7rem; cursor:pointer; }
+        .sidebar-item i { margin-right:10px; color:var(--ghost); }
 
-        footer { margin-top: 50px; text-align: center; font-size: 0.65rem; color: var(--ghost-blue); letter-spacing: 5px; opacity: 0.5; }
+        /* --- ADMIN PANEL VIEW --- */
+        #adminView { display:none; padding:80px 20px; max-width:800px; margin:0 auto; }
+        .stat-grid { display:grid; grid-template-columns: repeat(2, 1fr); gap:15px; margin-bottom:30px; }
+        .stat-card { background:var(--glass); border:1px solid var(--ghost); padding:20px; border-radius:15px; text-align:center; }
+        .stat-val { font-size:1.5rem; color:var(--ghost); font-weight:900; }
+        .data-table { width:100%; border-collapse:collapse; font-size:0.7rem; margin-top:20px; }
+        .data-table th, td { border:1px solid #222; padding:10px; text-align:left; }
+        
+        /* --- SUGGESTION FORM --- */
+        #suggestionView { display:none; padding:100px 20px; text-align:center; }
+        textarea { width:100%; height:150px; background:#111; border:1px solid var(--ghost); border-radius:15px; color:#fff; padding:15px; outline:none; }
+
+        #rainCanvas { position:fixed; top:0; left:0; z-index:-1; opacity:0.3; }
+        .container { max-width:480px; margin:0 auto; padding:80px 20px; text-align:center; }
+        .hidden { display:none !important; }
     </style>
 </head>
 <body>
 
-    <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
-
-    <nav class="sidebar" id="sidebar">
-        <div class="sidebar-item" onclick="showHome()"><i class="fas fa-bolt"></i> HOME</div>
-        <div class="sidebar-item" onclick="showGallery()"><i class="fas fa-images"></i> MY UPLOADS</div>
-        <div class="sidebar-item" onclick="window.open('https://wa.me/923106723295', '_blank')"><i class="fas fa-crown"></i> BUY PREMIUM</div>
-        
-        <div style="position: absolute; bottom: 40px; left: 30px;">
-            <p style="font-size: 0.6rem; color: #555; letter-spacing: 1px; margin-bottom: 5px;">CONTACT ADMIN</p>
-            <p style="color: var(--ghost-blue); font-size: 0.9rem; font-weight: bold;">03106723295</p>
+    <div id="authOverlay">
+        <div class="auth-card" id="loginBox">
+            <h2 style="color:var(--ghost); margin-bottom:20px;">GHOSTY LOGIN</h2>
+            <input type="email" id="logEmail" class="auth-input" placeholder="Email">
+            <input type="password" id="logPass" class="auth-input" placeholder="Password">
+            <button class="auth-btn" onclick="login()">SIGN IN</button>
+            <p onclick="toggleAuth(true)" style="font-size:0.7rem; margin-top:15px; cursor:pointer;">Need Account? <span style="color:var(--ghost)">SIGNUP</span></p>
         </div>
+        <div class="auth-card hidden" id="signupBox">
+            <h2 style="color:var(--ghost); margin-bottom:20px;">GHOSTY SIGNUP</h2>
+            <input type="text" id="regName" class="auth-input" placeholder="Full Name">
+            <input type="email" id="regEmail" class="auth-input" placeholder="Email">
+            <input type="password" id="regPass" class="auth-input" placeholder="Password">
+            <input type="password" id="regConfirm" class="auth-input" placeholder="Confirm Password">
+            <button class="auth-btn" onclick="signup()">CREATE ACCOUNT</button>
+            <p onclick="toggleAuth(false)" style="font-size:0.7rem; margin-top:15px; cursor:pointer;">Have Account? <span style="color:var(--ghost)">LOGIN</span></p>
+        </div>
+    </div>
+
+    <div class="menu-btn" onclick="toggleMenu()"><i class="fas fa-bars"></i></div>
+    <nav class="sidebar" id="sidebar">
+        <div class="sidebar-item" onclick="showPage('home')"><i class="fas fa-home"></i> HOME</div>
+        <div class="sidebar-item" onclick="showPage('suggest')"><i class="fas fa-comment-alt"></i> SUGGESTION</div>
+        <div class="sidebar-item" id="adminLink" style="display:none;" onclick="showPage('admin')"><i class="fas fa-user-shield"></i> ADMIN PANEL</div>
+        <div class="sidebar-item" onclick="window.open('https://wa.me/923106723295')"><i class="fas fa-crown"></i> BUY PREMIUM</div>
+        <div class="sidebar-item" onclick="firebase.auth().signOut()" style="color:red; margin-top:50px;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
     </nav>
 
     <canvas id="rainCanvas"></canvas>
 
-    <div class="container">
-        <header>
-            <i class="fas fa-ghost" style="color: var(--ghost-blue); font-size: 2.5rem; filter: drop-shadow(0 0 15px var(--ghost-blue));"></i>
-            <div class="logo">GHOSTY</div>
-        </header>
-
-        <div id="homeView">
-            <div class="premium-card">
-                <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
-                    <i class="fas fa-plus-circle" style="font-size: 3rem; color: white; text-shadow: 0 0 10px var(--ghost-blue); margin-bottom: 20px;"></i>
-                    <h2 id="fileLabel" style="font-size: 1.1rem; color: var(--ghost-blue); letter-spacing: 2px;">UPLOAD IMAGE</h2>
-                    <p style="font-size: 0.7rem; color: #555; margin-top: 10px;">TAP TO INJECT MEDIA</p>
-                    <input type="file" id="fileInput" hidden accept="image/*">
-                </div>
-                
-                <div class="loader" id="spinner"></div>
-                <button class="btn-main" id="goBtn">GET LINK</button>
-
-                <div id="resultBox">
-                    <div class="link-bar">
-                        <span id="urlText"></span>
-                        <button class="copy-btn" id="copyBtn">COPY</button>
-                    </div>
-                    <button onclick="location.reload()" style="background: none; border: none; color: #444; margin-top: 20px; font-size: 0.7rem; cursor: pointer; text-transform: uppercase; letter-spacing: 2px;">New Upload</button>
-                </div>
+    <div class="container" id="homeView">
+        <h1 class="logo" style="font-family:'Orbitron'; letter-spacing:10px; color:var(--ghost)">GHOSTY</h1>
+        <div style="background:var(--glass); border:1px solid var(--ghost); padding:40px; border-radius:30px; margin-top:30px;">
+            <input type="file" id="fileInp" hidden>
+            <div onclick="document.getElementById('fileInp').click()" style="border:2px dashed var(--ghost); padding:40px; border-radius:20px; cursor:pointer;">
+                <i class="fas fa-upload" style="font-size:2rem; color:var(--ghost)"></i>
+                <p style="margin-top:10px;">CLICK TO UPLOAD</p>
             </div>
         </div>
+    </div>
 
-        <div id="galleryView">
-            <h2 style="color: var(--ghost-blue); text-shadow: var(--shining-shadow); font-size: 1rem; letter-spacing: 4px; margin-bottom: 10px;">MY RECENT UPLOADS</h2>
-            <p style="font-size: 0.6rem; color: #444; margin-bottom: 30px;">TAP IMAGE TO COPY LINK</p>
-            <div class="gallery-grid" id="galleryGrid"></div>
-            <button onclick="clearHistory()" style="background: none; border: 1px solid #ff4d4d; color: #ff4d4d; border-radius: 10px; padding: 10px 20px; margin-top: 40px; font-size: 0.7rem; cursor: pointer;">WIPE DATA</button>
+    <div id="suggestionView">
+        <h2 style="color:var(--ghost)">TOOL SUGGESTIONS</h2>
+        <p style="font-size:0.7rem; margin-bottom:20px;">What should we change?</p>
+        <textarea id="suggestTxt" placeholder="Write your ideas here..."></textarea>
+        <button class="auth-btn" onclick="submitSuggest()">SUBMIT SUGGESTION</button>
+    </div>
+
+    <div id="adminView">
+        <h2 style="color:var(--ghost); margin-bottom:20px;">ADMIN DASHBOARD</h2>
+        <div class="stat-grid">
+            <div class="stat-card"><p>Total Visitors</p><div class="stat-val" id="statVisitors">0</div></div>
+            <div class="stat-card"><p>Total Images</p><div class="stat-val" id="statImages">0</div></div>
         </div>
-
-        <footer>&copy; 2026 GHOSTY PREMIUM</footer>
+        <h3 style="font-size:0.8rem; color:var(--ghost)">REGISTERED USERS</h3>
+        <table class="data-table"><thead id="userTableHead"><tr><th>Name</th><th>Email</th></tr></thead><tbody id="userTable"></tbody></table>
+        <h3 style="font-size:0.8rem; color:var(--ghost); margin-top:30px;">USER SUGGESTIONS</h3>
+        <div id="suggestList" style="margin-top:10px;"></div>
     </div>
 
     <script>
-        const API_KEY = 'Ed019955ccdfc5952b136e449d727e0b';
-        
-        // --- NAVIGATION LOGIC ---
+        // --- FIREBASE CONFIG ---
+        const firebaseConfig = {
+            apiKey: "YOUR_API_KEY",
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "YOUR_SENDER_ID",
+            appId: "YOUR_APP_ID"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+        const ADMIN_MAIL = "your-email@gmail.com"; // CHANGE THIS
+
+        // --- AUTH FUNCTIONS ---
+        function toggleAuth(isSignup) {
+            document.getElementById('loginBox').classList.toggle('hidden', isSignup);
+            document.getElementById('signupBox').classList.toggle('hidden', !isSignup);
+        }
+
+        async function signup() {
+            const name = document.getElementById('regName').value;
+            const email = document.getElementById('regEmail').value;
+            const pass = document.getElementById('regPass').value;
+            const conf = document.getElementById('regConfirm').value;
+            if(pass !== conf) return alert("Passwords don't match");
+            try {
+                const res = await auth.createUserWithEmailAndPassword(email, pass);
+                await db.collection("users").doc(res.user.uid).set({ name, email });
+            } catch(e) { alert(e.message); }
+        }
+
+        async function login() {
+            const email = document.getElementById('logEmail').value;
+            const pass = document.getElementById('logPass').value;
+            try { await auth.signInWithEmailAndPassword(email, pass); } catch(e) { alert(e.message); }
+        }
+
+        auth.onAuthStateChanged(user => {
+            if(user) {
+                document.getElementById('authOverlay').classList.add('hidden');
+                if(user.email === ADMIN_MAIL) document.getElementById('adminLink').style.display='block';
+                // Count visitor
+                db.collection("stats").doc("counters").set({ visitors: firebase.firestore.FieldValue.increment(1) }, {merge:true});
+            } else {
+                document.getElementById('authOverlay').classList.remove('hidden');
+            }
+        });
+
+        // --- NAVIGATION ---
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-        
-        function showHome() { 
-            document.getElementById('homeView').style.display = 'block'; 
-            document.getElementById('galleryView').style.display = 'none'; 
-            if(document.getElementById('sidebar').classList.contains('active')) toggleMenu(); 
+        function showPage(p) {
+            document.getElementById('homeView').style.display = p==='home'?'block':'none';
+            document.getElementById('suggestionView').style.display = p==='suggest'?'block':'none';
+            document.getElementById('adminView').style.display = p==='admin'?'block':'none';
+            if(p==='admin') loadAdminData();
+            toggleMenu();
         }
 
-        function showGallery() { 
-            document.getElementById('homeView').style.display = 'none'; 
-            document.getElementById('galleryView').style.display = 'block'; 
-            renderGallery();
-            if(document.getElementById('sidebar').classList.contains('active')) toggleMenu(); 
+        // --- DATABASE LOGIC ---
+        async function submitSuggest() {
+            const text = document.getElementById('suggestTxt').value;
+            await db.collection("suggestions").add({ text, user: auth.currentUser.email });
+            alert("Suggestion Sent!");
+            document.getElementById('suggestTxt').value = "";
         }
 
-        // --- SHINING BLUE RAIN ---
+        async function loadAdminData() {
+            // Visitors & Total Images
+            const stats = await db.collection("stats").doc("counters").get();
+            document.getElementById('statVisitors').innerText = stats.data().visitors || 0;
+            
+            // Users List
+            const users = await db.collection("users").get();
+            let utable = "";
+            users.forEach(doc => { utable += `<tr><td>${doc.data().name}</td><td>${doc.data().email}</td></tr>`; });
+            document.getElementById('userTable').innerHTML = utable;
+
+            // Suggestions
+            const suggs = await db.collection("suggestions").get();
+            let slist = "";
+            suggs.forEach(doc => { slist += `<div style="background:#111; padding:10px; margin:5px; border-left:2px solid var(--ghost)">${doc.data().text} <br><small>- ${doc.data().user}</small></div>`; });
+            document.getElementById('suggestList').innerHTML = slist;
+        }
+
+        // --- RAIN ---
         const canvas = document.getElementById('rainCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        const drops = Array(Math.floor(canvas.width / 18)).fill(1);
-        function drawRain() {
+        const drops = Array(Math.floor(canvas.width / 16)).fill(1);
+        function draw() {
             ctx.fillStyle = "rgba(0,0,0,0.15)"; ctx.fillRect(0,0,canvas.width,canvas.height);
             ctx.fillStyle = "#00f2ff"; ctx.font = "16px monospace";
             drops.forEach((y, x) => {
-                ctx.fillText(Math.floor(Math.random()*2), x*18, y*18);
-                if(y*18 > canvas.height && Math.random() > 0.975) drops[x] = 0;
+                ctx.fillText(Math.floor(Math.random()*2), x*16, y*16);
+                if(y*16 > canvas.height && Math.random() > 0.975) drops[x] = 0;
                 drops[x]++;
             });
         }
-        setInterval(drawRain, 35);
-
-        // --- UPLOADER LOGIC ---
-        const fileInput = document.getElementById('fileInput');
-        const fileLabel = document.getElementById('fileLabel');
-
-        fileInput.onchange = () => { if(fileInput.files[0]) fileLabel.innerText = "DATA DETECTED"; };
-
-        document.getElementById('goBtn').onclick = async () => {
-            if(!fileInput.files[0]) return alert("Please select a file.");
-            
-            document.getElementById('goBtn').style.display = 'none';
-            document.getElementById('spinner').style.display = 'block';
-            
-            const fd = new FormData(); fd.append('image', fileInput.files[0]);
-            try {
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=${API_KEY}`, {method: 'POST', body: fd});
-                const data = await res.json();
-                if(data.success) {
-                    const url = data.data.url;
-                    document.getElementById('urlText').innerText = url;
-                    document.getElementById('resultBox').style.display = 'block';
-                    document.getElementById('spinner').style.display = 'none';
-                    saveToGallery(url);
-                }
-            } catch(e) { alert("Error uploading."); location.reload(); }
-        };
-
-        // --- GALLERY & STORAGE ---
-        function saveToGallery(url) {
-            let images = JSON.parse(localStorage.getItem('ghosty_gallery') || '[]');
-            images.unshift(url);
-            localStorage.setItem('ghosty_gallery', JSON.stringify(images));
-        }
-
-        function renderGallery() {
-            const grid = document.getElementById('galleryGrid');
-            let images = JSON.parse(localStorage.getItem('ghosty_gallery') || '[]');
-            if(images.length === 0) {
-                grid.innerHTML = '<p style="grid-column: span 3; color: #333; font-size: 0.8rem; margin-top: 20px;">No images found.</p>';
-                return;
-            }
-            grid.innerHTML = images.map(url => `
-                <div class="gallery-item" onclick="copySpecific('${url}')">
-                    <img src="${url}">
-                </div>
-            `).join('');
-        }
-
-        function copySpecific(url) {
-            navigator.clipboard.writeText(url);
-            alert("Link copied from gallery!");
-        }
-
-        document.getElementById('copyBtn').onclick = () => {
-            navigator.clipboard.writeText(document.getElementById('urlText').innerText);
-            alert("Copied!");
-        };
-
-        function clearHistory() {
-            if(confirm("Wipe all recent uploads?")) {
-                localStorage.removeItem('ghosty_gallery');
-                renderGallery();
-            }
-        }
+        setInterval(draw, 35);
     </script>
 </body>
 </html>
