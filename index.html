@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>GHOSTY PREMIUM | V2</title>
+    <title>GHOSTY PREMIUM | V3</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Syncopate:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
     
@@ -12,85 +12,59 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
     <style>
-        :root { --bg: #000; --ghost: #00f2ff; --glass: rgba(0, 242, 255, 0.05); }
+        :root { --bg: #000; --ghost: #00f2ff; --glass: rgba(0, 242, 255, 0.05); --blue-glow: #007bff; }
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
         body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
 
-        /* MODAL POPUP (Your Requested Style) */
-        #premiumModal {
+        /* STAFF ACCESS POPUP (Matches your screenshot style) */
+        #unlockPortal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 20000;
+            background: rgba(0,0,0,0.9); z-index: 30000;
             display: none; align-items: center; justify-content: center;
         }
-        .modal-card {
-            background: #0a0a0a; border: 1px solid var(--ghost);
-            padding: 35px; border-radius: 25px; width: 90%; max-width: 380px;
-            text-align: center; box-shadow: 0 0 30px rgba(0,242,255,0.3);
-            animation: popIn 0.3s ease-out;
+        .staff-card {
+            background: #fff; color: #000; padding: 40px 30px; border-radius: 40px;
+            width: 90%; max-width: 360px; text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
         }
-        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .modal-title { font-family: 'Orbitron'; color: var(--ghost); font-size: 1.1rem; margin-bottom: 10px; text-transform: uppercase; }
-        .modal-msg { font-size: 0.8rem; opacity: 0.8; margin-bottom: 25px; line-height: 1.5; }
-        .modal-btn { background: var(--ghost); color: #000; border: none; padding: 12px 45px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        .staff-title { font-family: 'Inter'; font-weight: 900; font-style: italic; font-size: 1.4rem; letter-spacing: -1px; margin-bottom: 5px; }
+        .staff-sub { font-size: 0.6rem; opacity: 0.6; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; }
+        .staff-input { 
+            width: 100%; padding: 18px; border-radius: 15px; border: 2px solid var(--blue-glow);
+            text-align: center; font-size: 1.2rem; margin-bottom: 20px; outline: none;
+        }
+        .unlock-btn { 
+            width: 100%; padding: 18px; background: #000; color: #fff; border: none;
+            border-radius: 15px; font-weight: 900; text-transform: uppercase; cursor: pointer;
+        }
 
-        /* AUTH UI */
-        #authOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:5000; display:flex; align-items:center; justify-content:center; }
-        .auth-card { background:#0a0a0a; border:1px solid var(--ghost); padding:30px; border-radius:25px; width:90%; max-width:400px; text-align:center; }
-        .auth-input { width:100%; padding:15px; margin:10px 0; border-radius:12px; border:1px solid #222; background:#000; color:#fff; outline:none; }
-        .auth-btn { width:100%; padding:15px; border-radius:12px; border:none; background:var(--ghost); color:#000; font-weight:900; cursor:pointer; }
-
-        /* SIDEBAR (3 LINES) */
+        /* SIDEBAR */
         .menu-btn { position:fixed; top:20px; left:20px; z-index:1000; font-size:1.5rem; color:var(--ghost); cursor:pointer; }
         .sidebar { position:fixed; top:0; left:-300px; width:280px; height:100%; background:rgba(0,0,0,0.98); border-right:2px solid var(--ghost); z-index:999; transition:0.4s; padding:80px 25px; }
         .sidebar.active { left:0; }
-        .sidebar-item { display:flex; align-items:center; color:#fff; text-decoration:none; padding:18px 0; font-family:'Syncopate'; font-size:0.65rem; cursor:pointer; border-bottom: 1px solid #111; letter-spacing: 2px; }
-        .sidebar-item i { margin-right: 15px; font-size: 0.9rem; color: var(--ghost); width: 20px; text-align: center; }
+        .sidebar-item { display:flex; align-items:center; color:#fff; text-decoration:none; padding:18px 0; font-family:'Syncopate'; font-size:0.65rem; cursor:pointer; border-bottom: 1px solid #111; }
+        .sidebar-item i { margin-right: 15px; color: var(--ghost); }
 
-        /* HOME UI (Matches your Screenshot) */
-        .home-container { max-width:480px; margin:0 auto; padding:80px 20px; text-align: center; }
-        .logo-section { margin-bottom: 40px; }
-        .logo-icon { font-size: 3.5rem; color: var(--ghost); filter: drop-shadow(0 0 10px var(--ghost)); margin-bottom: 10px; }
-        .logo-text { font-family: 'Orbitron'; font-size: 2.8rem; letter-spacing: 12px; color: #fff; text-shadow: 0 0 15px var(--ghost); }
-        .logo-sub { font-size: 0.6rem; letter-spacing: 4px; opacity: 0.5; margin-top: 5px; }
+        /* HOME UI */
+        .home-section { max-width:480px; margin:0 auto; padding:80px 20px; text-align: center; }
+        .logo-box { margin-bottom: 40px; }
+        .logo-text { font-family: 'Orbitron'; font-size: 2.5rem; letter-spacing: 10px; text-shadow: 0 0 20px var(--ghost); }
+        .upload-main { background: rgba(0,0,0,0.6); border: 2px solid var(--ghost); border-radius: 40px; padding: 40px 20px; }
+        .upload-area { border: 1px solid rgba(0,242,255,0.2); border-radius: 20px; padding: 40px 10px; margin-bottom: 20px; cursor: pointer; }
         
-        .upload-box { background: rgba(0,0,0,0.6); border: 2px solid var(--ghost); border-radius: 35px; padding: 40px 20px; margin-top: 30px; box-shadow: 0 0 20px rgba(0,242,255,0.1); }
-        .upload-inner { border: 1px solid rgba(0,242,255,0.3); border-radius: 20px; padding: 30px 10px; cursor: pointer; transition: 0.3s; margin-bottom: 20px; }
-        .upload-inner:hover { background: var(--glass); }
-        .upload-title { color: var(--ghost); font-weight: 900; letter-spacing: 2px; font-size: 1rem; margin-top: 10px; }
-        
-        /* GALLERY (3 IN ROW) */
-        .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
-        .gallery-card { aspect-ratio: 1; border: 1px solid #222; border-radius: 10px; overflow: hidden; background: #050505; }
-
-        #rainCanvas { position:fixed; top:0; left:0; z-index:-1; opacity:0.3; }
+        #rainCanvas { position:fixed; top:0; left:0; z-index:-1; opacity:0.25; }
         .hidden { display:none !important; }
     </style>
 </head>
 <body>
 
-    <div id="premiumModal">
-        <div class="modal-card">
-            <div class="modal-title" id="mTitle">GHOSTY SYSTEM</div>
-            <div class="modal-msg" id="mBody">Accessing secured database...</div>
-            <button class="modal-btn" onclick="closePopup()">OK</button>
-        </div>
-    </div>
-
-    <div id="authOverlay">
-        <div class="auth-card" id="loginBox">
-            <h2 style="color:var(--ghost); margin-bottom:20px; font-family:'Orbitron'">GHOSTY LOGIN</h2>
-            <input type="email" id="logEmail" class="auth-input" placeholder="Gmail">
-            <input type="password" id="logPass" class="auth-input" placeholder="Password">
-            <button class="auth-btn" onclick="login()">SIGN IN</button>
-            <p onclick="toggleAuth(true)" style="font-size:0.7rem; margin-top:15px; cursor:pointer; opacity: 0.5;">Need Account? <span style="color:var(--ghost)">SIGNUP</span></p>
-        </div>
-        <div class="auth-card hidden" id="signupBox">
-            <h2 style="color:var(--ghost); margin-bottom:20px; font-family:'Orbitron'">GHOSTY SIGNUP</h2>
-            <input type="text" id="regName" class="auth-input" placeholder="Full Name">
-            <input type="email" id="regEmail" class="auth-input" placeholder="Gmail">
-            <input type="password" id="regPass" class="auth-input" placeholder="Password">
-            <button class="auth-btn" onclick="signup()">CREATE ACCOUNT</button>
-            <p onclick="toggleAuth(false)" style="font-size:0.7rem; margin-top:15px; cursor:pointer; opacity: 0.5;">Have Account? <span style="color:var(--ghost)">LOGIN</span></p>
+    <div id="unlockPortal">
+        <div class="staff-card">
+            <div class="staff-title">STAFF ACCESS</div>
+            <div class="staff-sub">SECURE PORTAL</div>
+            <input type="password" id="adminPass" class="staff-input" placeholder="••••••••">
+            <button class="unlock-btn" onclick="checkUnlock()">UNLOCK</button>
+            <p onclick="closeUnlock()" style="margin-top:20px; cursor:pointer; font-size:0.7rem; opacity:0.5;">CANCEL</p>
         </div>
     </div>
 
@@ -101,55 +75,41 @@
         <div class="sidebar-item" onclick="window.open('https://wa.me/923106723295')"><i class="fas fa-crown"></i> BUY PREMIUM</div>
         <div class="sidebar-item" onclick="showPage('suggest')"><i class="fas fa-comment-dots"></i> SUGGESTION</div>
         
-        <div class="sidebar-item" id="adminLink" style="display:none; color: #ff0055;" onclick="showPage('admin')">
+        <div class="sidebar-item" style="color: var(--ghost);" onclick="openUnlock()">
             <i class="fas fa-user-shield"></i> ADMIN PANEL
         </div>
         
-        <div class="sidebar-item" onclick="firebase.auth().signOut()" style="color:red; margin-top:40px; border:none;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
+        <div class="sidebar-item" onclick="firebase.auth().signOut()" style="color:#ff4d4d; margin-top:40px;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
     </nav>
 
     <canvas id="rainCanvas"></canvas>
 
-    <div class="home-container" id="homeView">
-        <div class="logo-section">
-            <div class="logo-icon"><i class="fas fa-ghost"></i></div>
-            <div class="logo-text">GHOSTY</div>
-            <div class="logo-sub">PREMIUM SHINING LOG</div>
+    <div class="home-section" id="homeView">
+        <div class="logo-box">
+            <i class="fas fa-ghost" style="font-size: 3rem; color: var(--ghost); margin-bottom: 10px;"></i>
+            <h1 class="logo-text">GHOSTY</h1>
+            <p style="font-size: 0.6rem; letter-spacing: 3px; opacity: 0.5;">PREMIUM SHINING LOG</p>
         </div>
 
-        <div class="upload-box">
-            <div class="upload-inner" onclick="document.getElementById('fileInput').click()">
-                <i class="fas fa-file-export" style="font-size: 2.5rem; color: var(--ghost);"></i>
-                <div class="upload-title">UPLOAD IMAGE</div>
+        <div class="upload-main">
+            <div class="upload-area">
+                <i class="fas fa-file-export" style="font-size: 3rem; color: var(--ghost); margin-bottom: 15px;"></i>
+                <h3 style="letter-spacing: 2px; font-size: 0.9rem;">UPLOAD IMAGE</h3>
             </div>
-            <input type="file" id="fileInput" hidden>
-            <button class="auth-btn" style="background:none; border: 1px solid var(--ghost); color:#fff; width: 90%; font-size: 0.8rem;">GET LINK</button>
+            <button class="unlock-btn" style="background:none; border: 1px solid var(--ghost); width: 80%; font-size: 0.7rem;">GET LINK</button>
         </div>
-        <p style="margin-top: 40px; font-size: 0.6rem; letter-spacing: 3px; opacity: 0.4;">RECENT HISTORY</p>
+        <p style="margin-top: 50px; font-size: 0.6rem; letter-spacing: 4px; opacity: 0.4;">RECENT HISTORY</p>
     </div>
 
-    <div class="home-container hidden" id="uploadsView">
-        <h2 style="color:var(--ghost); font-family:'Syncopate'; font-size: 0.8rem;">MY UPLOADS</h2>
-        <div class="gallery-grid" id="galleryGrid">
-            <div class="gallery-card"></div><div class="gallery-card"></div><div class="gallery-card"></div>
-        </div>
-    </div>
-
-    <div class="home-container hidden" id="suggestView">
-        <h2 style="color:var(--ghost); font-family:'Syncopate'; font-size: 0.8rem;">SEND FEEDBACK</h2>
-        <textarea id="suggestTxt" style="width:100%; height:150px; background:#050505; border:1px solid var(--ghost); color:#fff; padding:15px; margin-top:20px; border-radius:15px; outline: none;" placeholder="What should we add?"></textarea>
-        <button class="auth-btn" onclick="submitSuggest()" style="margin-top:15px;">SEND TO MUSA</button>
-    </div>
-
-    <div class="home-container hidden" id="adminView">
-        <h2 style="color:var(--ghost); font-family:'Syncopate';">ADMIN CONSOLE</h2>
-        <div id="stats" style="margin-top: 30px; text-align: left; background: #0a0a0a; padding: 20px; border-radius: 15px; border: 1px solid #222;">
-            <p id="vCounter">Visitors: Loading...</p>
+    <div class="home-section hidden" id="adminView">
+        <h2 style="font-family: 'Orbitron'; color: var(--ghost);">ADMIN CONSOLE</h2>
+        <div id="adminData" style="margin-top: 30px; text-align: left; background: #0a0a0a; padding: 20px; border-radius: 20px; border: 1px solid #222;">
+            <p id="visitorCount">Loading Stats...</p>
         </div>
     </div>
 
     <script>
-        // FIREBASE CONFIG
+        // Use your Firebase Config here
         const firebaseConfig = {
             apiKey: "AIzaSyDulf_AZJ7_e8zhEPqARYeboQ435zllAN0",
             authDomain: "image-to-link-e0c9a.firebaseapp.com",
@@ -161,79 +121,46 @@
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
-        const ADMIN_MAIL = "musaandanas963@gmail.com"; 
 
-        // POPUP
-        function showPopup(title, msg) {
-            document.getElementById('mTitle').innerText = title;
-            document.getElementById('mBody').innerText = msg;
-            document.getElementById('premiumModal').style.display = 'flex';
+        // UNLOCK PORTAL LOGIC
+        const STAFF_PASS = "ghosty786"; // Set your desired admin password here
+
+        function openUnlock() { 
+            document.getElementById('unlockPortal').style.display = 'flex';
+            toggleMenu(); 
         }
-        function closePopup() { document.getElementById('premiumModal').style.display = 'none'; }
+        function closeUnlock() { document.getElementById('unlockPortal').style.display = 'none'; }
 
-        // AUTH & PERSISTENCE
-        async function login() {
-            const email = document.getElementById('logEmail').value;
-            const pass = document.getElementById('logPass').value;
-            try { 
-                await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
-                await auth.signInWithEmailAndPassword(email, pass);
-                showPopup("SUCCESS", "Logged in successfully.");
-            } catch(e) { showPopup("ERROR", e.message); }
-        }
-
-        async function signup() {
-            const name = document.getElementById('regName').value;
-            const email = document.getElementById('regEmail').value;
-            const pass = document.getElementById('regPass').value;
-            try {
-                const res = await auth.createUserWithEmailAndPassword(email, pass);
-                await db.collection("users").doc(res.user.uid).set({ name, email });
-                showPopup("SUCCESS", "Account Created!");
-            } catch(e) { showPopup("ERROR", e.message); }
-        }
-
-        auth.onAuthStateChanged(user => {
-            if(user) {
-                document.getElementById('authOverlay').classList.add('hidden');
-                if(user.email === ADMIN_MAIL) {
-                    document.getElementById('adminLink').style.display = 'flex';
-                }
-                db.collection("stats").doc("counters").set({ v: firebase.firestore.FieldValue.increment(1) }, {merge:true});
+        function checkUnlock() {
+            const input = document.getElementById('adminPass').value;
+            if(input === STAFF_PASS) {
+                closeUnlock();
+                showPage('admin');
+                document.getElementById('adminPass').value = "";
             } else {
-                document.getElementById('authOverlay').classList.remove('hidden');
-                document.getElementById('adminLink').style.display = 'none';
+                alert("ACCESS DENIED: Incorrect Staff Password");
             }
-        });
+        }
 
         // NAVIGATION
         function toggleMenu() { document.getElementById('sidebar').classList.toggle('active'); }
-        function toggleAuth(isSignup) {
-            document.getElementById('loginBox').classList.toggle('hidden', isSignup);
-            document.getElementById('signupBox').classList.toggle('hidden', !isSignup);
-        }
         function showPage(p) {
-            const views = ['homeView', 'uploadsView', 'suggestView', 'adminView'];
-            views.forEach(v => document.getElementById(v).classList.add('hidden'));
+            const views = ['homeView', 'adminView']; // Add other view IDs here
+            views.forEach(v => {
+                const el = document.getElementById(v);
+                if(el) el.classList.add('hidden');
+            });
             document.getElementById(p + 'View').classList.remove('hidden');
-            if(p === 'admin') loadStats();
-            toggleMenu();
         }
 
-        async function submitSuggest() {
-            const text = document.getElementById('suggestTxt').value;
-            if(!text) return showPopup("ALERT", "Field is empty.");
-            await db.collection("suggestions").add({ text, user: auth.currentUser.email });
-            document.getElementById('suggestTxt').value = "";
-            showPopup("SENT", "Musa will check your suggestion soon!");
-        }
+        // LOGIN PERSISTENCE (7 DAYS)
+        auth.onAuthStateChanged(user => {
+            if(user) {
+                auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
+            }
+        });
 
-        async function loadStats() {
-            const doc = await db.collection("stats").doc("counters").get();
-            document.getElementById('vCounter').innerText = "Total Site Visitors: " + (doc.data().v || 0);
-        }
-
-        // MATRIX EFFECT
+        // RAIN EFFECT
         const canvas = document.getElementById('rainCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
