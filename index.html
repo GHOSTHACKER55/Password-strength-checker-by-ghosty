@@ -16,7 +16,7 @@
         * { margin:0; padding:0; box-sizing:border-box; font-family:'Inter', sans-serif; }
         body { background: var(--bg); color: #fff; min-height: 100vh; overflow-x: hidden; }
 
-        /* PREMIUM MODAL POPUP (Image 7 Style) */
+        /* PREMIUM MODAL (Your Screenshot Style) */
         #premiumModal {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.85); z-index: 20000;
@@ -26,28 +26,29 @@
             background: #0a0a0a; border: 1px solid var(--ghost);
             padding: 35px; border-radius: 25px; width: 90%; max-width: 380px;
             text-align: center; box-shadow: 0 0 30px rgba(0,242,255,0.3);
-            position: relative; animation: popIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative; animation: popIn 0.3s ease-out;
         }
-        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        
-        .modal-title { font-family: 'Orbitron'; color: var(--ghost); font-size: 1.2rem; margin-bottom: 15px; letter-spacing: 2px; }
-        .modal-msg { font-size: 0.85rem; line-height: 1.6; opacity: 0.9; margin-bottom: 25px; }
-        .modal-close { background: var(--ghost); color: #000; border: none; padding: 12px 35px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        @keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .modal-title { font-family: 'Orbitron'; color: var(--ghost); font-size: 1.2rem; margin-bottom: 10px; }
+        .modal-msg { font-size: 0.8rem; opacity: 0.8; margin-bottom: 25px; line-height: 1.5; }
+        .modal-btn { background: var(--ghost); color: #000; border: none; padding: 12px 40px; border-radius: 12px; font-weight: 900; cursor: pointer; text-transform: uppercase; }
 
-        /* AUTH & SIDEBAR */
+        /* AUTH UI */
         #authOverlay { position: fixed; top:0; left:0; width:100%; height:100%; background:#000; z-index:5000; display:flex; align-items:center; justify-content:center; }
         .auth-card { background:#0a0a0a; border:1px solid var(--ghost); padding:30px; border-radius:25px; width:90%; max-width:400px; text-align:center; }
         .auth-input { width:100%; padding:15px; margin:10px 0; border-radius:12px; border:1px solid #222; background:#000; color:#fff; outline:none; }
         .auth-btn { width:100%; padding:15px; border-radius:12px; border:none; background:var(--ghost); color:#000; font-weight:900; cursor:pointer; }
 
+        /* 3-LINE SIDEBAR */
         .menu-btn { position:fixed; top:20px; left:20px; z-index:1000; font-size:1.5rem; color:var(--ghost); cursor:pointer; }
         .sidebar { position:fixed; top:0; left:-300px; width:280px; height:100%; background:rgba(0,0,0,0.98); border-right:2px solid var(--ghost); z-index:999; transition:0.4s; padding:80px 25px; }
         .sidebar.active { left:0; }
         .sidebar-item { display:block; color:#fff; text-decoration:none; padding:18px 0; font-family:'Syncopate'; font-size:0.65rem; cursor:pointer; border-bottom: 1px solid #111; letter-spacing: 2px; }
 
+        /* GALLERY 3 IN ROW */
         .gallery-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 20px; }
-        .gallery-card { aspect-ratio: 1; border: 1px solid #222; border-radius: 8px; overflow: hidden; background: #050505; }
-        
+        .gallery-card { aspect-ratio: 1; background: #050505; border: 1px solid #222; border-radius: 10px; overflow: hidden; }
+
         #rainCanvas { position:fixed; top:0; left:0; z-index:-1; opacity:0.3; }
         .container { max-width:480px; margin:0 auto; padding:80px 20px; text-align: center;}
         .hidden { display:none !important; }
@@ -57,9 +58,9 @@
 
     <div id="premiumModal">
         <div class="modal-card">
-            <div class="modal-title" id="mTitle">SYSTEM ALERT</div>
-            <div class="modal-msg" id="mBody">Something went wrong.</div>
-            <button class="modal-close" onclick="closePopup()">OK</button>
+            <div class="modal-title" id="mTitle">GHOSTY SYSTEM</div>
+            <div class="modal-msg" id="mBody">Welcome to the portal.</div>
+            <button class="modal-btn" onclick="closePopup()">CLOSE</button>
         </div>
     </div>
 
@@ -69,7 +70,7 @@
             <input type="email" id="logEmail" class="auth-input" placeholder="Gmail">
             <input type="password" id="logPass" class="auth-input" placeholder="Password">
             <button class="auth-btn" onclick="login()">SIGN IN</button>
-            <p onclick="toggleAuth(true)" style="font-size:0.7rem; margin-top:15px; cursor:pointer;">Need Account? <span style="color:var(--ghost)">SIGNUP</span></p>
+            <p onclick="toggleAuth(true)" style="font-size:0.7rem; margin-top:15px; cursor:pointer; opacity: 0.5;">Need Account? <span style="color:var(--ghost)">SIGNUP</span></p>
         </div>
         <div class="auth-card hidden" id="signupBox">
             <h2 style="color:var(--ghost); margin-bottom:20px; font-family:'Orbitron'">GHOSTY SIGNUP</h2>
@@ -77,7 +78,7 @@
             <input type="email" id="regEmail" class="auth-input" placeholder="Gmail">
             <input type="password" id="regPass" class="auth-input" placeholder="Password">
             <button class="auth-btn" onclick="signup()">CREATE ACCOUNT</button>
-            <p onclick="toggleAuth(false)" style="font-size:0.7rem; margin-top:15px; cursor:pointer;">Have Account? <span style="color:var(--ghost)">LOGIN</span></p>
+            <p onclick="toggleAuth(false)" style="font-size:0.7rem; margin-top:15px; cursor:pointer; opacity: 0.5;">Have Account? <span style="color:var(--ghost)">LOGIN</span></p>
         </div>
     </div>
 
@@ -88,34 +89,38 @@
         <div class="sidebar-item" onclick="window.open('https://wa.me/923106723295')"><i class="fas fa-crown"></i> BUY PREMIUM</div>
         <div class="sidebar-item" onclick="showPage('suggest')"><i class="fas fa-comment-dots"></i> SUGGESTION</div>
         <div class="sidebar-item" id="adminLink" style="display:none; color: #ff0055;" onclick="showPage('admin')"><i class="fas fa-user-shield"></i> ADMIN PANEL</div>
-        <div class="sidebar-item" onclick="logoutUser()" style="color:red; margin-top:40px; border:none;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
+        <div class="sidebar-item" onclick="firebase.auth().signOut()" style="color:red; margin-top:40px; border:none;"><i class="fas fa-sign-out-alt"></i> LOGOUT</div>
     </nav>
 
     <canvas id="rainCanvas"></canvas>
 
     <div class="container" id="homeView">
         <h1 style="font-family:'Orbitron'; color:var(--ghost); letter-spacing:10px;">GHOSTY</h1>
-        <div style="background:var(--glass); border:1px solid var(--ghost); padding:50px; border-radius:30px; margin-top: 40px;">
+        <p style="font-size:0.6rem; letter-spacing:3px; opacity: 0.5;">PREMIUM SHINING LOG</p>
+        <div style="background:var(--glass); border: 1px solid var(--ghost); padding: 50px 20px; border-radius: 30px; margin-top: 40px;">
             <i class="fas fa-cloud-upload-alt" style="font-size:3rem; color:var(--ghost);"></i>
-            <h3 style="margin-top:15px; letter-spacing: 2px;">UPLOAD IMAGE</h3>
-            <button class="auth-btn" style="margin-top:20px; background:none; border:1px solid var(--ghost); color:#fff;">GET LINK</button>
+            <h3 style="margin-top:20px; letter-spacing: 2px; font-size: 0.9rem;">UPLOAD IMAGE</h3>
+            <button class="auth-btn" style="margin-top:25px; background:none; border:1px solid var(--ghost); color:#fff;">GET LINK</button>
         </div>
     </div>
 
     <div class="container hidden" id="uploadsView">
-        <h2 style="color:var(--ghost); font-family:'Syncopate'; font-size: 0.8rem;">MY UPLOADS</h2>
+        <h2 style="color:var(--ghost); font-family:'Syncopate'; font-size: 0.8rem;">RECENT UPLOADS</h2>
         <div class="gallery-grid" id="galleryGrid"></div>
     </div>
 
     <div class="container hidden" id="suggestView">
         <h2 style="color:var(--ghost); font-family:'Syncopate'; font-size: 0.8rem;">SUGGESTIONS</h2>
-        <textarea id="suggestTxt" style="width:100%; height:150px; background:#050505; border:1px solid var(--ghost); color:#fff; padding:15px; margin-top:20px; border-radius:15px; outline: none;" placeholder="Tell us what to change..."></textarea>
+        <textarea id="suggestTxt" style="width:100%; height:150px; background:#050505; border:1px solid var(--ghost); color:#fff; padding:15px; margin-top:20px; border-radius:15px; outline: none;"></textarea>
         <button class="auth-btn" onclick="submitSuggest()" style="margin-top:15px;">SEND TO MUSA</button>
     </div>
 
     <div class="container hidden" id="adminView">
-        <h2 style="color:var(--ghost); font-family:'Syncopate';">ADMIN PANEL</h2>
-        <div id="adminData" style="margin-top: 20px; text-align: left; font-size: 0.7rem;"></div>
+        <h2 style="color:var(--ghost); font-family:'Syncopate';">ADMIN DASHBOARD</h2>
+        <div id="adminData" style="margin-top: 25px; text-align: left; font-size: 0.75rem;">
+            <p id="vCount">Visitors: Loading...</p>
+            <div id="userList" style="margin-top:15px;"></div>
+        </div>
     </div>
 
     <script>
@@ -132,7 +137,6 @@
         const db = firebase.firestore();
         const ADMIN_MAIL = "musaandanas963@gmail.com"; 
 
-        // PREMIUM POPUP LOGIC
         function showPopup(title, msg) {
             document.getElementById('mTitle').innerText = title;
             document.getElementById('mBody').innerText = msg;
@@ -140,16 +144,15 @@
         }
         function closePopup() { document.getElementById('premiumModal').style.display = 'none'; }
 
-        // 7-DAY LOGIN LOGIC
         async function login() {
             const email = document.getElementById('logEmail').value;
             const pass = document.getElementById('logPass').value;
             try { 
-                // Set persistence to LOCAL (remains until logout or cleared)
+                // PERSISTENCE.LOCAL ensures login lasts roughly 7-30 days unless user logs out
                 await auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL);
                 await auth.signInWithEmailAndPassword(email, pass);
-                showPopup("SUCCESS", "Logged in as " + email);
-            } catch(e) { showPopup("ERROR", e.message); }
+                showPopup("ACCESS GRANTED", "Welcome back Ghosty user.");
+            } catch(e) { showPopup("ACCESS DENIED", e.message); }
         }
 
         async function signup() {
@@ -159,16 +162,15 @@
             try {
                 const res = await auth.createUserWithEmailAndPassword(email, pass);
                 await db.collection("users").doc(res.user.uid).set({ name, email });
-                showPopup("GHOSTY", "Account Created Successfully!");
-            } catch(e) { showPopup("ERROR", e.message); }
+                showPopup("SUCCESS", "Your Ghosty account has been created!");
+            } catch(e) { showPopup("SIGNUP FAILED", e.message); }
         }
-
-        function logoutUser() { auth.signOut(); }
 
         auth.onAuthStateChanged(user => {
             if(user) {
                 document.getElementById('authOverlay').classList.add('hidden');
                 if(user.email === ADMIN_MAIL) document.getElementById('adminLink').style.display='block';
+                db.collection("stats").doc("counters").set({ v: firebase.firestore.FieldValue.increment(1) }, {merge:true});
             } else {
                 document.getElementById('authOverlay').classList.remove('hidden');
             }
@@ -179,18 +181,24 @@
             const views = ['homeView', 'uploadsView', 'suggestView', 'adminView'];
             views.forEach(v => document.getElementById(v).classList.add('hidden'));
             document.getElementById(p + 'View').classList.remove('hidden');
+            if(p === 'admin') loadAdminData();
             toggleMenu();
         }
 
         async function submitSuggest() {
             const text = document.getElementById('suggestTxt').value;
-            if(!text) return showPopup("EMPTY", "Please enter a suggestion first.");
+            if(!text) return showPopup("ALERT", "Suggestion field cannot be empty.");
             await db.collection("suggestions").add({ text, user: auth.currentUser.email });
             document.getElementById('suggestTxt').value = "";
-            showPopup("SENT", "Your suggestion has been sent to Musa!");
+            showPopup("SENT", "Musa will review your suggestion soon!");
         }
 
-        // RAIN EFFECT
+        async function loadAdminData() {
+            const stats = await db.collection("stats").doc("counters").get();
+            document.getElementById('vCount').innerText = "Total Site Visitors: " + (stats.data().v || 0);
+        }
+
+        // RAIN MATRIX EFFECT
         const canvas = document.getElementById('rainCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
