@@ -6,227 +6,369 @@
 <title>SMILE MC | PREMIUM STORE 👑</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-body{font-family:'Plus Jakarta Sans',sans-serif;background:#0a0a0a;color:#fff;margin:0;padding-bottom:150px;}
-.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);backdrop-filter:blur(15px);z-index:999;align-items:center;justify-content:center;}
-.active-modal{display:flex;}
-.portal-card{background:#fff;color:#000;border-radius:45px;padding:40px;width:95%;max-width:420px;max-height:90vh;overflow-y:auto;}
-.toast{position:fixed;top:30px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:18px 28px;border-radius:40px;font-size:12px;font-weight:900;opacity:0;transition:0.3s;z-index:9999;}
-.toast.show{opacity:1;top:50px;}
-.nav{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;padding:20px 40px;border-radius:50px;display:flex;gap:30px;}
-.input-field{width:100%;padding:12px;border-radius:18px;border:2px solid #f0f0f0;margin-bottom:12px;outline:none;color:#000;font-weight:600;transition:all 0.2s;}
-.input-field:focus{border-color:#000;background:#fff;}
-.button-primary{width:100%;padding:16px;border-radius:20px;background:#000;color:#fff;font-weight:900;text-transform:uppercase;letter-spacing:1px;}
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800;900&display=swap');
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#0a0a0a;color:#fff;margin:0;padding-bottom:100px;}
+.brand-logo{font-size:1.6rem;font-weight:900;text-transform:uppercase;letter-spacing:-1.5px;color:#fff;display:flex;align-items:center;gap:8px;}
+.modal{display:none;position:fixed;z-index:1000;inset:0;background:rgba(0,0,0,0.95);backdrop-filter:blur(15px);}
+.active-modal{display:flex;align-items:center;justify-content:center;}
+.portal-card{background:#fff;border-radius:45px;padding:40px 30px;width:95%;max-width:400px;max-height:90vh;overflow-y:auto;color:#000;}
+.staff-portal-card{background:#fff;border-radius:50px;padding:60px 40px;width:95%;max-width:420px;text-align:center;color:#000;}
+.staff-input-box{border:2px solid #3b82f6;border-radius:20px;margin:30px 0;padding:20px;box-shadow:0 10px 30px rgba(59,130,246,0.15);}
+.staff-input-box input{width:100%;border:none !important;background:transparent !important;text-align:center;font-size:24px;letter-spacing:8px;color:#000;outline:none;}
+.unlock-btn{background:#000;color:#fff;width:100%;padding:22px;border-radius:20px;font-weight:900;text-transform:uppercase;letter-spacing:2px;font-size:12px;}
+input{border:2px solid #f0f0f0;outline:none;transition:all 0.2s;border-radius:18px;font-weight:600;color:#000;}
+input:focus{border-color:#000;background:#fff;}
+.back-btn-ui{display:none;cursor:pointer;font-size:1.8rem;font-weight:900;color:#fff;margin-right:15px;}
+.nav-card{box-shadow:0 -10px 40px rgba(0,0,0,0.5);background:#111;border-top:1px solid #222;}
 .step-hidden{display:none;}
+.no-scrollbar::-webkit-scrollbar{display:none;}
 </style>
 </head>
 <body>
 
-<div id="toast" class="toast"></div>
-
-<header class="p-6 flex justify-between items-center sticky top-0 bg-[#0a0a0a] z-50">
-<h1 class="text-2xl font-black">SMILE MC 👑</h1>
-<div id="user-display" class="text-xs opacity-40">Guest</div>
-</header>
-
-<main class="p-6 max-w-6xl mx-auto">
-
-<!-- HOME PAGE -->
-<section id="home-page">
-<div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
-</section>
-
-<!-- ADMIN PAGE -->
-<section id="admin-page" class="hidden">
-<div class="flex gap-4 mb-8 overflow-x-auto">
-<button onclick="switchAdminTab('products')" id="btn-products" class="px-6 py-2 bg-white text-black rounded-full text-xs font-black">Products</button>
-<button onclick="switchAdminTab('orders')" id="btn-orders" class="px-6 py-2 bg-[#111] text-gray-400 rounded-full text-xs font-black">Orders</button>
-<button onclick="switchAdminTab('users')" id="btn-users" class="px-6 py-2 bg-[#111] text-gray-400 rounded-full text-xs font-black">Users</button>
-</div>
-
-<!-- PRODUCTS TAB -->
-<div id="tab-products">
-<div class="bg-[#111] p-6 rounded-3xl mb-6">
-<h3 class="text-xs uppercase mb-4">Add Product</h3>
-<input id="p-name" placeholder="NAME" class="input-field">
-<input id="p-price" placeholder="PRICE" type="number" class="input-field">
-<input id="p-desc" placeholder="DESCRIPTION" class="input-field">
-<input type="file" id="p-file" class="input-field">
-<button onclick="publishProduct()" class="button-primary">Publish</button>
-</div>
-<div id="inventory"></div>
-</div>
-
-<!-- ORDERS TAB -->
-<div id="tab-orders" class="step-hidden"></div>
-
-<!-- USERS TAB -->
-<div id="tab-users" class="step-hidden"></div>
-</section>
-
-</main>
-
 <!-- STAFF LOGIN MODAL -->
-<div id="staffModal" class="modal">
-<div class="portal-card">
-<h2 class="text-xl font-black mb-6">STAFF LOGIN</h2>
-<input id="staff-pass" type="password" placeholder="Enter Password" class="input-field">
-<button onclick="verifyStaff()" class="button-primary">Unlock Admin</button>
-<button onclick="closeStaff()" class="w-full text-xs opacity-30 mt-4">Cancel</button>
-</div>
+<div id="staffAuthModal" class="modal">
+  <div class="staff-portal-card">
+    <h2 class="text-3xl italic font-black uppercase tracking-tighter">STAFF ACCESS</h2>
+    <p class="text-[10px] font-bold opacity-30 uppercase tracking-widest mt-1">Secure Portal</p>
+    <div class="staff-input-box">
+      <input type="password" id="staff-key-input" placeholder="••••••••">
+    </div>
+    <button onclick="verifyStaffKey()" class="unlock-btn">Unlock</button>
+    <button onclick="closeModal('staffAuthModal')" class="w-full text-[10px] font-black opacity-20 uppercase mt-8 tracking-widest">Cancel</button>
+  </div>
 </div>
 
 <!-- AUTH MODAL -->
 <div id="authModal" class="modal">
-<div class="portal-card">
-<h2 id="auth-title" class="text-xl font-black mb-6">Create Account</h2>
-<div id="signup-fields">
-<input id="reg-name" placeholder="FULL NAME" class="input-field">
-<input id="reg-phone" placeholder="WHATSAPP" class="input-field">
-</div>
-<input id="auth-email" placeholder="EMAIL" class="input-field">
-<input id="auth-pass" type="password" placeholder="PASSWORD" class="input-field">
-<button onclick="handleAuth()" id="auth-btn" class="button-primary">Register</button>
-<p onclick="toggleMode()" class="text-center text-xs opacity-40 mt-3 cursor-pointer">Switch Mode</p>
-<p onclick="resetPassword()" class="text-center text-xs text-blue-500 cursor-pointer">Forgot Password?</p>
-<button onclick="closeAuth()" class="w-full text-xs opacity-30 mt-4">Cancel</button>
-</div>
+  <div class="portal-card">
+    <h2 id="auth-title" class="text-2xl font-black uppercase mb-6 tracking-tighter">Create Account</h2>
+    <div id="signup-fields" class="space-y-3">
+      <input type="text" id="reg-name" placeholder="FULL NAME" class="w-full p-4 bg-gray-50 text-[11px]">
+      <input type="text" id="reg-phone" placeholder="WHATSAPP NUMBER" class="w-full p-4 bg-gray-50 text-[11px]">
+    </div>
+    <div class="space-y-3 mt-3">
+      <input type="email" id="auth-email" placeholder="EMAIL ADDRESS" class="w-full p-4 bg-gray-50 text-[11px]">
+      <input type="password" id="auth-pass" placeholder="PASSWORD" class="w-full p-4 bg-gray-50 text-[11px]">
+      <button onclick="handleAuth()" id="auth-submit-btn" class="w-full bg-black text-white py-5 rounded-2xl font-black text-[11px] uppercase mt-4">Register Now</button>
+      <p onclick="toggleAuthMode()" id="auth-toggle" class="text-[10px] font-bold text-center cursor-pointer opacity-50 uppercase mt-6">Already have an account? Sign In</p>
+      <button onclick="resetPassword()" class="w-full text-[10px] font-black opacity-50 uppercase mt-2">Forgot Password?</button>
+      <button onclick="closeModal('authModal')" class="w-full text-[9px] font-black opacity-20 uppercase mt-4">Cancel</button>
+    </div>
+  </div>
 </div>
 
 <!-- CHECKOUT MODAL -->
 <div id="checkoutModal" class="modal">
-<div class="portal-card">
-<div id="check-step-1">
-<h2 class="text-xl font-black mb-4">Order Details</h2>
-<input id="ord-name" placeholder="Name" class="input-field">
-<input id="ord-fullname" placeholder="Full Name" class="input-field">
-<input id="ord-discord" placeholder="Discord ID" class="input-field">
-<input id="ord-whatsapp" placeholder="WhatsApp (Optional)" class="input-field">
-<button onclick="nextStep(2)" class="button-primary">Proceed To Pay</button>
+  <div class="portal-card">
+    <div id="check-step-1">
+      <div class="flex items-center mb-8">
+        <span onclick="closeModal('checkoutModal')" class="cursor-pointer text-2xl font-black mr-4">←</span>
+        <h2 class="text-xl font-black uppercase tracking-tighter">Order Details</h2>
+      </div>
+      <div class="space-y-3">
+        <input type="text" id="ord-fullname" placeholder="FULL NAME" class="w-full p-4 bg-gray-50 text-[11px]">
+        <input type="text" id="ord-discord" placeholder="DISCORD ID" class="w-full p-4 bg-gray-50 text-[11px]">
+        <input type="text" id="ord-whatsapp" placeholder="WHATSAPP NUMBER (OPTIONAL)" class="w-full p-4 bg-gray-50 text-[11px]">
+        <button onclick="nextStep(2)" class="w-full bg-black text-white py-5 rounded-2xl font-black text-[11px] uppercase mt-6">Proceed to Pay</button>
+      </div>
+    </div>
+    <div id="check-step-2" class="step-hidden text-center">
+      <div class="mb-6">
+        <p class="text-[10px] font-bold opacity-50 uppercase">Easypaisa Recipient</p>
+        <p class="text-sm font-bold mb-1">Sumera Ismail</p>
+        <p class="text-2xl font-black tracking-tighter">03209797510</p>
+      </div>
+      <button onclick="submitOrder()" class="w-full bg-black text-white py-5 rounded-2xl font-black text-[11px] uppercase mb-4">Checkout</button>
+      <button onclick="contactDiscord()" class="w-full bg-blue-600 text-white py-5 rounded-2xl font-black text-[11px] uppercase mb-4">Contact on Discord</button>
+      <button onclick="contactWhatsApp()" class="w-full bg-green-600 text-white py-5 rounded-2xl font-black text-[11px] uppercase">Contact on WhatsApp</button>
+    </div>
+    <div id="check-step-3" class="step-hidden text-center py-8">
+      <div class="text-5xl mb-6">✅</div>
+      <h2 class="text-2xl font-black uppercase tracking-tighter mb-4">Order Logged</h2>
+      <p class="text-[11px] font-bold opacity-50 mb-8 leading-relaxed">Saved. Opening contact...</p>
+    </div>
+  </div>
 </div>
 
-<div id="check-step-2" class="step-hidden">
-<h2 class="text-xl font-black mb-2">Payment</h2>
-<p class="text-sm font-bold mb-1">Sumera Ismail</p>
-<p class="text-xs font-bold mb-4">Easypaisa: 03209797510</p>
-<button onclick="submitOrder()" class="button-primary mb-3">Checkout</button>
-<button onclick="contactDiscord()" class="button-primary mb-3 bg-blue-600">Contact on Discord</button>
-<button onclick="contactWhatsApp()" class="button-primary mb-3 bg-green-600">Contact on WhatsApp</button>
-</div>
-</div>
-</div>
+<!-- HEADER -->
+<header class="p-6 md:px-12 flex items-center justify-between sticky top-0 bg-[#0a0a0a] z-50">
+  <div class="flex items-center">
+    <div id="global-back-btn" onclick="showPage('home')" class="back-btn-ui">←</div>
+    <h1 class="brand-logo">SMILE MC 👑</h1>
+  </div>
+  <div id="user-display" class="text-[10px] font-black uppercase tracking-widest opacity-30">Guest</div>
+</header>
 
-<nav class="nav">
-<div onclick="openAuth()">👤</div>
-<div onclick="openStaff()">🛡️</div>
-<div onclick="showPage('home')">🏠</div>
+<main class="p-6 md:px-12 max-w-7xl mx-auto">
+  <section id="page-home">
+    <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
+  </section>
+
+  <section id="page-admin" class="hidden">
+    <div class="flex gap-4 mb-10 overflow-x-auto pb-2 no-scrollbar">
+      <button id="btn-inventory" onclick="switchAdminTab('inventory')" class="adm-btn bg-white text-black px-8 py-3 rounded-full text-[10px] font-black uppercase">Products</button>
+      <button id="btn-orders" onclick="switchAdminTab('orders')" class="adm-btn bg-[#111] text-gray-500 px-8 py-3 rounded-full text-[10px] font-black uppercase">Orders</button>
+      <button id="btn-users" onclick="switchAdminTab('users')" class="adm-btn bg-[#111] text-gray-500 px-8 py-3 rounded-full text-[10px] font-black uppercase">Accounts</button>
+    </div>
+    <div id="tab-inventory" class="adm-tab">
+      <div class="bg-[#111] p-8 rounded-[40px] mb-8 border border-[#222]">
+        <h3 class="text-[11px] font-black uppercase mb-6 text-white">Upload New Item</h3>
+        <div class="grid md:grid-cols-2 gap-4">
+          <input type="text" id="p-name" placeholder="NAME" class="w-full p-4 bg-[#1a1a1a] border-none text-white text-[11px]">
+          <input type="number" id="p-price" placeholder="PRICE" class="w-full p-4 bg-[#1a1a1a] border-none text-white text-[11px]">
+          <input type="text" id="p-desc" placeholder="DESCRIPTION" class="w-full p-4 bg-[#1a1a1a] border-none text-white text-[11px]">
+          <input type="file" id="p-file" class="text-[10px] p-2 bg-[#1a1a1a] text-gray-400 w-full rounded-xl">
+          <button onclick="handlePublish()" class="bg-white text-black p-4 rounded-2xl font-black text-[11px] uppercase">Post Product</button>
+        </div>
+      </div>
+      <div id="inventory-list" class="grid gap-3"></div>
+    </div>
+    <div id="tab-orders" class="adm-tab hidden space-y-4"></div>
+    <div id="tab-users" class="adm-tab hidden space-y-3"></div>
+  </section>
+</main>
+
+<!-- NAV -->
+<nav class="fixed bottom-8 left-1/2 -translate-x-1/2 w-[90%] max-w-md rounded-[35px] p-6 flex justify-around items-center z-50 nav-card text-white">
+  <div onclick="showPage('home')" class="cursor-pointer text-center">
+    <span class="block text-xl">🏠</span>
+    <p class="text-[8px] font-black uppercase mt-1 opacity-50">Store</p>
+  </div>
+  <div onclick="openModal('authModal')" class="cursor-pointer text-center">
+    <span class="block text-xl">👤</span>
+    <p class="text-[8px] font-black uppercase mt-1 opacity-50">Account</p>
+  </div>
+  <div onclick="openModal('staffAuthModal')" class="cursor-pointer text-center">
+    <span class="block text-xl">🛡️</span>
+    <p class="text-[8px] font-black uppercase mt-1 opacity-50">Staff</p>
+  </div>
 </nav>
-
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  // ==============================
+  // FIREBASE SETUP
+  // ==============================
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-const firebaseConfig = {
-apiKey: "AIzaSyC41Y6mNNBFvjNeHdOOWGsjczMjyaqoqjU",
-authDomain: "fajar-collection-8aba3.firebaseapp.com",
-projectId: "fajar-collection-8aba3",
-storageBucket: "fajar-collection-8aba3.firebasestorage.app",
-messagingSenderId: "620336064195",
-appId: "1:620336064195:web:4608ae5f133de8fa17a476"
-};
+  const firebaseConfig = {
+    apiKey: "AIzaSyB-7z5W4laDVqgtQNUOrDkAMQU7sHw0NQY",
+    authDomain: "ghosty-cd076.firebaseapp.com",
+    projectId: "ghosty-cd076",
+    storageBucket: "ghosty-cd076.firebasestorage.app",
+    messagingSenderId: "249795670090",
+    appId: "1:249795670090:web:c2d119a4d34b089d8076b3"
+  };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+  const auth = getAuth(app);
 
-const STAFF_PASSWORD = "GHOSTYDEVELOPER";
-const IMGBB_KEY = "ed019955ccdfc5952b136e449d727e0b";
+  let currentUser = null;
+  let isSignUp = true;
+  let selectedProduct = "";
 
-let currentUser = null;
-let selectedProduct = "";
-let isSignup = true;
+  // ==============================
+  // MODAL UTILS
+  // ==============================
+  window.openModal = id => document.getElementById(id).classList.add('active-modal');
+  window.closeModal = id => document.getElementById(id).classList.remove('active-modal');
+  window.showPage = id => {
+    document.querySelectorAll('main > section').forEach(s => s.classList.add('hidden'));
+    document.getElementById(`page-${id}`).classList.remove('hidden');
+    document.getElementById('global-back-btn').style.display = (id === 'home') ? 'none' : 'block';
+    window.scrollTo(0,0);
+  };
 
-// TOAST FUNCTION
-function toast(msg){const t=document.getElementById("toast");t.innerText=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),3000);}
+  // ==============================
+  // STAFF LOGIN
+  // ==============================
+  window.verifyStaffKey = () => {
+    const key = document.getElementById('staff-key-input').value;
+    if(key === "GHOSTYDEVELOPER") {
+      closeModal('staffAuthModal'); 
+      showPage('admin'); 
+      loadAdmin(); 
+      document.getElementById('staff-key-input').value = "";
+    } else alert("Wrong Key");
+  };
 
-// SHOW PAGE
-window.showPage = (id)=>{document.querySelectorAll('main>section').forEach(s=>s.classList.add('hidden'));document.getElementById(`${id}-page`).classList.remove('hidden');};
-showPage('home');
+  // ==============================
+  // AUTHENTICATION
+  // ==============================
+  window.handleAuth = async () => {
+    const email = document.getElementById('auth-email').value;
+    const pass = document.getElementById('auth-pass').value;
+    try {
+      if(isSignUp) {
+        const res = await createUserWithEmailAndPassword(auth, email, pass);
+        await setDoc(doc(db, "users", res.user.uid), { 
+          name: document.getElementById('reg-name').value,
+          phone: document.getElementById('reg-phone').value,
+          email, password: pass
+        });
+      } else {
+        await signInWithEmailAndPassword(auth, email, pass);
+      }
+      closeModal('authModal');
+    } catch(e){ alert(e.message); }
+  };
 
-// AUTH MODAL
-window.openAuth = ()=>document.getElementById("authModal").classList.add("active-modal");
-window.closeAuth = ()=>document.getElementById("authModal").classList.remove("active-modal");
-window.toggleMode = ()=>{isSignup=!isSignup;document.getElementById("auth-title").innerText=isSignup?"Create Account":"Sign In";document.getElementById("auth-btn").innerText=isSignup?"Register":"Login";document.getElementById("signup-fields").style.display=isSignup?"block":"none";};
-window.handleAuth=async()=>{
-const email=document.getElementById("auth-email").value.trim();
-const pass=document.getElementById("auth-pass").value.trim();
-const name=document.getElementById("reg-name").value.trim();
-const phone=document.getElementById("reg-phone").value.trim();
-if(!email||!pass){toast("Fill all fields");return;}
-try{
-if(isSignup){
-const res=await createUserWithEmailAndPassword(auth,email,pass);
-await setDoc(doc(db,"users",res.user.uid),{name,phone,email,createdAt:serverTimestamp()});
-toast("Account Created 👑");
-}else{
-await signInWithEmailAndPassword(auth,email,pass);
-toast("Welcome Back 🔥");
-}
-closeAuth();
-}catch(e){toast(e.message);}
-};
-window.resetPassword=async()=>{
-const email=document.getElementById("auth-email").value.trim();
-if(!email){toast("Enter Email");return;}
-await sendPasswordResetEmail(auth,email);
-toast("Reset Email Sent ✉️");
-};
-onAuthStateChanged(auth,user=>{currentUser=user;document.getElementById("user-display").innerText=user?"Connected":"Guest";});
+  window.toggleAuthMode = () => {
+    isSignUp = !isSignUp;
+    document.getElementById('auth-title').innerText = isSignUp ? "Create Account" : "Sign In";
+    document.getElementById('auth-submit-btn').innerText = isSignUp ? "Register Now" : "Sign In";
+    document.getElementById('signup-fields').style.display = isSignUp ? 'block' : 'none';
+  };
 
-// STAFF LOGIN
-window.openStaff=()=>document.getElementById("staffModal").classList.add("active-modal");
-window.closeStaff=()=>document.getElementById("staffModal").classList.remove("active-modal");
-window.verifyStaff=()=>{const pass=document.getElementById("staff-pass").value.trim();if(pass===STAFF_PASSWORD){closeStaff();document.getElementById("admin-page").classList.remove("hidden");toast("Admin Access ✅");loadAdmin();}else{toast("Wrong Password ❌");}};
+  window.resetPassword = () => {
+    const email = document.getElementById('auth-email').value;
+    if(!email){ alert("Enter your email first"); return; }
+    sendPasswordResetEmail(auth, email)
+      .then(()=> alert("Password reset email sent"))
+      .catch(err => alert(err.message));
+  };
 
-// PUBLISH PRODUCT
-window.publishProduct=async()=>{
-const name=document.getElementById("p-name").value;
-const price=document.getElementById("p-price").value;
-const desc=document.getElementById("p-desc").value;
-const file=document.getElementById("p-file").files[0];
-if(!name||!price||!file){toast("All fields required");return;}
-const fd=new FormData();fd.append("image",file);
-const r=await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`,{method:"POST",body:fd});
-const d=await r.json();
-await addDoc(collection(db,"products"),{name,price,desc,image:d.data.url,createdAt:serverTimestamp()});
-toast("Product Live 🔥");
-document.getElementById("p-name").value="";document.getElementById("p-price").value="";document.getElementById("p-desc").value="";document.getElementById("p-file").value="";
-};
+  onAuthStateChanged(auth, user => {
+    currentUser = user;
+    document.getElementById('user-display').innerText = user ? "Connected" : "Guest";
+  });
 
-// LOAD PRODUCTS ON HOME & INVENTORY
-onSnapshot(query(collection(db,"products"),orderBy("createdAt","desc")),snap=>{
-document.getElementById("product-grid").innerHTML=snap.docs.map(d=>{const p=d.data();return `<div class="bg-[#111] rounded-3xl overflow-hidden"><img src="${p.image}" class="w-full aspect-square object-cover"><div class="p-4"><p class="text-xs opacity-40">${p.name}</p><p class="font-black text-lg">Rs.${p.price}</p><button onclick="startCheckout('${p.name}')" class="button-primary mt-2">Buy Now</button></div></div>`;}).join('');
-document.getElementById("inventory").innerHTML=snap.docs.map(d=>{const p=d.data();return `<div class="bg-[#111] p-3 rounded-2xl flex justify-between items-center mb-2"><p class="text-xs font-black">${p.name}</p><button onclick="deleteDoc(doc(db,'products','${d.id}'))" class="text-red-500 text-xs font-black">Remove</button></div>`;}).join('');
-});
+  // ==============================
+  // ADMIN PANEL
+  // ==============================
+  window.switchAdminTab = t => {
+    document.querySelectorAll('.adm-btn').forEach(b => {
+      b.classList.add('bg-[#111]','text-gray-500');
+      b.classList.remove('bg-white','text-black');
+    });
+    document.getElementById(`btn-${t}`).classList.remove('bg-[#111]','text-gray-500');
+    document.getElementById(`btn-${t}`).classList.add('bg-white','text-black');
+    document.querySelectorAll('.adm-tab').forEach(tab => tab.classList.add('hidden'));
+    document.getElementById(`tab-${t}`).classList.remove('hidden');
+  };
 
-// ADMIN TABS
-window.switchAdminTab=(t)=>{document.querySelectorAll('#admin-page>div[id^="tab"]').forEach(tab=>tab.classList.add('step-hidden'));document.getElementById(`tab-${t}`).classList.remove('step-hidden');document.querySelectorAll('#admin-page button[id^="btn"]').forEach(b=>{b.classList.remove('bg-white','text-black');b.classList.add('bg-[#111]','text-gray-400');});document.getElementById(`btn-${t}`).classList.add('bg-white','text-black');};
+  window.loadAdmin = () => {
+    // USERS
+    onSnapshot(collection(db,"users"), snap => {
+      document.getElementById('tab-users').innerHTML = snap.docs.map(d=>{
+        const u = d.data();
+        return `<div class="bg-[#111] p-6 rounded-3xl border border-[#222]">
+          <p class="text-[11px] font-black text-white uppercase">${u.name}</p>
+          <p class="text-[9px] text-gray-500">WA: ${u.phone} | ${u.email}</p>
+          <p class="text-[10px] font-black text-red-500 mt-2 bg-red-900/10 p-2 rounded uppercase">Pass: ${u.password}</p>
+        </div>`;
+      }).join('');
+    });
+    // ORDERS
+    onSnapshot(query(collection(db,"orders"),orderBy("timestamp","desc")), snap => {
+      document.getElementById('tab-orders').innerHTML = snap.docs.map(d=>{
+        const o = d.data();
+        return `<div class="bg-[#111] p-6 rounded-3xl border border-[#222] flex justify-between items-start">
+          <div class="space-y-1">
+            <p class="text-[12px] font-black text-blue-400 uppercase">${o.product}</p>
+            <p class="text-[10px] font-bold text-white">IGN: ${o.ign}</p>
+            <p class="text-[9px] text-gray-400">WA: ${o.wa}</p>
+            ${o.rankName && o.rankName !== "N/A" ? `<p class="text-[9px] font-black text-green-400 bg-green-900/10 p-1 inline-block rounded">RANK: ${o.rankName}</p>` : ''}
+          </div>
+          <button onclick="removeOrder('${d.id}')" class="bg-red-900/20 text-red-500 p-3 rounded-xl text-[8px] font-black uppercase">Delete</button>
+        </div>`;
+      }).join('');
+    });
+  };
 
-// CHECKOUT
-window.startCheckout=(p)=>{if(!currentUser){openAuth();return;}selectedProduct=p;document.getElementById("checkoutModal").classList.add("active-modal");document.getElementById("check-step-1").classList.remove("step-hidden");document.getElementById("check-step-2").classList.add("step-hidden");};
-window.nextStep=(s)=>{if(s==2){document.getElementById("check-step-1").classList.add("step-hidden");document.getElementById("check-step-2").classList.remove("step-hidden");}};
-window.submitOrder=async()=>{
-const name=document.getElementById("ord-name").value,fullname=document.getElementById("ord-fullname").value,discord=document.getElementById("ord-discord").value,wa=document.getElementById("ord-whatsapp").value||"N/A";
-await addDoc(collection(db,"orders"),{product:selectedProduct,name,fullname,discord,wa,timestamp:serverTimestamp()});
-toast("Order Placed ✅");};
-window.contactDiscord=()=>{const name=document.getElementById("ord-name").value,fullname=document.getElementById("ord-fullname").value,discord=document.getElementById("ord-discord").value,wa=document.getElementById("ord-whatsapp").value||"N/A";window.open(`https://discord.com/users/devil_hunter_______?message=Order:%20${selectedProduct}%0AName:%20${name}%0AFullName:%20${fullname}%0ADiscord:%20${discord}%0AWhatsApp:%20${wa}`,'_blank');};
-window.contactWhatsApp=()=>{const name=document.getElementById("ord-name").value,fullname=document.getElementById("ord-fullname").value,discord=document.getElementById("ord-discord").value,wa=document.getElementById("ord-whatsapp").value||"N/A";window.open(`https://wa.me/003706116030?text=Order:%20${selectedProduct}%0AName:%20${name}%0AFullName:%20${fullname}%0ADiscord:%20${discord}%0AWhatsApp:%20${wa}`,'_blank');};
+  // REMOVE FUNCTIONS
+  window.removeProduct = async id => { if(confirm("Delete product?")) await deleteDoc(doc(db,"products",id)); };
+  window.removeOrder = async id => { if(confirm("Clear order?")) await deleteDoc(doc(db,"orders",id)); };
 
-// LOAD ADMIN ORDERS AND USERS
-function loadAdmin(){
-onSnapshot(query(collection(db,"orders"),orderBy("timestamp","desc")),snap=>{document.getElementById("tab-orders").innerHTML=snap.docs.map(d=>{const o=d.data();return `<div class="bg-[#111] p-4 rounded-2xl flex justify-between items-start mb-2"><div><p class="text-xs font-black text-blue-400">${o.product}</p><p class="text-xs">${o.name} | ${o.fullname}</p><p class="text-xs">Discord: ${o.discord}</p><p class="text-xs">WA: ${o.wa}</p></div><button onclick="deleteDoc(doc(db,'orders','${d.id}'))" class="text-red-500 text-xs font-black">Delete</button></div>`;}).join('');});
-onSnapshot(collection(db,"users"),snap=>{document.getElementById("tab-users").innerHTML=snap.docs.map(d=>{const u=d.data();return `<div class="bg-[#111] p-4 rounded-2xl flex justify-between items-center mb-2"><p class="text-xs font-black">${u.name} | ${u.email} | ${u.phone}</p><button onclick="deleteDoc(doc(db,'users','${d.id}'))" class="text-red-500 text-xs font-black">Remove</button></div>`;}).join('');});
-}
+  // ==============================
+  // PRODUCT MANAGEMENT
+  // ==============================
+  window.handlePublish = async () => {
+    const file = document.getElementById('p-file').files[0];
+    if(!file){ alert("Select an image"); return; }
+    const fd = new FormData(); fd.append("image", file);
+    const r = await fetch("https://api.imgbb.com/1/upload?key=ed019955ccdfc5952b136e449d727e0b", { method:"POST", body:fd });
+    const d = await r.json();
+    await addDoc(collection(db,"products"),{
+      name: document.getElementById('p-name').value,
+      price: document.getElementById('p-price').value,
+      description: document.getElementById('p-desc').value,
+      image: d.data.url,
+      createdAt: serverTimestamp()
+    });
+    alert("Product Live!");
+  };
+
+  // ==============================
+  // LOAD PRODUCTS IN STORE
+  // ==============================
+  onSnapshot(query(collection(db,"products"),orderBy("createdAt","desc")), snap=>{
+    document.getElementById('product-grid').innerHTML = snap.docs.map(d=>{
+      const p = d.data();
+      return `<div class="bg-[#111] rounded-[35px] border border-[#222] overflow-hidden">
+        <img src="${p.image}" class="w-full aspect-square object-cover">
+        <div class="p-5">
+          <p class="text-[10px] font-black text-white uppercase opacity-30">${p.name}</p>
+          <p class="text-xl font-black mb-4 text-white">Rs.${p.price}</p>
+          <button onclick="startCheckout('${p.name}')" class="w-full py-4 bg-white text-black rounded-2xl text-[9px] font-black uppercase">Buy Now</button>
+        </div>
+      </div>`;
+    }).join('');
+    // INVENTORY LIST
+    document.getElementById('inventory-list').innerHTML = snap.docs.map(d=>{
+      const p = d.data();
+      return `<div class="bg-[#111] p-4 rounded-2xl border border-[#222] flex justify-between items-center">
+        <p class="text-[10px] font-black uppercase text-white">${p.name}</p>
+        <button onclick="removeProduct('${d.id}')" class="text-red-500 font-black text-[8px] uppercase">Remove</button>
+      </div>`;
+    }).join('');
+  });
+
+  // ==============================
+  // CHECKOUT LOGIC
+  // ==============================
+  window.startCheckout = pName => {
+    if(!currentUser) return openModal('authModal');
+    selectedProduct = pName;
+    nextStep(1);
+    openModal('checkoutModal');
+  };
+
+  window.nextStep = s => {
+    [1,2,3].forEach(n=>document.getElementById(`check-step-${n}`).classList.add('step-hidden'));
+    document.getElementById(`check-step-${s}`).classList.remove('step-hidden');
+  };
+
+  window.submitOrder = async () => {
+    const ign = document.getElementById('ord-discord').value;
+    const wa = document.getElementById('ord-whatsapp').value || "N/A";
+    const name = document.getElementById('ord-fullname').value;
+    await addDoc(collection(db,"orders"),{
+      product: selectedProduct,
+      ign,
+      wa,
+      name,
+      timestamp: serverTimestamp()
+    });
+    nextStep(3);
+  };
+
+  window.contactDiscord = () => {
+    const discordID = "devil_hunter_______";
+    const msg = encodeURIComponent(`Product: ${selectedProduct}`);
+    window.open(`https://discord.com/users/${discordID}?msg=${msg}`, "_blank");
+  };
+
+  window.contactWhatsApp = () => {
+    const waNumber = "003706116030";
+    const msg = encodeURIComponent(`Product: ${selectedProduct}`);
+    window.open(`https://wa.me/${waNumber}?text=${msg}`, "_blank");
+  };
+
+  // INITIAL PAGE
+  showPage('home');
 </script>
 </body>
 </html>
