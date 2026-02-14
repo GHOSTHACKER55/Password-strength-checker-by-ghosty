@@ -1,304 +1,179 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8"/>
-    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-    <title>GHOSTY PREMIUM | Shining Blue History</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet"/>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@900&family=Syncopate:wght@700&family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
-    <style>
-        :root {
-            --bg: #000000;
-            --ghost-blue: #00f2ff;
-            --shining-shadow: 0 0 15px rgba(0, 242, 255, 0.8), 0 0 30px rgba(0, 242, 255, 0.4);
-            --glass: rgba(255, 255, 255, 0.01);
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMILE MC | PREMIUM STORE 👑</title>
+<script src="https://cdn.tailwindcss.com"></script>
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
-
-        body {
-            background-color: var(--bg);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            overflow-x: hidden;
-        }
-
-        #rainCanvas {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1;
-            opacity: 0.3;
-        }
-
-        .container {
-            width: 100%;
-            max-width: 480px;
-            padding: 50px 20px;
-            z-index: 1;
-        }
-
-        header { text-align: center; margin-bottom: 40px; }
-
-        .ghost-icon {
-            font-size: 3rem;
-            color: var(--ghost-blue);
-            filter: drop-shadow(0 0 20px var(--ghost-blue));
-            animation: float 3s ease-in-out infinite;
-            margin-bottom: 10px;
-        }
-
-        .logo {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3.5rem;
-            font-weight: 900;
-            letter-spacing: 15px;
-            color: white;
-            text-transform: uppercase;
-            text-shadow: var(--shining-shadow);
-            animation: pulse 2s infinite alternate;
-        }
-
-        @keyframes float { 0%, 100% { transform: translateY(0); opacity: 0.7; } 50% { transform: translateY(-15px); opacity: 1; } }
-        @keyframes pulse { from { opacity: 0.8; } to { opacity: 1; transform: scale(1.02); } }
-
-        .premium-card {
-            background: var(--glass);
-            backdrop-filter: blur(20px);
-            border: 1px solid rgba(0, 242, 255, 0.3);
-            border-radius: 40px;
-            padding: 35px;
-            box-shadow: 0 0 50px rgba(0, 0, 0, 1);
-            margin-bottom: 30px;
-        }
-
-        .upload-zone {
-            border: 2px solid var(--ghost-blue);
-            border-radius: 25px;
-            padding: 50px 20px;
-            text-align: center;
-            cursor: pointer;
-            background: rgba(0, 0, 0, 0.6);
-            box-shadow: inset 0 0 25px rgba(0, 242, 255, 0.2);
-            transition: 0.4s;
-        }
-
-        .upload-zone:hover { box-shadow: 0 0 20px var(--ghost-blue); transform: scale(1.02); }
-
-        .shining-blue-text {
-            color: var(--ghost-blue);
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 0 0 10px var(--ghost-blue);
-        }
-
-        .btn-main {
-            width: 100%;
-            margin-top: 30px;
-            padding: 22px;
-            border: none;
-            border-radius: 20px;
-            font-family: 'Syncopate', sans-serif;
-            font-weight: 700;
-            color: white;
-            cursor: pointer;
-            background: linear-gradient(90deg, #002222, var(--ghost-blue), #002222);
-            background-size: 200% auto;
-            box-shadow: 0 0 30px rgba(0, 242, 255, 0.5);
-            animation: moveShine 3s linear infinite;
-        }
-
-        @keyframes moveShine { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
-
-        /* HISTORY SECTION */
-        .history-box {
-            width: 100%;
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 25px;
-            padding: 20px;
-            border: 1px solid rgba(0, 242, 255, 0.1);
-        }
-
-        .history-title {
-            font-size: 0.7rem;
-            letter-spacing: 4px;
-            color: var(--ghost-blue);
-            text-align: center;
-            margin-bottom: 15px;
-            text-transform: uppercase;
-            text-shadow: 0 0 5px var(--ghost-blue);
-        }
-
-        .history-item {
-            background: #000;
-            border: 1px solid rgba(0, 242, 255, 0.2);
-            padding: 12px;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            animation: fadeIn 0.5s ease;
-        }
-
-        .history-link {
-            color: var(--ghost-blue);
-            font-size: 0.75rem;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            max-width: 70%;
-            text-decoration: none;
-        }
-
-        .mini-copy {
-            background: var(--ghost-blue);
-            color: #000;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.6rem;
-            font-weight: 900;
-            cursor: pointer;
-        }
-
-        /* UPLOADER ELEMENTS */
-        .result-box { display: none; margin-top: 30px; }
-        .link-bar {
-            background: #000;
-            padding: 18px;
-            border-radius: 15px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border: 1px solid var(--ghost-blue);
-        }
-        #urlText { color: var(--ghost-blue); font-family: monospace; font-size: 0.8rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-        .copy-btn { background: white; color: black; border: none; padding: 10px 15px; border-radius: 8px; font-weight: 900; cursor: pointer; }
-        .loader { display: none; margin: 20px auto; width: 40px; height: 40px; border: 4px solid rgba(0, 242, 255, 0.1); border-top: 4px solid var(--ghost-blue); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-
-        footer { margin-top: 40px; padding: 25px; text-align: center; font-size: 0.7rem; color: var(--ghost-blue); letter-spacing: 8px; opacity: 0.5; }
-    </style>
+<style>
+body{
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    background:#0a0a0a;
+    color:#fff;
+    margin:0;
+    padding-bottom:100px;
+}
+.modal{
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.9);
+    backdrop-filter:blur(12px);
+    z-index:999;
+}
+.active-modal{display:flex;align-items:center;justify-content:center;}
+.portal-card{
+    background:#fff;
+    color:#000;
+    border-radius:40px;
+    padding:40px;
+    width:95%;
+    max-width:420px;
+}
+.toast{
+    position:fixed;
+    top:30px;
+    left:50%;
+    transform:translateX(-50%);
+    background:#111;
+    color:#fff;
+    padding:18px 30px;
+    border-radius:30px;
+    font-size:12px;
+    font-weight:800;
+    letter-spacing:1px;
+    z-index:9999;
+    opacity:0;
+    transition:0.3s;
+}
+.toast.show{opacity:1;top:50px;}
+</style>
 </head>
 <body>
 
-    <canvas id="rainCanvas"></canvas>
+<div id="toast" class="toast"></div>
 
-    <div class="container">
-        <header>
-            <i class="fas fa-ghost ghost-icon"></i>
-            <div class="logo">GHOSTY</div>
-            <p style="font-size: 0.6rem; letter-spacing: 5px; margin-top: 10px; color: white;">PREMIUM SHINING LOG</p>
-        </header>
+<!-- AUTH MODAL -->
+<div id="authModal" class="modal">
+<div class="portal-card">
+<h2 id="auth-title" class="text-2xl font-black uppercase mb-6">Create Account</h2>
 
-        <div class="premium-card">
-            <div class="upload-zone" id="dropArea">
-                <i class="fas fa-file-export" style="color: white; font-size: 2.5rem; margin-bottom: 15px; filter: drop-shadow(0 0 10px var(--ghost-blue));"></i>
-                <h2 class="shining-blue-text" id="fileLabel">Upload Image</h2>
-                <input type="file" id="fileInput" hidden accept="image/*">
-            </div>
+<div id="signup-fields" class="space-y-3">
+<input id="reg-name" placeholder="FULL NAME" class="w-full p-4 bg-gray-100 rounded-xl text-[12px]">
+<input id="reg-phone" placeholder="WHATSAPP NUMBER" class="w-full p-4 bg-gray-100 rounded-xl text-[12px]">
+</div>
 
-            <div class="loader" id="spinner"></div>
-            <button class="btn-main" id="goBtn">GET LINK</button>
+<div class="space-y-3 mt-3">
+<input id="auth-email" placeholder="EMAIL ADDRESS" class="w-full p-4 bg-gray-100 rounded-xl text-[12px]">
+<input id="auth-pass" type="password" placeholder="PASSWORD" class="w-full p-4 bg-gray-100 rounded-xl text-[12px]">
 
-            <div class="result-box" id="resultBox">
-                <div class="link-bar">
-                    <span id="urlText"></span>
-                    <button class="copy-btn" id="copyBtn">COPY</button>
-                </div>
-                <button onclick="location.reload()" style="background:none; border:none; color:#444; width:100%; margin-top:20px; cursor:pointer; font-size:0.75rem;">NEW SUMMON</button>
-            </div>
-        </div>
+<button onclick="handleAuth()" id="auth-btn"
+class="w-full bg-black text-white py-4 rounded-xl font-black uppercase text-[12px]">Register</button>
 
-        <div class="history-box">
-            <div class="history-title">Recent History</div>
-            <div id="historyList"></div>
-            <button onclick="clearHistory()" style="background:none; border:none; color:#ff4d4d; font-size:0.6rem; margin-top:10px; cursor:pointer; width:100%; letter-spacing: 2px;">WIPE ALL DATA</button>
-        </div>
+<p onclick="toggleAuthMode()" class="text-center text-[11px] opacity-50 cursor-pointer">Switch Mode</p>
 
-        <footer>GHOSTY PREMIUM</footer>
-    </div>
+<p onclick="resetPassword()" class="text-center text-[11px] text-blue-500 cursor-pointer">Forgot Password?</p>
 
-    <script>
-        const KEY = 'Ed019955ccdfc5952b136e449d727e0b';
-        const fileInput = document.getElementById('fileInput');
-        const historyList = document.getElementById('historyList');
+<button onclick="closeModal('authModal')" class="w-full text-[10px] opacity-30 mt-4">Cancel</button>
+</div>
+</div>
+</div>
 
-        // RAIN BACKGROUND
-        const canvas = document.getElementById('rainCanvas');
-        const ctx = canvas.getContext('2d');
-        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
-        const drops = Array(Math.floor(canvas.width / 16)).fill(1);
-        function draw() {
-            ctx.fillStyle = "rgba(0,0,0,0.15)"; ctx.fillRect(0,0,canvas.width,canvas.height);
-            ctx.fillStyle = "#00f2ff"; ctx.font = "16px monospace";
-            drops.forEach((y, x) => {
-                ctx.fillText(Math.floor(Math.random()*2), x*16, y*16);
-                if(y*16 > canvas.height && Math.random() > 0.975) drops[x] = 0;
-                drops[x]++;
-            });
-        }
-        setInterval(draw, 35);
+<header class="p-6 flex justify-between items-center">
+<h1 class="text-2xl font-black">SMILE MC 👑</h1>
+<div id="user-display" class="text-xs opacity-40">Guest</div>
+</header>
 
-        // HISTORY LOGIC
-        function saveToHistory(url) {
-            let history = JSON.parse(localStorage.getItem('ghosty_history') || '[]');
-            history.unshift(url);
-            if(history.length > 5) history.pop();
-            localStorage.setItem('ghosty_history', JSON.stringify(history));
-            renderHistory();
-        }
+<main class="p-6">
+<div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
+</main>
 
-        function renderHistory() {
-            let history = JSON.parse(localStorage.getItem('ghosty_history') || '[]');
-            historyList.innerHTML = history.map(url => `
-                <div class="history-item">
-                    <a href="${url}" target="_blank" class="history-link">${url}</a>
-                    <button class="mini-copy" onclick="copyText('${url}')">COPY</button>
-                </div>
-            `).join('');
-        }
+<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#111] p-6 rounded-[40px] flex gap-10">
+<div onclick="openModal('authModal')" class="cursor-pointer">👤</div>
+<div onclick="logoutUser()" class="cursor-pointer">🚪</div>
+</nav>
 
-        function copyText(text) {
-            navigator.clipboard.writeText(text);
-            alert("Copied to clipboard!");
-        }
+<script type="module">
 
-        function clearHistory() {
-            localStorage.removeItem('ghosty_history');
-            renderHistory();
-        }
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // UPLOADER
-        document.getElementById('dropArea').onclick = () => fileInput.click();
-        document.getElementById('goBtn').onclick = async () => {
-            if(!fileInput.files[0]) return;
-            document.getElementById('goBtn').style.display='none';
-            document.getElementById('spinner').style.display='block';
-            const fd = new FormData(); fd.append('image', fileInput.files[0]);
-            try {
-                const res = await fetch(`https://api.imgbb.com/1/upload?key=${KEY}`, {method:'POST', body:fd});
-                const data = await res.json();
-                if(data.success) {
-                    const url = data.data.url;
-                    document.getElementById('urlText').innerText = url;
-                    document.getElementById('spinner').style.display='none';
-                    document.getElementById('resultBox').style.display='block';
-                    saveToHistory(url);
-                }
-            } catch(e) { location.reload(); }
-        };
+const firebaseConfig = {
+apiKey: "YOUR_FIREBASE_KEY",
+authDomain: "YOUR_DOMAIN",
+projectId: "YOUR_ID",
+storageBucket: "YOUR_BUCKET",
+messagingSenderId: "YOUR_MSG",
+appId: "YOUR_APP"
+};
 
-        document.getElementById('copyBtn').onclick = () => {
-            copyText(document.getElementById('urlText').innerText);
-        };
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
 
-        window.onload = renderHistory;
-    </script>
+let isSignUp = true;
+
+function showToast(msg){
+const t = document.getElementById("toast");
+t.innerText = msg;
+t.classList.add("show");
+setTimeout(()=>{t.classList.remove("show")},3000);
+}
+
+window.openModal = id => document.getElementById(id).classList.add("active-modal");
+window.closeModal = id => document.getElementById(id).classList.remove("active-modal");
+
+window.toggleAuthMode = ()=>{
+isSignUp=!isSignUp;
+document.getElementById("auth-title").innerText=isSignUp?"Create Account":"Sign In";
+document.getElementById("auth-btn").innerText=isSignUp?"Register":"Login";
+document.getElementById("signup-fields").style.display=isSignUp?"block":"none";
+};
+
+window.handleAuth = async ()=>{
+const email=document.getElementById("auth-email").value.trim();
+const pass=document.getElementById("auth-pass").value.trim();
+const name=document.getElementById("reg-name").value.trim();
+const phone=document.getElementById("reg-phone").value.trim();
+
+if(!email||!pass){showToast("Fill Email & Password");return;}
+
+try{
+if(isSignUp){
+const res=await createUserWithEmailAndPassword(auth,email,pass);
+await setDoc(doc(db,"users",res.user.uid),{
+name:name,
+phone:phone,
+email:email,
+createdAt:serverTimestamp()
+});
+showToast("Account Created 👑");
+}else{
+await signInWithEmailAndPassword(auth,email,pass);
+showToast("Welcome Back 🔥");
+}
+closeModal("authModal");
+}catch(e){showToast(e.message);}
+};
+
+window.resetPassword = async ()=>{
+const email=document.getElementById("auth-email").value.trim();
+if(!email){showToast("Enter Email First");return;}
+await sendPasswordResetEmail(auth,email);
+showToast("Password Reset Sent ✉️");
+};
+
+window.logoutUser = async ()=>{
+await signOut(auth);
+showToast("Logged Out");
+};
+
+onAuthStateChanged(auth,user=>{
+document.getElementById("user-display").innerText=user?"Connected":"Guest";
+});
+
+</script>
 </body>
 </html>
