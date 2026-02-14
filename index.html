@@ -16,6 +16,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#0a0a0a;color:#fff;ma
 .input-field{width:100%;padding:12px;border-radius:18px;border:2px solid #f0f0f0;margin-bottom:12px;outline:none;color:#000;font-weight:600;transition:all 0.2s;}
 .input-field:focus{border-color:#000;background:#fff;}
 .button-primary{width:100%;padding:16px;border-radius:20px;background:#000;color:#fff;font-weight:900;text-transform:uppercase;letter-spacing:1px;}
+.step-hidden{display:none;}
 </style>
 </head>
 <body>
@@ -29,20 +30,20 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#0a0a0a;color:#fff;ma
 
 <main class="p-6 max-w-6xl mx-auto">
 
-<!-- PRODUCT GRID -->
+<!-- HOME PAGE -->
 <section id="home-page">
 <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
 </section>
 
-<!-- ADMIN PANEL -->
+<!-- ADMIN PAGE -->
 <section id="admin-page" class="hidden">
-<div class="flex gap-4 mb-8">
+<div class="flex gap-4 mb-8 overflow-x-auto">
 <button onclick="switchAdminTab('products')" id="btn-products" class="px-6 py-2 bg-white text-black rounded-full text-xs font-black">Products</button>
 <button onclick="switchAdminTab('orders')" id="btn-orders" class="px-6 py-2 bg-[#111] text-gray-400 rounded-full text-xs font-black">Orders</button>
 <button onclick="switchAdminTab('users')" id="btn-users" class="px-6 py-2 bg-[#111] text-gray-400 rounded-full text-xs font-black">Users</button>
 </div>
 
-<!-- Products Tab -->
+<!-- PRODUCTS TAB -->
 <div id="tab-products">
 <div class="bg-[#111] p-6 rounded-3xl mb-6">
 <h3 class="text-xs uppercase mb-4">Add Product</h3>
@@ -55,12 +56,11 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#0a0a0a;color:#fff;ma
 <div id="inventory"></div>
 </div>
 
-<!-- Orders Tab -->
-<div id="tab-orders" class="hidden"></div>
+<!-- ORDERS TAB -->
+<div id="tab-orders" class="step-hidden"></div>
 
-<!-- Users Tab -->
-<div id="tab-users" class="hidden"></div>
-
+<!-- USERS TAB -->
+<div id="tab-users" class="step-hidden"></div>
 </section>
 
 </main>
@@ -104,7 +104,7 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#0a0a0a;color:#fff;ma
 <button onclick="nextStep(2)" class="button-primary">Proceed To Pay</button>
 </div>
 
-<div id="check-step-2" class="hidden">
+<div id="check-step-2" class="step-hidden">
 <h2 class="text-xl font-black mb-2">Payment</h2>
 <p class="text-sm font-bold mb-1">Sumera Ismail</p>
 <p class="text-xs font-bold mb-4">Easypaisa: 03209797510</p>
@@ -123,42 +123,40 @@ body{font-family:'Plus Jakarta Sans',sans-serif;background:#0a0a0a;color:#fff;ma
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, deleteDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-const firebaseConfig={
-apiKey:"YOUR_FIREBASE_KEY",
-authDomain:"YOUR_AUTH_DOMAIN",
-projectId:"YOUR_PROJECT_ID",
-storageBucket:"YOUR_BUCKET",
-messagingSenderId:"YOUR_MSG",
-appId:"YOUR_APP"
+const firebaseConfig = {
+apiKey: "AIzaSyC41Y6mNNBFvjNeHdOOWGsjczMjyaqoqjU",
+authDomain: "fajar-collection-8aba3.firebaseapp.com",
+projectId: "fajar-collection-8aba3",
+storageBucket: "fajar-collection-8aba3.firebasestorage.app",
+messagingSenderId: "620336064195",
+appId: "1:620336064195:web:4608ae5f133de8fa17a476"
 };
-const app=initializeApp(firebaseConfig);
-const db=getFirestore(app);
-const auth=getAuth(app);
 
-// STAFF PASSWORD
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const auth = getAuth(app);
+
 const STAFF_PASSWORD = "GHOSTYDEVELOPER";
+const IMGBB_KEY = "ed019955ccdfc5952b136e449d727e0b";
 
-let currentUser=null;
-let selectedProduct="";
-let isSignup=true;
+let currentUser = null;
+let selectedProduct = "";
+let isSignup = true;
 
-// TOAST
+// TOAST FUNCTION
 function toast(msg){const t=document.getElementById("toast");t.innerText=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),3000);}
 
-// PAGES
-window.showPage=(id)=>{
-document.querySelectorAll('main>section').forEach(s=>s.classList.add('hidden'));
-document.getElementById(`${id}-page`).classList.remove('hidden');
-};
+// SHOW PAGE
+window.showPage = (id)=>{document.querySelectorAll('main>section').forEach(s=>s.classList.add('hidden'));document.getElementById(`${id}-page`).classList.remove('hidden');};
 showPage('home');
 
-// AUTH
-window.openAuth=()=>document.getElementById("authModal").classList.add("active-modal");
-window.closeAuth=()=>document.getElementById("authModal").classList.remove("active-modal");
-window.toggleMode=()=>{isSignup=!isSignup;document.getElementById("auth-title").innerText=isSignup?"Create Account":"Sign In";document.getElementById("auth-btn").innerText=isSignup?"Register":"Login";document.getElementById("signup-fields").style.display=isSignup?"block":"none";};
+// AUTH MODAL
+window.openAuth = ()=>document.getElementById("authModal").classList.add("active-modal");
+window.closeAuth = ()=>document.getElementById("authModal").classList.remove("active-modal");
+window.toggleMode = ()=>{isSignup=!isSignup;document.getElementById("auth-title").innerText=isSignup?"Create Account":"Sign In";document.getElementById("auth-btn").innerText=isSignup?"Register":"Login";document.getElementById("signup-fields").style.display=isSignup?"block":"none";};
 window.handleAuth=async()=>{
 const email=document.getElementById("auth-email").value.trim();
 const pass=document.getElementById("auth-pass").value.trim();
@@ -183,58 +181,52 @@ if(!email){toast("Enter Email");return;}
 await sendPasswordResetEmail(auth,email);
 toast("Reset Email Sent ✉️");
 };
-window.logoutUser=async()=>{await signOut(auth);toast("Logged Out");};
 onAuthStateChanged(auth,user=>{currentUser=user;document.getElementById("user-display").innerText=user?"Connected":"Guest";});
 
 // STAFF LOGIN
 window.openStaff=()=>document.getElementById("staffModal").classList.add("active-modal");
 window.closeStaff=()=>document.getElementById("staffModal").classList.remove("active-modal");
-window.verifyStaff=()=>{
-const pass=document.getElementById("staff-pass").value.trim();
-if(pass===STAFF_PASSWORD){closeStaff();document.getElementById("admin-page").classList.remove("hidden");toast("Admin Access Granted ✅");}
-else{toast("Wrong Password ❌");}};
+window.verifyStaff=()=>{const pass=document.getElementById("staff-pass").value.trim();if(pass===STAFF_PASSWORD){closeStaff();document.getElementById("admin-page").classList.remove("hidden");toast("Admin Access ✅");loadAdmin();}else{toast("Wrong Password ❌");}};
 
-// PRODUCT UPLOAD
+// PUBLISH PRODUCT
 window.publishProduct=async()=>{
+const name=document.getElementById("p-name").value;
+const price=document.getElementById("p-price").value;
+const desc=document.getElementById("p-desc").value;
 const file=document.getElementById("p-file").files[0];
-if(!file){toast("Select an image");return;}
+if(!name||!price||!file){toast("All fields required");return;}
 const fd=new FormData();fd.append("image",file);
-const r=await fetch("https://api.imgbb.com/1/upload?key=YOUR_IMGBB_KEY",{method:"POST",body:fd});
-const data=await r.json();
-await addDoc(collection(db,"products"),{name:p-name.value,price:p-price.value,desc:p-desc.value,image:data.data.url,createdAt:serverTimestamp()});
+const r=await fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_KEY}`,{method:"POST",body:fd});
+const d=await r.json();
+await addDoc(collection(db,"products"),{name,price,desc,image:d.data.url,createdAt:serverTimestamp()});
 toast("Product Live 🔥");
+document.getElementById("p-name").value="";document.getElementById("p-price").value="";document.getElementById("p-desc").value="";document.getElementById("p-file").value="";
 };
 
-// SHOW PRODUCTS
-onSnapshot(collection(db,"products"),snap=>{
-const grid=document.getElementById("product-grid");
-grid.innerHTML=snap.docs.map(d=>{const p=d.data();selectedProduct=p.name;
-return `<div class="bg-[#111] rounded-3xl overflow-hidden">
-<img src="${p.image}" class="w-full aspect-square object-cover">
-<div class="p-4">
-<p class="text-xs opacity-40">${p.name}</p>
-<p class="font-black text-lg">Rs.${p.price}</p>
-<button onclick="startCheckout('${p.name}')" class="button-primary mt-2">Buy Now</button>
-</div></div>`;}).join('');
+// LOAD PRODUCTS ON HOME & INVENTORY
+onSnapshot(query(collection(db,"products"),orderBy("createdAt","desc")),snap=>{
+document.getElementById("product-grid").innerHTML=snap.docs.map(d=>{const p=d.data();return `<div class="bg-[#111] rounded-3xl overflow-hidden"><img src="${p.image}" class="w-full aspect-square object-cover"><div class="p-4"><p class="text-xs opacity-40">${p.name}</p><p class="font-black text-lg">Rs.${p.price}</p><button onclick="startCheckout('${p.name}')" class="button-primary mt-2">Buy Now</button></div></div>`;}).join('');
+document.getElementById("inventory").innerHTML=snap.docs.map(d=>{const p=d.data();return `<div class="bg-[#111] p-3 rounded-2xl flex justify-between items-center mb-2"><p class="text-xs font-black">${p.name}</p><button onclick="deleteDoc(doc(db,'products','${d.id}'))" class="text-red-500 text-xs font-black">Remove</button></div>`;}).join('');
 });
 
+// ADMIN TABS
+window.switchAdminTab=(t)=>{document.querySelectorAll('#admin-page>div[id^="tab"]').forEach(tab=>tab.classList.add('step-hidden'));document.getElementById(`tab-${t}`).classList.remove('step-hidden');document.querySelectorAll('#admin-page button[id^="btn"]').forEach(b=>{b.classList.remove('bg-white','text-black');b.classList.add('bg-[#111]','text-gray-400');});document.getElementById(`btn-${t}`).classList.add('bg-white','text-black');};
+
 // CHECKOUT
-window.startCheckout=(pName)=>{if(!currentUser){openAuth();return;}selectedProduct=pName;document.getElementById("check-step-1").classList.remove("hidden");document.getElementById("check-step-2").classList.add("hidden");document.getElementById("checkoutModal").classList.add("active-modal");};
-window.nextStep=(s)=>{if(s===2){document.getElementById("check-step-1").classList.add("hidden");document.getElementById("check-step-2").classList.remove("hidden");}};
-
-// SUBMIT ORDER
+window.startCheckout=(p)=>{if(!currentUser){openAuth();return;}selectedProduct=p;document.getElementById("checkoutModal").classList.add("active-modal");document.getElementById("check-step-1").classList.remove("step-hidden");document.getElementById("check-step-2").classList.add("step-hidden");};
+window.nextStep=(s)=>{if(s==2){document.getElementById("check-step-1").classList.add("step-hidden");document.getElementById("check-step-2").classList.remove("step-hidden");}};
 window.submitOrder=async()=>{
-const name=document.getElementById("ord-name").value;
-const fullname=document.getElementById("ord-fullname").value;
-const discord=document.getElementById("ord-discord").value;
-const wa=document.getElementById("ord-whatsapp").value||"N/A";
+const name=document.getElementById("ord-name").value,fullname=document.getElementById("ord-fullname").value,discord=document.getElementById("ord-discord").value,wa=document.getElementById("ord-whatsapp").value||"N/A";
 await addDoc(collection(db,"orders"),{product:selectedProduct,name,fullname,discord,wa,timestamp:serverTimestamp()});
-toast("Order Placed ✅");
-};
+toast("Order Placed ✅");};
+window.contactDiscord=()=>{const name=document.getElementById("ord-name").value,fullname=document.getElementById("ord-fullname").value,discord=document.getElementById("ord-discord").value,wa=document.getElementById("ord-whatsapp").value||"N/A";window.open(`https://discord.com/users/devil_hunter_______?message=Order:%20${selectedProduct}%0AName:%20${name}%0AFullName:%20${fullname}%0ADiscord:%20${discord}%0AWhatsApp:%20${wa}`,'_blank');};
+window.contactWhatsApp=()=>{const name=document.getElementById("ord-name").value,fullname=document.getElementById("ord-fullname").value,discord=document.getElementById("ord-discord").value,wa=document.getElementById("ord-whatsapp").value||"N/A";window.open(`https://wa.me/003706116030?text=Order:%20${selectedProduct}%0AName:%20${name}%0AFullName:%20${fullname}%0ADiscord:%20${discord}%0AWhatsApp:%20${wa}`,'_blank');};
 
-// CONTACT
-window.contactDiscord=()=>{const name=document.getElementById("ord-name").value;const fullname=document.getElementById("ord-fullname").value;const discord=document.getElementById("ord-discord").value;const wa=document.getElementById("ord-whatsapp").value||"N/A";const msg=`Order:%20${selectedProduct}%0AName:%20${name}%0AFullName:%20${fullname}%0ADiscord:%20${discord}%0AWhatsApp:%20${wa}`;window.open(`https://discord.com/users/devil_hunter_______?message=${msg}`,'_blank');};
-window.contactWhatsApp=()=>{const name=document.getElementById("ord-name").value;const fullname=document.getElementById("ord-fullname").value;const discord=document.getElementById("ord-discord").value;const wa=document.getElementById("ord-whatsapp").value||"N/A";const msg=`Order:%20${selectedProduct}%0AName:%20${name}%0AFullName:%20${fullname}%0ADiscord:%20${discord}%0AWhatsApp:%20${wa}`;window.open(`https://wa.me/003706116030?text=${msg}`,'_blank');};
+// LOAD ADMIN ORDERS AND USERS
+function loadAdmin(){
+onSnapshot(query(collection(db,"orders"),orderBy("timestamp","desc")),snap=>{document.getElementById("tab-orders").innerHTML=snap.docs.map(d=>{const o=d.data();return `<div class="bg-[#111] p-4 rounded-2xl flex justify-between items-start mb-2"><div><p class="text-xs font-black text-blue-400">${o.product}</p><p class="text-xs">${o.name} | ${o.fullname}</p><p class="text-xs">Discord: ${o.discord}</p><p class="text-xs">WA: ${o.wa}</p></div><button onclick="deleteDoc(doc(db,'orders','${d.id}'))" class="text-red-500 text-xs font-black">Delete</button></div>`;}).join('');});
+onSnapshot(collection(db,"users"),snap=>{document.getElementById("tab-users").innerHTML=snap.docs.map(d=>{const u=d.data();return `<div class="bg-[#111] p-4 rounded-2xl flex justify-between items-center mb-2"><p class="text-xs font-black">${u.name} | ${u.email} | ${u.phone}</p><button onclick="deleteDoc(doc(db,'users','${d.id}'))" class="text-red-500 text-xs font-black">Remove</button></div>`;}).join('');});
+}
 </script>
 </body>
 </html>
