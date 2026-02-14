@@ -5,175 +5,241 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SMILE MC | PREMIUM STORE 👑</title>
 <script src="https://cdn.tailwindcss.com"></script>
-
 <style>
-body{
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    background:#0a0a0a;
-    color:#fff;
-    margin:0;
-    padding-bottom:100px;
-}
-.modal{
-    display:none;
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,0.9);
-    backdrop-filter:blur(12px);
-    z-index:999;
-}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:#0a0a0a;color:#fff;margin:0;padding-bottom:150px;}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.95);backdrop-filter:blur(15px);z-index:999;}
 .active-modal{display:flex;align-items:center;justify-content:center;}
-.portal-card{
-    background:#fff;
-    color:#000;
-    border-radius:40px;
-    padding:40px;
-    width:95%;
-    max-width:420px;
-}
-.toast{
-    position:fixed;
-    top:30px;
-    left:50%;
-    transform:translateX(-50%);
-    background:#111;
-    color:#fff;
-    padding:18px 30px;
-    border-radius:30px;
-    font-size:12px;
-    font-weight:800;
-    letter-spacing:1px;
-    z-index:9999;
-    opacity:0;
-    transition:0.3s;
-}
+.portal-card{background:#fff;color:#000;border-radius:45px;padding:40px;width:95%;max-width:420px;max-height:90vh;overflow-y:auto;}
+.toast{position:fixed;top:30px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:18px 28px;border-radius:40px;font-size:12px;font-weight:900;opacity:0;transition:0.3s;z-index:9999;}
 .toast.show{opacity:1;top:50px;}
+.nav{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;padding:20px 40px;border-radius:50px;display:flex;gap:30px;}
+.input-field{width:100%;padding:12px;border-radius:18px;border:2px solid #f0f0f0;margin-bottom:12px;outline:none;color:#000;font-weight:600;transition:all 0.2s;}
+.input-field:focus{border-color:#000;background:#fff;}
+.button-primary{width:100%;padding:16px;border-radius:20px;background:#000;color:#fff;font-weight:900;text-transform:uppercase;letter-spacing:1px;}
 </style>
 </head>
 <body>
 
 <div id="toast" class="toast"></div>
 
-<!-- AUTH MODAL -->
-<div id="authModal" class="modal">
-<div class="portal-card">
-<h2 id="auth-title" class="text-2xl font-black uppercase mb-6">Create Account</h2>
-
-<div id="signup-fields" class="space-y-3">
-<input id="reg-name" placeholder="FULL NAME" class="w-full p-4 bg-gray-100 rounded-xl text-[12px]">
-<input id="reg-phone" placeholder="WHATSAPP NUMBER" class="w-full p-4 bg-gray-100 rounded-xl text-[12px]">
-</div>
-
-<div class="space-y-3 mt-3">
-<input id="auth-email" placeholder="EMAIL ADDRESS" class="w-full p-4 bg-gray-100 rounded-xl text-[12px]">
-<input id="auth-pass" type="password" placeholder="PASSWORD" class="w-full p-4 bg-gray-100 rounded-xl text-[12px]">
-
-<button onclick="handleAuth()" id="auth-btn"
-class="w-full bg-black text-white py-4 rounded-xl font-black uppercase text-[12px]">Register</button>
-
-<p onclick="toggleAuthMode()" class="text-center text-[11px] opacity-50 cursor-pointer">Switch Mode</p>
-
-<p onclick="resetPassword()" class="text-center text-[11px] text-blue-500 cursor-pointer">Forgot Password?</p>
-
-<button onclick="closeModal('authModal')" class="w-full text-[10px] opacity-30 mt-4">Cancel</button>
-</div>
-</div>
-</div>
-
-<header class="p-6 flex justify-between items-center">
+<header class="p-6 flex justify-between items-center sticky top-0 bg-[#0a0a0a] z-50">
 <h1 class="text-2xl font-black">SMILE MC 👑</h1>
 <div id="user-display" class="text-xs opacity-40">Guest</div>
 </header>
 
-<main class="p-6">
+<main class="p-6 max-w-6xl mx-auto">
+
+<!-- PRODUCT GRID -->
+<section id="home-page">
 <div id="product-grid" class="grid grid-cols-2 md:grid-cols-4 gap-6"></div>
+</section>
+
+<!-- ADMIN PANEL -->
+<section id="admin-page" class="hidden">
+<div class="flex gap-4 mb-8">
+<button onclick="switchAdminTab('products')" id="btn-products" class="px-6 py-2 bg-white text-black rounded-full text-xs font-black">Products</button>
+<button onclick="switchAdminTab('orders')" id="btn-orders" class="px-6 py-2 bg-[#111] text-gray-400 rounded-full text-xs font-black">Orders</button>
+<button onclick="switchAdminTab('users')" id="btn-users" class="px-6 py-2 bg-[#111] text-gray-400 rounded-full text-xs font-black">Users</button>
+</div>
+
+<!-- Products Tab -->
+<div id="tab-products">
+<div class="bg-[#111] p-6 rounded-3xl mb-6">
+<h3 class="text-xs uppercase mb-4">Add Product</h3>
+<input id="p-name" placeholder="NAME" class="input-field">
+<input id="p-price" placeholder="PRICE" type="number" class="input-field">
+<input id="p-desc" placeholder="DESCRIPTION" class="input-field">
+<input type="file" id="p-file" class="input-field">
+<button onclick="publishProduct()" class="button-primary">Publish</button>
+</div>
+<div id="inventory"></div>
+</div>
+
+<!-- Orders Tab -->
+<div id="tab-orders" class="hidden"></div>
+
+<!-- Users Tab -->
+<div id="tab-users" class="hidden"></div>
+
+</section>
+
 </main>
 
-<nav class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-[#111] p-6 rounded-[40px] flex gap-10">
-<div onclick="openModal('authModal')" class="cursor-pointer">👤</div>
-<div onclick="logoutUser()" class="cursor-pointer">🚪</div>
+<!-- AUTH MODAL -->
+<div id="authModal" class="modal">
+<div class="portal-card">
+<h2 id="auth-title" class="text-xl font-black mb-6">Create Account</h2>
+<div id="signup-fields">
+<input id="reg-name" placeholder="FULL NAME" class="input-field">
+<input id="reg-phone" placeholder="WHATSAPP" class="input-field">
+</div>
+<input id="auth-email" placeholder="EMAIL" class="input-field">
+<input id="auth-pass" type="password" placeholder="PASSWORD" class="input-field">
+<button onclick="handleAuth()" id="auth-btn" class="button-primary">Register</button>
+<p onclick="toggleMode()" class="text-center text-xs opacity-40 mt-3 cursor-pointer">Switch Mode</p>
+<p onclick="resetPassword()" class="text-center text-xs text-blue-500 cursor-pointer">Forgot Password?</p>
+<button onclick="closeAuth()" class="w-full text-xs opacity-30 mt-4">Cancel</button>
+</div>
+</div>
+
+<!-- CHECKOUT MODAL -->
+<div id="checkoutModal" class="modal">
+<div class="portal-card">
+<div id="check-step-1">
+<h2 class="text-xl font-black mb-4">Order Details</h2>
+<input id="ord-name" placeholder="Name" class="input-field">
+<input id="ord-fullname" placeholder="Full Name" class="input-field">
+<input id="ord-discord" placeholder="Discord ID" class="input-field">
+<input id="ord-whatsapp" placeholder="WhatsApp (Optional)" class="input-field">
+<button onclick="nextStep(2)" class="button-primary">Proceed To Pay</button>
+</div>
+
+<div id="check-step-2" class="hidden">
+<h2 class="text-xl font-black mb-2">Payment</h2>
+<p class="text-sm font-bold mb-1">Sumera Ismail</p>
+<p class="text-xs font-bold mb-4">Easypaisa: 03209797510</p>
+<button onclick="submitOrder()" class="button-primary mb-3">Checkout</button>
+<button onclick="contactDiscord()" class="button-primary mb-3 bg-blue-600">Contact on Discord</button>
+<button onclick="contactWhatsApp()" class="button-primary mb-3 bg-green-600">Contact on WhatsApp</button>
+</div>
+</div>
+</div>
+
+<nav class="nav">
+<div onclick="openAuth()">👤</div>
+<div id="admin-btn" onclick="openAdmin()" style="display:none;">🛡️</div>
+<div onclick="logoutUser()">🚪</div>
 </nav>
 
 <script type="module">
-
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, onSnapshot, doc, setDoc, getDoc, deleteDoc, serverTimestamp, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-const firebaseConfig = {
-apiKey: "YOUR_FIREBASE_KEY",
-authDomain: "YOUR_DOMAIN",
-projectId: "YOUR_ID",
-storageBucket: "YOUR_BUCKET",
-messagingSenderId: "YOUR_MSG",
-appId: "YOUR_APP"
+const firebaseConfig={
+apiKey:"YOUR_FIREBASE_KEY",
+authDomain:"YOUR_AUTH_DOMAIN",
+projectId:"YOUR_PROJECT_ID",
+storageBucket:"YOUR_BUCKET",
+messagingSenderId:"YOUR_MSG",
+appId:"YOUR_APP"
 };
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-const auth = getAuth(app);
+const app=initializeApp(firebaseConfig);
+const db=getFirestore(app);
+const auth=getAuth(app);
 
-let isSignUp = true;
+let isSignup=true;
+let currentUser=null;
+let selectedProduct="";
 
-function showToast(msg){
-const t = document.getElementById("toast");
-t.innerText = msg;
-t.classList.add("show");
-setTimeout(()=>{t.classList.remove("show")},3000);
-}
+function toast(msg){const t=document.getElementById("toast");t.innerText=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),3000);}
 
-window.openModal = id => document.getElementById(id).classList.add("active-modal");
-window.closeModal = id => document.getElementById(id).classList.remove("active-modal");
+window.openAuth=()=>document.getElementById("authModal").classList.add("active-modal");
+window.closeAuth=()=>document.getElementById("authModal").classList.remove("active-modal");
+window.toggleMode=()=>{isSignup=!isSignup;document.getElementById("auth-title").innerText=isSignup?"Create Account":"Sign In";document.getElementById("auth-btn").innerText=isSignup?"Register":"Login";document.getElementById("signup-fields").style.display=isSignup?"block":"none";};
 
-window.toggleAuthMode = ()=>{
-isSignUp=!isSignUp;
-document.getElementById("auth-title").innerText=isSignUp?"Create Account":"Sign In";
-document.getElementById("auth-btn").innerText=isSignUp?"Register":"Login";
-document.getElementById("signup-fields").style.display=isSignUp?"block":"none";
-};
-
-window.handleAuth = async ()=>{
+window.handleAuth=async()=>{
 const email=document.getElementById("auth-email").value.trim();
 const pass=document.getElementById("auth-pass").value.trim();
 const name=document.getElementById("reg-name").value.trim();
 const phone=document.getElementById("reg-phone").value.trim();
-
-if(!email||!pass){showToast("Fill Email & Password");return;}
-
+if(!email||!pass){toast("Fill all fields");return;}
 try{
-if(isSignUp){
+if(isSignup){
 const res=await createUserWithEmailAndPassword(auth,email,pass);
-await setDoc(doc(db,"users",res.user.uid),{
-name:name,
-phone:phone,
-email:email,
-createdAt:serverTimestamp()
-});
-showToast("Account Created 👑");
+await setDoc(doc(db,"users",res.user.uid),{name,phone,email,createdAt:serverTimestamp()});
+toast("Account Created 👑");
 }else{
 await signInWithEmailAndPassword(auth,email,pass);
-showToast("Welcome Back 🔥");
+toast("Welcome Back 🔥");
 }
-closeModal("authModal");
-}catch(e){showToast(e.message);}
+closeAuth();
+}catch(e){toast(e.message);}
 };
 
-window.resetPassword = async ()=>{
+window.resetPassword=async()=>{
 const email=document.getElementById("auth-email").value.trim();
-if(!email){showToast("Enter Email First");return;}
+if(!email){toast("Enter Email");return;}
 await sendPasswordResetEmail(auth,email);
-showToast("Password Reset Sent ✉️");
+toast("Reset Email Sent ✉️");
 };
 
-window.logoutUser = async ()=>{
-await signOut(auth);
-showToast("Logged Out");
-};
+window.logoutUser=async()=>{await signOut(auth);toast("Logged Out");};
 
-onAuthStateChanged(auth,user=>{
+onAuthStateChanged(auth,async user=>{
+currentUser=user;
 document.getElementById("user-display").innerText=user?"Connected":"Guest";
+if(user){
+const snap=await getDoc(doc(db,"admins",user.uid));
+document.getElementById("admin-btn").style.display=snap.exists()?"block":"none";
+}else document.getElementById("admin-btn").style.display="none";
 });
 
+// ADMIN PANEL FUNCTIONS
+window.openAdmin=()=>{home-page.classList.add("hidden");admin-page.classList.remove("hidden");};
+window.switchAdminTab=(t)=>{
+tab-products.classList.add("hidden");
+tab-orders.classList.add("hidden");
+tab-users.classList.add("hidden");
+document.getElementById("tab-"+t).classList.remove("hidden");
+};
+
+window.publishProduct=async()=>{
+const file=document.getElementById("p-file").files[0];
+const fd=new FormData();
+fd.append("image",file);
+const r=await fetch("https://api.imgbb.com/1/upload?key=YOUR_IMGBB_KEY",{method:"POST",body:fd});
+const data=await r.json();
+await addDoc(collection(db,"products"),{name:p-name.value,price:p-price.value,desc:p-desc.value,image:data.data.url,createdAt:serverTimestamp()});
+toast("Product Live 🔥");
+};
+
+// LOAD PRODUCTS
+onSnapshot(collection(db,"products"),snap=>{
+product-grid.innerHTML=snap.docs.map(d=>{
+const p=d.data();selectedProduct=p.name;
+return `<div class="bg-[#111] rounded-3xl overflow-hidden">
+<img src="${p.image}" class="w-full aspect-square object-cover">
+<div class="p-4">
+<p class="text-xs opacity-40">${p.name}</p>
+<p class="font-black text-lg">Rs.${p.price}</p>
+<button onclick="startCheckout('${p.name}')" class="button-primary mt-2">Buy Now</button>
+</div></div>`;
+}).join('');
+});
+
+// CHECKOUT STEPS
+window.startCheckout=(pName)=>{if(!currentUser){openAuth();return;}selectedProduct=pName;document.getElementById("check-step-1").classList.remove("hidden");document.getElementById("check-step-2").classList.add("hidden");document.getElementById("checkoutModal").classList.add("active-modal");};
+window.nextStep=(s)=>{if(s===2){document.getElementById("check-step-1").classList.add("hidden");document.getElementById("check-step-2").classList.remove("hidden");}};
+
+// SUBMIT ORDER
+window.submitOrder=async()=>{
+const name=document.getElementById("ord-name").value;
+const fullname=document.getElementById("ord-fullname").value;
+const discord=document.getElementById("ord-discord").value;
+const wa=document.getElementById("ord-whatsapp").value||"N/A";
+await addDoc(collection(db,"orders"),{product:selectedProduct,name,fullname,discord,wa,timestamp:serverTimestamp()});
+toast("Order Placed ✅");
+};
+
+// CONTACT BUTTONS
+window.contactDiscord=()=>{
+const name=document.getElementById("ord-name").value;
+const fullname=document.getElementById("ord-fullname").value;
+const discord=document.getElementById("ord-discord").value;
+const wa=document.getElementById("ord-whatsapp").value||"N/A";
+const msg=`Order:%20${selectedProduct}%0AName:%20${name}%0AFullName:%20${fullname}%0ADiscord:%20${discord}%0AWhatsApp:%20${wa}`;
+window.open(`https://discord.com/users/devil_hunter_______?message=${msg}`,'_blank');
+};
+window.contactWhatsApp=()=>{
+const name=document.getElementById("ord-name").value;
+const fullname=document.getElementById("ord-fullname").value;
+const discord=document.getElementById("ord-discord").value;
+const wa=document.getElementById("ord-whatsapp").value||"N/A";
+const msg=`Order:%20${selectedProduct}%0AName:%20${name}%0AFullName:%20${fullname}%0ADiscord:%20${discord}%0AWhatsApp:%20${wa}`;
+window.open(`https://wa.me/003706116030?text=${msg}`,'_blank');
+};
 </script>
 </body>
 </html>
